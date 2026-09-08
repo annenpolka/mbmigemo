@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "reference": {
+    "name": "C/Migemo",
+    "version": "1.8.0",
+    "commit": "e780fcf8dfe59fe3266ca8676906a3cefa1683e8",
+    "url": "https://codeload.github.com/koron/cmigemo/tar.gz/e780fcf8dfe59fe3266ca8676906a3cefa1683e8",
+    "sha256": "ce75e44da0c0391869b1889bf44823ce86d19a5311663d16d6e3375f259c8593",
+    "tables": [
+      "roma2hira.dat",
+      "hira2kata.dat",
+      "han2zen.dat",
+      "zen2han.dat"
+    ],
+    "operators": [
+      "|",
+      "(",
+      ")",
+      "[",
+      "]",
+      ""
+    ],
+    "flags": "u"
+  },
+  "converter": {
+    "name": "jsmigemo",
+    "version": "0.5.2"
+  },
+  "seed": 20260908,
+  "generatedCount": 10000,
+  "generatedDistinctInputs": 10000,
+  "dictionaries": {
+    "tiny": {
+      "source": "tests/fixtures/tiny-dict.tsv",
+      "sourceSha256": "4fd71200173b19d1efd42f6b00db4e3e4fa885dd2209459ddade0e9449180df0",
+      "file": "tests/fixtures/tiny.compact",
+      "sha256": "eaec6aac2e5e669ed395eec68ac43ae15b2e6220c8647b5ece746a4d96b77869",
+      "bytes": 489
+    },
+    "alternate": {
+      "source": "tests/fixtures/alternate-dict.tsv",
+      "sourceSha256": "5ed166a44aa8adc415e8139554f521f8a71535f88864ba84005416d9ed154f62",
+      "file": "tests/fixtures/alternate.compact",
+      "sha256": "eee434cc9a0174c1c5eb32272f9ecaae51f0d193f4dbd5fc71a13c2309177107",
+      "bytes": 86
+    }
+  },
+  "files": {
+    "tests/fixtures/cases.json": "7522ed67ad4fe34177e2302e8b6bfebd71c4e810924be48927166795fe1497b1",
+    "tests/fixtures/documents.json": "91121a4f4ea67b1a9c65589fecfe4b382dab1c4279fa382251c4c38cbbab17cd",
+    "tests/fixtures/sequences.json": "a307b5c88cc069a66ba8107c4361c5522d0ab5d66508578a8074e562715059ed",
+    "tests/fixtures/generated.jsonl": "4a31686d08fc6c00c636d799a5fd78eb1e97dd71f58dcc7335dcc7d0c6c884dd",
+    "tests/fixtures/cmigemo-golden.json": "26573a235eb024a84cdb9b7a4917f20ca6cff2ea667b9ba0b7fbc0b43cff52bc",
+    "tests/reference/lock.json": "a3d7c17c35175407adffc671df86ec87f7aab08214bb388bae32e185beac8cf9",
+    "tests/reference/cmigemo-driver.c": "7e300c49a296a608e4662bc07f4e4a7e0e6a0194ef38a6c84db058f72e211f77"
+  }
+}

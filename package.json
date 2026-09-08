@@ -1,0 +1,24 @@
+{
+  "name": "mbmigemo-workspace",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": "26.0.0", "npm": "11.16.0" },
+  "packageManager": "npm@11.16.0",
+  "scripts": {
+    "reference:prepare": "node scripts/prepare-reference.mjs",
+    "dictionary:prepare": "node scripts/prepare-dictionary.mjs",
+    "fixtures:update": "node scripts/update-fixtures.mjs",
+    "test": "npm run test:foundation",
+    "test:foundation": "node scripts/check-toolchain.mjs && node --test --test-timeout=60000 tests/harness/*.test.mjs",
+    "test:coverage": "node --test --experimental-test-coverage --test-coverage-include='scripts/lib/*.mjs' tests/harness/*.test.mjs",
+    "test:moon": "node scripts/check-toolchain.mjs --moon && moon fmt --check && moon test --target js --deny-warn && moon test --target wasm-gc --deny-warn",
+    "build:bridge": "node scripts/build-bridge.mjs",
+    "test:bridge": "npm run build:bridge && node --test --test-timeout=60000 tests/bridge/*.test.mjs",
+    "test:all": "npm test && npm run test:moon && npm run test:bridge",
+    "test:api": "node --test --test-timeout=60000 tests/contracts/*.test.mjs",
+    "test:compat": "node scripts/test-compat.mjs",
+    "test:implementation": "npm run test:api && npm run test:compat"
+  },
+  "devDependencies": { "jsmigemo": "0.5.2" }
+}

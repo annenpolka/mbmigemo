@@ -1,0 +1,27 @@
+options(
+  link: {
+    "js": {
+      "exports": [
+        "echo",
+        "utf16_length",
+        "snapshot_bytes",
+        "snapshot_latin1",
+        "byte_length",
+        "byte_at",
+        "checksum",
+      ],
+      "format": "esm",
+    },
+    "wasm-gc": {
+      "exports": [
+        "echo",
+        "utf16_length",
+        "snapshot_latin1",
+        "byte_length",
+        "byte_at",
+        "checksum",
+      ],
+      "use-js-builtin-string": true,
+    },
+  },
+)

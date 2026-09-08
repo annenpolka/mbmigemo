@@ -1,0 +1,537 @@
+[
+  {
+    "id": "dictionary-00",
+    "class": "dictionary",
+    "input": "kensaku"
+  },
+  {
+    "id": "dictionary-01",
+    "class": "dictionary",
+    "input": "kensak"
+  },
+  {
+    "id": "dictionary-02",
+    "class": "dictionary",
+    "input": "kensa"
+  },
+  {
+    "id": "dictionary-03",
+    "class": "dictionary",
+    "input": "ken"
+  },
+  {
+    "id": "dictionary-04",
+    "class": "dictionary",
+    "input": "nihongo"
+  },
+  {
+    "id": "dictionary-05",
+    "class": "dictionary",
+    "input": "nihon"
+  },
+  {
+    "id": "dictionary-06",
+    "class": "dictionary",
+    "input": "nihonj"
+  },
+  {
+    "id": "dictionary-07",
+    "class": "dictionary",
+    "input": "foo"
+  },
+  {
+    "id": "dictionary-08",
+    "class": "dictionary",
+    "input": "foob"
+  },
+  {
+    "id": "dictionary-09",
+    "class": "dictionary",
+    "input": "meta"
+  },
+  {
+    "id": "dictionary-10",
+    "class": "dictionary",
+    "input": "yoshi"
+  },
+  {
+    "id": "dictionary-11",
+    "class": "dictionary",
+    "input": "emoji"
+  },
+  {
+    "id": "nasal-00",
+    "class": "nasal",
+    "input": "n"
+  },
+  {
+    "id": "nasal-01",
+    "class": "nasal",
+    "input": "nn"
+  },
+  {
+    "id": "nasal-02",
+    "class": "nasal",
+    "input": "nna"
+  },
+  {
+    "id": "nasal-03",
+    "class": "nasal",
+    "input": "nni"
+  },
+  {
+    "id": "nasal-04",
+    "class": "nasal",
+    "input": "nnya"
+  },
+  {
+    "id": "nasal-05",
+    "class": "nasal",
+    "input": "kan"
+  },
+  {
+    "id": "nasal-06",
+    "class": "nasal",
+    "input": "kann"
+  },
+  {
+    "id": "nasal-07",
+    "class": "nasal",
+    "input": "shinbun"
+  },
+  {
+    "id": "nasal-08",
+    "class": "nasal",
+    "input": "kan'i"
+  },
+  {
+    "id": "aliases-00",
+    "class": "aliases",
+    "input": "shi"
+  },
+  {
+    "id": "aliases-01",
+    "class": "aliases",
+    "input": "si"
+  },
+  {
+    "id": "aliases-02",
+    "class": "aliases",
+    "input": "chi"
+  },
+  {
+    "id": "aliases-03",
+    "class": "aliases",
+    "input": "ti"
+  },
+  {
+    "id": "aliases-04",
+    "class": "aliases",
+    "input": "tsu"
+  },
+  {
+    "id": "aliases-05",
+    "class": "aliases",
+    "input": "tu"
+  },
+  {
+    "id": "aliases-06",
+    "class": "aliases",
+    "input": "fu"
+  },
+  {
+    "id": "aliases-07",
+    "class": "aliases",
+    "input": "hu"
+  },
+  {
+    "id": "aliases-08",
+    "class": "aliases",
+    "input": "ji"
+  },
+  {
+    "id": "aliases-09",
+    "class": "aliases",
+    "input": "zi"
+  },
+  {
+    "id": "small-kana-00",
+    "class": "small-kana",
+    "input": "sha"
+  },
+  {
+    "id": "small-kana-01",
+    "class": "small-kana",
+    "input": "sya"
+  },
+  {
+    "id": "small-kana-02",
+    "class": "small-kana",
+    "input": "shu"
+  },
+  {
+    "id": "small-kana-03",
+    "class": "small-kana",
+    "input": "sho"
+  },
+  {
+    "id": "small-kana-04",
+    "class": "small-kana",
+    "input": "kya"
+  },
+  {
+    "id": "small-kana-05",
+    "class": "small-kana",
+    "input": "gyu"
+  },
+  {
+    "id": "small-kana-06",
+    "class": "small-kana",
+    "input": "ryo"
+  },
+  {
+    "id": "small-kana-07",
+    "class": "small-kana",
+    "input": "xtu"
+  },
+  {
+    "id": "small-kana-08",
+    "class": "small-kana",
+    "input": "xtsu"
+  },
+  {
+    "id": "small-kana-09",
+    "class": "small-kana",
+    "input": "ltu"
+  },
+  {
+    "id": "geminate-00",
+    "class": "geminate",
+    "input": "gakkou"
+  },
+  {
+    "id": "geminate-01",
+    "class": "geminate",
+    "input": "kitte"
+  },
+  {
+    "id": "geminate-02",
+    "class": "geminate",
+    "input": "matcha"
+  },
+  {
+    "id": "geminate-03",
+    "class": "geminate",
+    "input": "maccha"
+  },
+  {
+    "id": "geminate-04",
+    "class": "geminate",
+    "input": "kk"
+  },
+  {
+    "id": "geminate-05",
+    "class": "geminate",
+    "input": "tt"
+  },
+  {
+    "id": "geminate-06",
+    "class": "geminate",
+    "input": "ss"
+  },
+  {
+    "id": "case-00",
+    "class": "case",
+    "input": "KENSAKU"
+  },
+  {
+    "id": "case-01",
+    "class": "case",
+    "input": "Kensaku"
+  },
+  {
+    "id": "case-02",
+    "class": "case",
+    "input": "KenSaku"
+  },
+  {
+    "id": "case-03",
+    "class": "case",
+    "input": "XMLParser"
+  },
+  {
+    "id": "case-04",
+    "class": "case",
+    "input": "ABC"
+  },
+  {
+    "id": "case-05",
+    "class": "case",
+    "input": "A"
+  },
+  {
+    "id": "width-00",
+    "class": "width",
+    "input": "ｋｅｎｓａｋｕ"
+  },
+  {
+    "id": "width-01",
+    "class": "width",
+    "input": "ケンサク"
+  },
+  {
+    "id": "width-02",
+    "class": "width",
+    "input": "ｹﾝｻｸ"
+  },
+  {
+    "id": "width-03",
+    "class": "width",
+    "input": "にほんご"
+  },
+  {
+    "id": "width-04",
+    "class": "width",
+    "input": "ガ"
+  },
+  {
+    "id": "width-05",
+    "class": "width",
+    "input": "ｶﾞ"
+  },
+  {
+    "id": "width-06",
+    "class": "width",
+    "input": "ﾊﾟ"
+  },
+  {
+    "id": "width-07",
+    "class": "width",
+    "input": "ぱ"
+  },
+  {
+    "id": "unicode-00",
+    "class": "unicode",
+    "input": "が"
+  },
+  {
+    "id": "unicode-01",
+    "class": "unicode",
+    "input": "が"
+  },
+  {
+    "id": "unicode-02",
+    "class": "unicode",
+    "input": "ガ"
+  },
+  {
+    "id": "unicode-03",
+    "class": "unicode",
+    "input": "ｶ゙"
+  },
+  {
+    "id": "unicode-04",
+    "class": "unicode",
+    "input": "𠮷"
+  },
+  {
+    "id": "unicode-05",
+    "class": "unicode",
+    "input": "😀"
+  },
+  {
+    "id": "unicode-06",
+    "class": "unicode",
+    "input": "😀kensaku"
+  },
+  {
+    "id": "unicode-07",
+    "class": "unicode",
+    "input": "é"
+  },
+  {
+    "id": "unicode-08",
+    "class": "unicode",
+    "input": "é"
+  },
+  {
+    "id": "metacharacter-00",
+    "class": "metacharacter",
+    "input": "."
+  },
+  {
+    "id": "metacharacter-01",
+    "class": "metacharacter",
+    "input": "*"
+  },
+  {
+    "id": "metacharacter-02",
+    "class": "metacharacter",
+    "input": "+"
+  },
+  {
+    "id": "metacharacter-03",
+    "class": "metacharacter",
+    "input": "?"
+  },
+  {
+    "id": "metacharacter-04",
+    "class": "metacharacter",
+    "input": "^"
+  },
+  {
+    "id": "metacharacter-05",
+    "class": "metacharacter",
+    "input": "$"
+  },
+  {
+    "id": "metacharacter-06",
+    "class": "metacharacter",
+    "input": "{"
+  },
+  {
+    "id": "metacharacter-07",
+    "class": "metacharacter",
+    "input": "}"
+  },
+  {
+    "id": "metacharacter-08",
+    "class": "metacharacter",
+    "input": "("
+  },
+  {
+    "id": "metacharacter-09",
+    "class": "metacharacter",
+    "input": ")"
+  },
+  {
+    "id": "metacharacter-10",
+    "class": "metacharacter",
+    "input": "["
+  },
+  {
+    "id": "metacharacter-11",
+    "class": "metacharacter",
+    "input": "]"
+  },
+  {
+    "id": "metacharacter-12",
+    "class": "metacharacter",
+    "input": "|"
+  },
+  {
+    "id": "metacharacter-13",
+    "class": "metacharacter",
+    "input": "\\"
+  },
+  {
+    "id": "metacharacter-14",
+    "class": "metacharacter",
+    "input": "-"
+  },
+  {
+    "id": "metacharacter-15",
+    "class": "metacharacter",
+    "input": "/"
+  },
+  {
+    "id": "metacharacter-16",
+    "class": "metacharacter",
+    "input": "a.b"
+  },
+  {
+    "id": "metacharacter-17",
+    "class": "metacharacter",
+    "input": "a+b"
+  },
+  {
+    "id": "metacharacter-18",
+    "class": "metacharacter",
+    "input": "a-b"
+  },
+  {
+    "id": "metacharacter-19",
+    "class": "metacharacter",
+    "input": "[x]"
+  },
+  {
+    "id": "metacharacter-20",
+    "class": "metacharacter",
+    "input": "(a|b)"
+  },
+  {
+    "id": "metacharacter-21",
+    "class": "metacharacter",
+    "input": "^$\\{}"
+  },
+  {
+    "id": "whitespace-00",
+    "class": "whitespace",
+    "input": " "
+  },
+  {
+    "id": "whitespace-01",
+    "class": "whitespace",
+    "input": "　"
+  },
+  {
+    "id": "whitespace-02",
+    "class": "whitespace",
+    "input": "\t"
+  },
+  {
+    "id": "whitespace-03",
+    "class": "whitespace",
+    "input": "\n"
+  },
+  {
+    "id": "whitespace-04",
+    "class": "whitespace",
+    "input": "\r\n"
+  },
+  {
+    "id": "whitespace-05",
+    "class": "whitespace",
+    "input": " kensaku"
+  },
+  {
+    "id": "whitespace-06",
+    "class": "whitespace",
+    "input": "kensaku "
+  },
+  {
+    "id": "whitespace-07",
+    "class": "whitespace",
+    "input": "kensaku nihongo"
+  },
+  {
+    "id": "whitespace-08",
+    "class": "whitespace",
+    "input": "a\nb"
+  },
+  {
+    "id": "unknown-00",
+    "class": "unknown",
+    "input": "qzxyz"
+  },
+  {
+    "id": "unknown-01",
+    "class": "unknown",
+    "input": "12345"
+  },
+  {
+    "id": "unknown-02",
+    "class": "unknown",
+    "input": "zzzzzz"
+  },
+  {
+    "id": "long-00",
+    "class": "long",
+    "input": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  {
+    "id": "long-01",
+    "class": "long",
+    "input": "けけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけけ"
+  }
+]

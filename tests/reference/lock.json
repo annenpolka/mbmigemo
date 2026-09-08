@@ -1,0 +1,10 @@
+{
+  "name": "C/Migemo",
+  "version": "1.8.0",
+  "commit": "e780fcf8dfe59fe3266ca8676906a3cefa1683e8",
+  "url": "https://codeload.github.com/koron/cmigemo/tar.gz/e780fcf8dfe59fe3266ca8676906a3cefa1683e8",
+  "sha256": "ce75e44da0c0391869b1889bf44823ce86d19a5311663d16d6e3375f259c8593",
+  "tables": ["roma2hira.dat", "hira2kata.dat", "han2zen.dat", "zen2han.dat"],
+  "operators": ["|", "(", ")", "[", "]", ""],
+  "flags": "u"
+}
