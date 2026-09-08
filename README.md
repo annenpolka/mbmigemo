@@ -4,7 +4,7 @@ MoonBitで実装する、ブラウザ向けのMigemoライブラリ。
 
 `kensaku` から「検索」「けんさく」「ケンサク」などに一致する正規表現を生成する。ローマ字変換・compact辞書の探索・正規表現生成は共通のMoonBitコアで行い、JavaScriptとWasm GCへ出力する。
 
-**共通検索コア、公開API、実用辞書、ブラウザデモを実装済み**。JSとWasm GCをC/Migemoと比較し、Chromium・Firefox・WebKitとSafari実機で検索を確認している。既定はJS。進捗と測定・配布確認は[PLAN.md](PLAN.md)に記録する。
+**共通検索コア、公開API、実用辞書、ブラウザデモを実装済み**。JSとWasm GCをC/Migemoと比較し、Chromium・Firefox・WebKitとSafari実機で検索を確認している。実測に基づき既定はJS、Wasm GCは明示選択できる実験版とする。進捗と測定・配布確認は[PLAN.md](PLAN.md)に記録する。
 
 ## ビルドして検索する
 
@@ -57,7 +57,11 @@ npm run demo
 
 実用辞書は固定したSKK-JISYO.Lから生成する163,556読み・224,044候補、2,135,633バイト。同じ語彙をC/Migemoへ渡し、各バックエンドで12,107ケース・1,471,006文書照合の差分0を確認した。これは有限のテストでの一致であり、全入力の同値証明ではない。
 
-`npm run size`で圧縮別の容量、`npm run bench`で3ブラウザ各3回の起動・検索・取得可能なメモリを測る。[測定手法](docs/benchmarks/methodology.md)に比較条件と採用基準を固定している。`npm run pack:check`はnpm packした成果物を別のTypeScriptプロジェクトへ導入し、小辞書と実用辞書を検証する。npmへの公開は行わない。
+`npm run size`で圧縮別の容量、`npm run bench`で3ブラウザ各3回の起動・検索・取得可能なメモリを測る。[測定手法](docs/benchmarks/methodology.md)に比較条件と採用基準を固定している。
+
+M4 Maxでの[実測結果](docs/benchmarks/baseline.md)では、コードのBrotli合計がJS 15,844バイト、Wasm GC 16,804バイト。Wasm GCはChromiumの問い合わせp95で約23〜28%速い一方、初回応答は約2倍となり、既定変更の条件を満たさなかった。辞書は両版共通でBrotli 1,249,022バイト。`auto`は対応機能で選択するため、最速の方式を推測する機能ではない。
+
+`npm run pack:check`はnpm packした成果物を別のTypeScriptプロジェクトへ導入し、小辞書と実用辞書を検証する。npmへの公開は行わない。
 
 JS版はES modulesとUnicode対応の`RegExp`を使う。Wasm版にはWasm GCとJS String Builtinsの両方が必要。確認したブラウザの版と、自動テスト・Safari実機確認の範囲は[テスト手順](docs/testing.md)を参照。`query`と照合は同期処理のため、大きな展開や大量の文書を扱うアプリはWorkerなどで実行場所を分けられる。
 

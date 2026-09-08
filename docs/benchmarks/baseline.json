@@ -1,0 +1,5386 @@
+{
+  "schema": 1,
+  "started": "2026-09-08T04:37:10.825Z",
+  "fixture": "practical",
+  "environment": {
+    "cpu": "Apple M4 Max",
+    "logicalCpus": 16,
+    "os": "darwin 25.6.0 arm64",
+    "systemMemoryBytes": 137438953472,
+    "node": "v26.0.0",
+    "npm": "11.16.0",
+    "playwright": "1.63.0",
+    "sdk": {
+      "moon": "moon 0.1.20260827 (d0aaa07 2026-08-27)",
+      "moonc": "v0.10.11+6ff76a5f9 (2026-08-28)",
+      "core": "0.10.11+6ff76a5f9"
+    },
+    "gitHead": "1215a72b537fcc6fb1d2b01bf9ae7a9017fecee4",
+    "trackedChanges": false
+  },
+  "protocol": {
+    "browsers": [
+      "chromium",
+      "firefox",
+      "webkit"
+    ],
+    "runs": 3,
+    "warmup": 2,
+    "rounds": 5,
+    "execution": "serial, separate fresh browser process per backend/public trial and separate fresh process for each diagnostic; alternate backend order between repetitions",
+    "network": "uncompressed no-store HTTP on loopback; no network throttling; cold browser cache, potentially warm OS filesystem cache",
+    "timing": "performance.now around each individual call; nearest-rank percentiles over all equally weighted fixed cases and repetitions; zero-resolution samples retained",
+    "firstResponse": "Dictionary fetch starts after harness navigation. Startup after dictionary fetch includes wrapper import, feature detection if selected, core loading/compile, snapshot/transport, init, first kensaku query, RegExp construction, and all document matches.",
+    "regex": "new RegExp(pattern, u) constructor time measured separately from first test and document matching; engines may cache compilation and defer work to test()",
+    "memory": "performance.memory observations where available; no forced GC, no process RSS or total Wasm GC attribution. Values are not comparable across browsers and are not an adoption criterion."
+  },
+  "workload": {
+    "sha256": "22fc29f6bd9ced7fa93462c3a777bd26102a377ee60c3dfd4267c521a42f47a5",
+    "cases": 110,
+    "documents": 370,
+    "classes": [
+      "dictionary",
+      "nasal",
+      "aliases",
+      "small-kana",
+      "geminate",
+      "case",
+      "width",
+      "unicode",
+      "metacharacter",
+      "whitespace",
+      "unknown",
+      "long",
+      "mixed-case-regression"
+    ],
+    "dictionarySha256": "8fa973194468b4cc37e713e0c26c4a08625ee850d5c5db8497eb409d1263bc21",
+    "sourceSha256": "a0d3095aa83d143c396c4ffc94c29bebd16decff7be5149b3375d5242e95c2d3",
+    "oracle": {
+      "name": "C/Migemo",
+      "version": "1.8.0",
+      "commit": "e780fcf8dfe59fe3266ca8676906a3cefa1683e8",
+      "url": "https://codeload.github.com/koron/cmigemo/tar.gz/e780fcf8dfe59fe3266ca8676906a3cefa1683e8",
+      "sha256": "ce75e44da0c0391869b1889bf44823ce86d19a5311663d16d6e3375f259c8593",
+      "tables": [
+        "roma2hira.dat",
+        "hira2kata.dat",
+        "han2zen.dat",
+        "zen2han.dat"
+      ],
+      "operators": [
+        "|",
+        "(",
+        ")",
+        "[",
+        "]",
+        ""
+      ],
+      "flags": "u"
+    }
+  },
+  "benchmarkSourceSha256": {
+    "scripts/bench.mjs": "fce22209fd4dd7b531fd1902b73fea030e96a56a0f6782a67b4419515c8061a4",
+    "scripts/size.mjs": "d292158a6aaf3a13557aa00b92e93e8292954b68f89e6210480e7f033f5e1043",
+    "bench/harness.html": "dea8620141662c245957257e08a558c48e43bdf3f95412ebc73c30bd9a417931",
+    "bench/harness.mjs": "5e13502af26bc3f2e4801fdf5b2386628175a67b2a8c37b4da39aa7e19120c9c",
+    "bench/decision.mjs": "c62215a416c0dbe6dd448aa106d3690c86df8c3760493b41aff8e198ab07f799",
+    "bench/provenance.mjs": "10055b7ed0431906fa31094b2d0fd25245aa755501d90c4b8addb8ef8cf66d7a",
+    "scripts/lib/server.mjs": "53448f5af8e2c3f95b5a69154fd4f24f6d90788d714648c993903a4fbc487313"
+  },
+  "referenceEligibility": {
+    "status": "verified",
+    "minimumDistinctInputsPerBackend": 10000,
+    "artifactSha256": {
+      "index.js": "f3a1bc23fbed78454826293b3b3641a02247f9ee51f2f6bff204d8009d71b44f",
+      "core.js": "1045fabdb34ec60b33c4bbeb9a2560f82aa33b4f5af7160ea1a0628d7ef80b42",
+      "core.wasm": "206a4065f247562d520e6622ff8c47dedd7921d31bb39a003a8f458118453a48",
+      "feature-bytes.js": "93517d56b1f16b190955cce224c3f572657096d2415a636dd4b492cf80bd9a4c"
+    },
+    "dictionarySha256": "8fa973194468b4cc37e713e0c26c4a08625ee850d5c5db8497eb409d1263bc21",
+    "sourceSha256": "a0d3095aa83d143c396c4ffc94c29bebd16decff7be5149b3375d5242e95c2d3",
+    "reference": {
+      "name": "C/Migemo",
+      "version": "1.8.0",
+      "commit": "e780fcf8dfe59fe3266ca8676906a3cefa1683e8",
+      "url": "https://codeload.github.com/koron/cmigemo/tar.gz/e780fcf8dfe59fe3266ca8676906a3cefa1683e8",
+      "sha256": "ce75e44da0c0391869b1889bf44823ce86d19a5311663d16d6e3375f259c8593",
+      "tables": [
+        "roma2hira.dat",
+        "hira2kata.dat",
+        "han2zen.dat",
+        "zen2han.dat"
+      ],
+      "operators": [
+        "|",
+        "(",
+        ")",
+        "[",
+        "]",
+        ""
+      ],
+      "flags": "u"
+    },
+    "results": [
+      {
+        "backend": "js",
+        "inputs": 11707,
+        "cases": 12107,
+        "comparisons": 1471006,
+        "mismatches": 0,
+        "inputSha256": "5c3dc91cdd2c1fe11ef74168142de67ff3dc9d850af0df3f6f395f12b7ec5ebc",
+        "documentsSha256": "511ea91c254258ecf32ac59f2cb5ff7b25ef9a5f997337452544f27de6abc497",
+        "corpus": {
+          "seed": 20260908,
+          "file": ".cache/dictionaries/practical/compat-cases.jsonl",
+          "sha256": "459c2aea56614d170e2cd9d6192f0857f985cfb0241dae1f497d34643f5a6bdd",
+          "sourceSha256": "a0d3095aa83d143c396c4ffc94c29bebd16decff7be5149b3375d5242e95c2d3",
+          "generatedCases": 2000,
+          "generatedUniqueInputs": 1637
+        }
+      },
+      {
+        "backend": "wasm-gc",
+        "inputs": 11707,
+        "cases": 12107,
+        "comparisons": 1471006,
+        "mismatches": 0,
+        "inputSha256": "5c3dc91cdd2c1fe11ef74168142de67ff3dc9d850af0df3f6f395f12b7ec5ebc",
+        "documentsSha256": "511ea91c254258ecf32ac59f2cb5ff7b25ef9a5f997337452544f27de6abc497",
+        "corpus": {
+          "seed": 20260908,
+          "file": ".cache/dictionaries/practical/compat-cases.jsonl",
+          "sha256": "459c2aea56614d170e2cd9d6192f0857f985cfb0241dae1f497d34643f5a6bdd",
+          "sourceSha256": "a0d3095aa83d143c396c4ffc94c29bebd16decff7be5149b3375d5242e95c2d3",
+          "generatedCases": 2000,
+          "generatedUniqueInputs": 1637
+        }
+      }
+    ],
+    "report": "test-results/compat-practical.json",
+    "reportSha256": "752424dd6c05f7bc5155e318f33440423a8d49efeac4a130af4bb2885c7f51b9"
+  },
+  "sizes": {
+    "schema": 1,
+    "compression": {
+      "gzip": {
+        "level": 9
+      },
+      "brotli": {
+        "quality": 11,
+        "mode": "generic",
+        "lgwin": 22
+      },
+      "aggregation": "sum of individually compressed HTTP resources; no shared compression context"
+    },
+    "node": "v26.0.0",
+    "zlib": "1.2.12",
+    "brotli": "1.2.0",
+    "scope": "Unminified release executable code plus public ESM wrapper and required feature probe. Type declarations, licenses, HTTP headers, demo, source maps and dictionary are excluded from code totals. Dictionary is identical and reported separately.",
+    "files": {
+      "index.js": {
+        "sha256": "f3a1bc23fbed78454826293b3b3641a02247f9ee51f2f6bff204d8009d71b44f",
+        "raw": 4535,
+        "gzip": 1666,
+        "brotli": 1418
+      },
+      "core.js": {
+        "sha256": "1045fabdb34ec60b33c4bbeb9a2560f82aa33b4f5af7160ea1a0628d7ef80b42",
+        "raw": 186026,
+        "gzip": 21087,
+        "brotli": 14426
+      },
+      "core.wasm": {
+        "sha256": "206a4065f247562d520e6622ff8c47dedd7921d31bb39a003a8f458118453a48",
+        "raw": 53350,
+        "gzip": 21240,
+        "brotli": 15033
+      },
+      "feature-bytes.js": {
+        "sha256": "93517d56b1f16b190955cce224c3f572657096d2415a636dd4b492cf80bd9a4c",
+        "raw": 875,
+        "gzip": 400,
+        "brotli": 353
+      }
+    },
+    "backends": {
+      "js": {
+        "files": [
+          "index.js",
+          "core.js"
+        ],
+        "raw": 190561,
+        "gzip": 22753,
+        "brotli": 15844
+      },
+      "wasm-gc": {
+        "files": [
+          "index.js",
+          "feature-bytes.js",
+          "core.wasm"
+        ],
+        "raw": 58760,
+        "gzip": 23306,
+        "brotli": 16804
+      }
+    },
+    "dictionary": {
+      "fixture": "practical",
+      "sha256": "8fa973194468b4cc37e713e0c26c4a08625ee850d5c5db8497eb409d1263bc21",
+      "raw": 2135633,
+      "gzip": 1504786,
+      "brotli": 1249022
+    }
+  },
+  "measurements": [
+    {
+      "browser": "chromium",
+      "run": 1,
+      "browserVersion": "153.0.8010.12",
+      "backend": "js",
+      "status": "ok",
+      "compatibility": true,
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+        "crossOriginIsolated": true,
+        "hardwareConcurrency": 16,
+        "observedTimerStepMs": 0.004999995231628418
+      },
+      "dictionaryBytes": 2135633,
+      "cold": {
+        "dictionaryFetchMs": 5.319999992847443,
+        "wrapperLoadMs": 2.5149999856948853,
+        "coreLoadCompileAndInitializeMs": 31.439999997615814,
+        "initializeThroughPublicApiMs": 31.439999997615814,
+        "firstQueryMs": 2.365000009536743,
+        "firstRegexCompileMs": 0.019999980926513672,
+        "firstMatchMs": 0.08500003814697266,
+        "firstResponseAfterDictionaryFetchMs": 36.42500001192093,
+        "fetchToFirstResponseMs": 41.74500000476837
+      },
+      "patternLengths": [
+        55,
+        103,
+        76,
+        188,
+        52,
+        56,
+        77,
+        42,
+        61,
+        29,
+        172,
+        32,
+        1030,
+        15,
+        20,
+        20,
+        22,
+        438,
+        239,
+        63,
+        89,
+        1387,
+        1537,
+        576,
+        596,
+        461,
+        691,
+        476,
+        714,
+        666,
+        739,
+        237,
+        148,
+        254,
+        406,
+        54,
+        26,
+        115,
+        17,
+        23,
+        17,
+        43,
+        35,
+        44,
+        44,
+        59,
+        39,
+        71,
+        55,
+        55,
+        270,
+        102,
+        47,
+        1263,
+        19,
+        13,
+        13,
+        36,
+        8,
+        9,
+        9,
+        118,
+        245,
+        12,
+        9,
+        9,
+        6,
+        6,
+        40,
+        5,
+        18,
+        27,
+        11,
+        14,
+        9,
+        25,
+        11,
+        9,
+        9,
+        13,
+        12,
+        13,
+        12,
+        14,
+        11,
+        30,
+        34,
+        60,
+        60,
+        56,
+        13,
+        43,
+        20,
+        5,
+        5,
+        6,
+        6,
+        8,
+        39,
+        39,
+        66,
+        61,
+        49,
+        15,
+        71,
+        5170,
+        1542,
+        5176,
+        3278,
+        6335
+      ],
+      "sink": 268695,
+      "memory": {
+        "before": {
+          "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+          "usedJSHeapSize": 2530174,
+          "totalJSHeapSize": 4562922,
+          "jsHeapSizeLimit": 4395630592
+        },
+        "afterInitializationAndFirstResponse": {
+          "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+          "usedJSHeapSize": 20613637,
+          "totalJSHeapSize": 24636605,
+          "jsHeapSizeLimit": 4395630592
+        },
+        "afterQueries": {
+          "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+          "usedJSHeapSize": 28798381,
+          "totalJSHeapSize": 60337341,
+          "jsHeapSizeLimit": 4395630592
+        }
+      },
+      "resources": [
+        {
+          "name": "/bench/harness.mjs",
+          "durationMs": 3.6800000071525574,
+          "transferSize": 8073,
+          "encodedBodySize": 7773,
+          "decodedBodySize": 7773
+        },
+        {
+          "name": "/dictionaries/practical.compact",
+          "durationMs": 3.009999990463257,
+          "transferSize": 2135933,
+          "encodedBodySize": 2135633,
+          "decodedBodySize": 2135633
+        },
+        {
+          "name": "/packages/mbmigemo/dist/index.js",
+          "durationMs": 0.85999995470047,
+          "transferSize": 4835,
+          "encodedBodySize": 4535,
+          "decodedBodySize": 4535
+        },
+        {
+          "name": "/packages/mbmigemo/dist/core.js",
+          "durationMs": 0.7599999904632568,
+          "transferSize": 186326,
+          "encodedBodySize": 186026,
+          "decodedBodySize": 186026
+        }
+      ],
+      "summary": {
+        "queryMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.014999985694885254,
+          "p95": 3.6600000262260437,
+          "p99": 11.770000040531158,
+          "max": 21.77999997138977,
+          "zeroCount": 113
+        },
+        "regexCompileMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0,
+          "p95": 0.009999990463256836,
+          "p99": 0.030000030994415283,
+          "max": 0.050000011920928955,
+          "zeroCount": 413
+        },
+        "matchMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.009999990463256836,
+          "p95": 0.034999966621398926,
+          "p99": 0.04500001668930054,
+          "max": 0.050000011920928955,
+          "zeroCount": 34
+        },
+        "totalMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.019999980926513672,
+          "p95": 3.7100000381469727,
+          "p99": 11.820000052452087,
+          "max": 21.849999964237213,
+          "zeroCount": 2
+        }
+      },
+      "diagnostic": {
+        "browserVersion": "153.0.8010.12",
+        "backend": "js",
+        "loadMs": 4.01500004529953,
+        "compileMs": null,
+        "dictionaryInitializationMs": 23.82499998807907,
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+          "crossOriginIsolated": true,
+          "hardwareConcurrency": 16,
+          "observedTimerStepMs": 0.004999995231628418
+        },
+        "memory": {
+          "before": {
+            "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+            "usedJSHeapSize": 3350841,
+            "totalJSHeapSize": 4568689,
+            "jsHeapSizeLimit": 4395630592
+          },
+          "afterInitialization": {
+            "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+            "usedJSHeapSize": 19940709,
+            "totalJSHeapSize": 23026513,
+            "jsHeapSizeLimit": 4395630592
+          }
+        },
+        "resources": [
+          {
+            "name": "/bench/harness.mjs",
+            "durationMs": 2.6700000166893005,
+            "transferSize": 8073,
+            "encodedBodySize": 7773,
+            "decodedBodySize": 7773
+          },
+          {
+            "name": "/dictionaries/practical.compact",
+            "durationMs": 1.7100000381469727,
+            "transferSize": 2135933,
+            "encodedBodySize": 2135633,
+            "decodedBodySize": 2135633
+          },
+          {
+            "name": "/packages/mbmigemo/dist/core.js",
+            "durationMs": 0.9449999928474426,
+            "transferSize": 186326,
+            "encodedBodySize": 186026,
+            "decodedBodySize": 186026
+          }
+        ],
+        "method": "JS dynamic import combines network, parse, compile and module evaluation; these are not separately exposed."
+      }
+    },
+    {
+      "browser": "chromium",
+      "run": 1,
+      "browserVersion": "153.0.8010.12",
+      "backend": "wasm-gc",
+      "status": "ok",
+      "compatibility": true,
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+        "crossOriginIsolated": true,
+        "hardwareConcurrency": 16,
+        "observedTimerStepMs": 0.004999995231628418
+      },
+      "dictionaryBytes": 2135633,
+      "cold": {
+        "dictionaryFetchMs": 3.865000009536743,
+        "wrapperLoadMs": 1.1550000309944153,
+        "coreLoadCompileAndInitializeMs": 72.48499995470047,
+        "initializeThroughPublicApiMs": 72.48499995470047,
+        "firstQueryMs": 0.7750000357627869,
+        "firstRegexCompileMs": 0.009999990463256836,
+        "firstMatchMs": 0.09500002861022949,
+        "firstResponseAfterDictionaryFetchMs": 74.52000004053116,
+        "fetchToFirstResponseMs": 78.3850000500679
+      },
+      "patternLengths": [
+        55,
+        103,
+        76,
+        188,
+        52,
+        56,
+        77,
+        42,
+        61,
+        29,
+        172,
+        32,
+        1030,
+        15,
+        20,
+        20,
+        22,
+        438,
+        239,
+        63,
+        89,
+        1387,
+        1537,
+        576,
+        596,
+        461,
+        691,
+        476,
+        714,
+        666,
+        739,
+        237,
+        148,
+        254,
+        406,
+        54,
+        26,
+        115,
+        17,
+        23,
+        17,
+        43,
+        35,
+        44,
+        44,
+        59,
+        39,
+        71,
+        55,
+        55,
+        270,
+        102,
+        47,
+        1263,
+        19,
+        13,
+        13,
+        36,
+        8,
+        9,
+        9,
+        118,
+        245,
+        12,
+        9,
+        9,
+        6,
+        6,
+        40,
+        5,
+        18,
+        27,
+        11,
+        14,
+        9,
+        25,
+        11,
+        9,
+        9,
+        13,
+        12,
+        13,
+        12,
+        14,
+        11,
+        30,
+        34,
+        60,
+        60,
+        56,
+        13,
+        43,
+        20,
+        5,
+        5,
+        6,
+        6,
+        8,
+        39,
+        39,
+        66,
+        61,
+        49,
+        15,
+        71,
+        5170,
+        1542,
+        5176,
+        3278,
+        6335
+      ],
+      "sink": 268695,
+      "memory": {
+        "before": {
+          "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+          "usedJSHeapSize": 2528286,
+          "totalJSHeapSize": 4562922,
+          "jsHeapSizeLimit": 4395630592
+        },
+        "afterInitializationAndFirstResponse": {
+          "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+          "usedJSHeapSize": 26392636,
+          "totalJSHeapSize": 35615788,
+          "jsHeapSizeLimit": 4395630592
+        },
+        "afterQueries": {
+          "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+          "usedJSHeapSize": 46188804,
+          "totalJSHeapSize": 100512812,
+          "jsHeapSizeLimit": 4395630592
+        }
+      },
+      "resources": [
+        {
+          "name": "/bench/harness.mjs",
+          "durationMs": 3.0799999833106995,
+          "transferSize": 8073,
+          "encodedBodySize": 7773,
+          "decodedBodySize": 7773
+        },
+        {
+          "name": "/dictionaries/practical.compact",
+          "durationMs": 1.9549999833106995,
+          "transferSize": 2135933,
+          "encodedBodySize": 2135633,
+          "decodedBodySize": 2135633
+        },
+        {
+          "name": "/packages/mbmigemo/dist/index.js",
+          "durationMs": 0.675000011920929,
+          "transferSize": 4835,
+          "encodedBodySize": 4535,
+          "decodedBodySize": 4535
+        },
+        {
+          "name": "/packages/mbmigemo/dist/feature-bytes.js",
+          "durationMs": 0.5100000500679016,
+          "transferSize": 1175,
+          "encodedBodySize": 875,
+          "decodedBodySize": 875
+        },
+        {
+          "name": "/packages/mbmigemo/dist/core.wasm",
+          "durationMs": 1.1200000047683716,
+          "transferSize": 53650,
+          "encodedBodySize": 53350,
+          "decodedBodySize": 53350
+        }
+      ],
+      "summary": {
+        "queryMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.014999985694885254,
+          "p95": 2.810000002384186,
+          "p99": 9.900000035762787,
+          "max": 17.835000038146973,
+          "zeroCount": 110
+        },
+        "regexCompileMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0,
+          "p95": 0.004999995231628418,
+          "p99": 0.005000054836273193,
+          "max": 0.01500004529953003,
+          "zeroCount": 486
+        },
+        "matchMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.009999990463256836,
+          "p95": 0.030000030994415283,
+          "p99": 0.04500001668930054,
+          "max": 0.10499995946884155,
+          "zeroCount": 28
+        },
+        "totalMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.020000040531158447,
+          "p95": 2.8399999737739563,
+          "p99": 9.925000011920929,
+          "max": 17.865000009536743,
+          "zeroCount": 4
+        }
+      },
+      "diagnostic": {
+        "browserVersion": "153.0.8010.12",
+        "backend": "wasm-gc",
+        "loadMs": 0.9399999976158142,
+        "compileMs": 2.0199999809265137,
+        "dictionaryInitializationMs": 62.69000005722046,
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+          "crossOriginIsolated": true,
+          "hardwareConcurrency": 16,
+          "observedTimerStepMs": 0.004999995231628418
+        },
+        "memory": {
+          "before": {
+            "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+            "usedJSHeapSize": 3350865,
+            "totalJSHeapSize": 4568689,
+            "jsHeapSizeLimit": 4395630592
+          },
+          "afterInitialization": {
+            "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+            "usedJSHeapSize": 25729706,
+            "totalJSHeapSize": 35315146,
+            "jsHeapSizeLimit": 4395630592
+          }
+        },
+        "resources": [
+          {
+            "name": "/bench/harness.mjs",
+            "durationMs": 2.675000011920929,
+            "transferSize": 8073,
+            "encodedBodySize": 7773,
+            "decodedBodySize": 7773
+          },
+          {
+            "name": "/dictionaries/practical.compact",
+            "durationMs": 1.574999988079071,
+            "transferSize": 2135933,
+            "encodedBodySize": 2135633,
+            "decodedBodySize": 2135633
+          },
+          {
+            "name": "/packages/mbmigemo/dist/core.wasm",
+            "durationMs": 0.6850000023841858,
+            "transferSize": 53650,
+            "encodedBodySize": 53350,
+            "decodedBodySize": 53350
+          }
+        ],
+        "method": "Wasm fetch and WebAssembly.instantiate measured separately; instantiate includes compile and module instantiation. Dictionary init includes the public snapshot and Latin-1 transport, but feature detection is excluded from this diagnostic."
+      }
+    },
+    {
+      "browser": "chromium",
+      "run": 2,
+      "browserVersion": "153.0.8010.12",
+      "backend": "wasm-gc",
+      "status": "ok",
+      "compatibility": true,
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+        "crossOriginIsolated": true,
+        "hardwareConcurrency": 16,
+        "observedTimerStepMs": 0.004999995231628418
+      },
+      "dictionaryBytes": 2135633,
+      "cold": {
+        "dictionaryFetchMs": 4.175000011920929,
+        "wrapperLoadMs": 1.225000023841858,
+        "coreLoadCompileAndInitializeMs": 66.28999996185303,
+        "initializeThroughPublicApiMs": 66.28999996185303,
+        "firstQueryMs": 0.7649999856948853,
+        "firstRegexCompileMs": 0.004999995231628418,
+        "firstMatchMs": 0.09500002861022949,
+        "firstResponseAfterDictionaryFetchMs": 68.37999999523163,
+        "fetchToFirstResponseMs": 72.55500000715256
+      },
+      "patternLengths": [
+        55,
+        103,
+        76,
+        188,
+        52,
+        56,
+        77,
+        42,
+        61,
+        29,
+        172,
+        32,
+        1030,
+        15,
+        20,
+        20,
+        22,
+        438,
+        239,
+        63,
+        89,
+        1387,
+        1537,
+        576,
+        596,
+        461,
+        691,
+        476,
+        714,
+        666,
+        739,
+        237,
+        148,
+        254,
+        406,
+        54,
+        26,
+        115,
+        17,
+        23,
+        17,
+        43,
+        35,
+        44,
+        44,
+        59,
+        39,
+        71,
+        55,
+        55,
+        270,
+        102,
+        47,
+        1263,
+        19,
+        13,
+        13,
+        36,
+        8,
+        9,
+        9,
+        118,
+        245,
+        12,
+        9,
+        9,
+        6,
+        6,
+        40,
+        5,
+        18,
+        27,
+        11,
+        14,
+        9,
+        25,
+        11,
+        9,
+        9,
+        13,
+        12,
+        13,
+        12,
+        14,
+        11,
+        30,
+        34,
+        60,
+        60,
+        56,
+        13,
+        43,
+        20,
+        5,
+        5,
+        6,
+        6,
+        8,
+        39,
+        39,
+        66,
+        61,
+        49,
+        15,
+        71,
+        5170,
+        1542,
+        5176,
+        3278,
+        6335
+      ],
+      "sink": 268695,
+      "memory": {
+        "before": {
+          "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+          "usedJSHeapSize": 2527966,
+          "totalJSHeapSize": 4562922,
+          "jsHeapSizeLimit": 4395630592
+        },
+        "afterInitializationAndFirstResponse": {
+          "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+          "usedJSHeapSize": 26386464,
+          "totalJSHeapSize": 35615788,
+          "jsHeapSizeLimit": 4395630592
+        },
+        "afterQueries": {
+          "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+          "usedJSHeapSize": 45688024,
+          "totalJSHeapSize": 100512812,
+          "jsHeapSizeLimit": 4395630592
+        }
+      },
+      "resources": [
+        {
+          "name": "/bench/harness.mjs",
+          "durationMs": 4.759999990463257,
+          "transferSize": 8073,
+          "encodedBodySize": 7773,
+          "decodedBodySize": 7773
+        },
+        {
+          "name": "/dictionaries/practical.compact",
+          "durationMs": 2.5299999713897705,
+          "transferSize": 2135933,
+          "encodedBodySize": 2135633,
+          "decodedBodySize": 2135633
+        },
+        {
+          "name": "/packages/mbmigemo/dist/index.js",
+          "durationMs": 0.8050000071525574,
+          "transferSize": 4835,
+          "encodedBodySize": 4535,
+          "decodedBodySize": 4535
+        },
+        {
+          "name": "/packages/mbmigemo/dist/feature-bytes.js",
+          "durationMs": 0.6299999952316284,
+          "transferSize": 1175,
+          "encodedBodySize": 875,
+          "decodedBodySize": 875
+        },
+        {
+          "name": "/packages/mbmigemo/dist/core.wasm",
+          "durationMs": 0.675000011920929,
+          "transferSize": 53650,
+          "encodedBodySize": 53350,
+          "decodedBodySize": 53350
+        }
+      ],
+      "summary": {
+        "queryMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.014999985694885254,
+          "p95": 2.849999964237213,
+          "p99": 10.064999997615814,
+          "max": 18.430000007152557,
+          "zeroCount": 104
+        },
+        "regexCompileMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0,
+          "p95": 0.004999995231628418,
+          "p99": 0.005000054836273193,
+          "max": 0.010000050067901611,
+          "zeroCount": 475
+        },
+        "matchMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.009999990463256836,
+          "p95": 0.030000030994415283,
+          "p99": 0.04000002145767212,
+          "max": 0.0549999475479126,
+          "zeroCount": 32
+        },
+        "totalMs": {
+          "count": 550,
+          "min": 0.004999995231628418,
+          "median": 0.020000040531158447,
+          "p95": 2.884999990463257,
+          "p99": 10.089999973773956,
+          "max": 18.4650000333786,
+          "zeroCount": 0
+        }
+      },
+      "diagnostic": {
+        "browserVersion": "153.0.8010.12",
+        "backend": "wasm-gc",
+        "loadMs": 0.949999988079071,
+        "compileMs": 1.9949999451637268,
+        "dictionaryInitializationMs": 60.905000030994415,
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+          "crossOriginIsolated": true,
+          "hardwareConcurrency": 16,
+          "observedTimerStepMs": 0.004999995231628418
+        },
+        "memory": {
+          "before": {
+            "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+            "usedJSHeapSize": 3350865,
+            "totalJSHeapSize": 4568689,
+            "jsHeapSizeLimit": 4395630592
+          },
+          "afterInitialization": {
+            "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+            "usedJSHeapSize": 25762162,
+            "totalJSHeapSize": 35577290,
+            "jsHeapSizeLimit": 4395630592
+          }
+        },
+        "resources": [
+          {
+            "name": "/bench/harness.mjs",
+            "durationMs": 2.7200000286102295,
+            "transferSize": 8073,
+            "encodedBodySize": 7773,
+            "decodedBodySize": 7773
+          },
+          {
+            "name": "/dictionaries/practical.compact",
+            "durationMs": 3.5300000309944153,
+            "transferSize": 2135933,
+            "encodedBodySize": 2135633,
+            "decodedBodySize": 2135633
+          },
+          {
+            "name": "/packages/mbmigemo/dist/core.wasm",
+            "durationMs": 0.675000011920929,
+            "transferSize": 53650,
+            "encodedBodySize": 53350,
+            "decodedBodySize": 53350
+          }
+        ],
+        "method": "Wasm fetch and WebAssembly.instantiate measured separately; instantiate includes compile and module instantiation. Dictionary init includes the public snapshot and Latin-1 transport, but feature detection is excluded from this diagnostic."
+      }
+    },
+    {
+      "browser": "chromium",
+      "run": 2,
+      "browserVersion": "153.0.8010.12",
+      "backend": "js",
+      "status": "ok",
+      "compatibility": true,
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+        "crossOriginIsolated": true,
+        "hardwareConcurrency": 16,
+        "observedTimerStepMs": 0.004999995231628418
+      },
+      "dictionaryBytes": 2135633,
+      "cold": {
+        "dictionaryFetchMs": 3.6800000071525574,
+        "wrapperLoadMs": 1.4649999737739563,
+        "coreLoadCompileAndInitializeMs": 29.055000007152557,
+        "initializeThroughPublicApiMs": 29.055000007152557,
+        "firstQueryMs": 1.1600000262260437,
+        "firstRegexCompileMs": 0.014999985694885254,
+        "firstMatchMs": 0.07499998807907104,
+        "firstResponseAfterDictionaryFetchMs": 31.769999980926514,
+        "fetchToFirstResponseMs": 35.44999998807907
+      },
+      "patternLengths": [
+        55,
+        103,
+        76,
+        188,
+        52,
+        56,
+        77,
+        42,
+        61,
+        29,
+        172,
+        32,
+        1030,
+        15,
+        20,
+        20,
+        22,
+        438,
+        239,
+        63,
+        89,
+        1387,
+        1537,
+        576,
+        596,
+        461,
+        691,
+        476,
+        714,
+        666,
+        739,
+        237,
+        148,
+        254,
+        406,
+        54,
+        26,
+        115,
+        17,
+        23,
+        17,
+        43,
+        35,
+        44,
+        44,
+        59,
+        39,
+        71,
+        55,
+        55,
+        270,
+        102,
+        47,
+        1263,
+        19,
+        13,
+        13,
+        36,
+        8,
+        9,
+        9,
+        118,
+        245,
+        12,
+        9,
+        9,
+        6,
+        6,
+        40,
+        5,
+        18,
+        27,
+        11,
+        14,
+        9,
+        25,
+        11,
+        9,
+        9,
+        13,
+        12,
+        13,
+        12,
+        14,
+        11,
+        30,
+        34,
+        60,
+        60,
+        56,
+        13,
+        43,
+        20,
+        5,
+        5,
+        6,
+        6,
+        8,
+        39,
+        39,
+        66,
+        61,
+        49,
+        15,
+        71,
+        5170,
+        1542,
+        5176,
+        3278,
+        6335
+      ],
+      "sink": 268695,
+      "memory": {
+        "before": {
+          "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+          "usedJSHeapSize": 2527738,
+          "totalJSHeapSize": 4562922,
+          "jsHeapSizeLimit": 4395630592
+        },
+        "afterInitializationAndFirstResponse": {
+          "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+          "usedJSHeapSize": 20593593,
+          "totalJSHeapSize": 24898749,
+          "jsHeapSizeLimit": 4395630592
+        },
+        "afterQueries": {
+          "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+          "usedJSHeapSize": 28844765,
+          "totalJSHeapSize": 60861629,
+          "jsHeapSizeLimit": 4395630592
+        }
+      },
+      "resources": [
+        {
+          "name": "/bench/harness.mjs",
+          "durationMs": 3.125,
+          "transferSize": 8073,
+          "encodedBodySize": 7773,
+          "decodedBodySize": 7773
+        },
+        {
+          "name": "/dictionaries/practical.compact",
+          "durationMs": 1.8649999499320984,
+          "transferSize": 2135933,
+          "encodedBodySize": 2135633,
+          "decodedBodySize": 2135633
+        },
+        {
+          "name": "/packages/mbmigemo/dist/index.js",
+          "durationMs": 0.9099999666213989,
+          "transferSize": 4835,
+          "encodedBodySize": 4535,
+          "decodedBodySize": 4535
+        },
+        {
+          "name": "/packages/mbmigemo/dist/core.js",
+          "durationMs": 0.6899999976158142,
+          "transferSize": 186326,
+          "encodedBodySize": 186026,
+          "decodedBodySize": 186026
+        }
+      ],
+      "summary": {
+        "queryMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.01500004529953003,
+          "p95": 3.8550000190734863,
+          "p99": 11.969999969005585,
+          "max": 22.009999990463257,
+          "zeroCount": 101
+        },
+        "regexCompileMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0,
+          "p95": 0.009999990463256836,
+          "p99": 0.02499997615814209,
+          "max": 0.04000002145767212,
+          "zeroCount": 439
+        },
+        "matchMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.009999990463256836,
+          "p95": 0.034999966621398926,
+          "p99": 0.04500001668930054,
+          "max": 0.050000011920928955,
+          "zeroCount": 19
+        },
+        "totalMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.02499997615814209,
+          "p95": 3.8950000405311584,
+          "p99": 12.014999985694885,
+          "max": 22.064999997615814,
+          "zeroCount": 2
+        }
+      },
+      "diagnostic": {
+        "browserVersion": "153.0.8010.12",
+        "backend": "js",
+        "loadMs": 4.370000004768372,
+        "compileMs": null,
+        "dictionaryInitializationMs": 28.405000030994415,
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+          "crossOriginIsolated": true,
+          "hardwareConcurrency": 16,
+          "observedTimerStepMs": 0.004999995231628418
+        },
+        "memory": {
+          "before": {
+            "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+            "usedJSHeapSize": 3350841,
+            "totalJSHeapSize": 4568689,
+            "jsHeapSizeLimit": 4395630592
+          },
+          "afterInitialization": {
+            "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+            "usedJSHeapSize": 19904361,
+            "totalJSHeapSize": 23288657,
+            "jsHeapSizeLimit": 4395630592
+          }
+        },
+        "resources": [
+          {
+            "name": "/bench/harness.mjs",
+            "durationMs": 3.26500004529953,
+            "transferSize": 8073,
+            "encodedBodySize": 7773,
+            "decodedBodySize": 7773
+          },
+          {
+            "name": "/dictionaries/practical.compact",
+            "durationMs": 2.7350000143051147,
+            "transferSize": 2135933,
+            "encodedBodySize": 2135633,
+            "decodedBodySize": 2135633
+          },
+          {
+            "name": "/packages/mbmigemo/dist/core.js",
+            "durationMs": 1.100000023841858,
+            "transferSize": 186326,
+            "encodedBodySize": 186026,
+            "decodedBodySize": 186026
+          }
+        ],
+        "method": "JS dynamic import combines network, parse, compile and module evaluation; these are not separately exposed."
+      }
+    },
+    {
+      "browser": "chromium",
+      "run": 3,
+      "browserVersion": "153.0.8010.12",
+      "backend": "js",
+      "status": "ok",
+      "compatibility": true,
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+        "crossOriginIsolated": true,
+        "hardwareConcurrency": 16,
+        "observedTimerStepMs": 0.004999995231628418
+      },
+      "dictionaryBytes": 2135633,
+      "cold": {
+        "dictionaryFetchMs": 5.035000026226044,
+        "wrapperLoadMs": 1.5999999642372131,
+        "coreLoadCompileAndInitializeMs": 36.375,
+        "initializeThroughPublicApiMs": 36.375,
+        "firstQueryMs": 1.4600000381469727,
+        "firstRegexCompileMs": 0.014999985694885254,
+        "firstMatchMs": 0.08499997854232788,
+        "firstResponseAfterDictionaryFetchMs": 39.5349999666214,
+        "fetchToFirstResponseMs": 44.56999999284744
+      },
+      "patternLengths": [
+        55,
+        103,
+        76,
+        188,
+        52,
+        56,
+        77,
+        42,
+        61,
+        29,
+        172,
+        32,
+        1030,
+        15,
+        20,
+        20,
+        22,
+        438,
+        239,
+        63,
+        89,
+        1387,
+        1537,
+        576,
+        596,
+        461,
+        691,
+        476,
+        714,
+        666,
+        739,
+        237,
+        148,
+        254,
+        406,
+        54,
+        26,
+        115,
+        17,
+        23,
+        17,
+        43,
+        35,
+        44,
+        44,
+        59,
+        39,
+        71,
+        55,
+        55,
+        270,
+        102,
+        47,
+        1263,
+        19,
+        13,
+        13,
+        36,
+        8,
+        9,
+        9,
+        118,
+        245,
+        12,
+        9,
+        9,
+        6,
+        6,
+        40,
+        5,
+        18,
+        27,
+        11,
+        14,
+        9,
+        25,
+        11,
+        9,
+        9,
+        13,
+        12,
+        13,
+        12,
+        14,
+        11,
+        30,
+        34,
+        60,
+        60,
+        56,
+        13,
+        43,
+        20,
+        5,
+        5,
+        6,
+        6,
+        8,
+        39,
+        39,
+        66,
+        61,
+        49,
+        15,
+        71,
+        5170,
+        1542,
+        5176,
+        3278,
+        6335
+      ],
+      "sink": 268695,
+      "memory": {
+        "before": {
+          "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+          "usedJSHeapSize": 2540470,
+          "totalJSHeapSize": 4562922,
+          "jsHeapSizeLimit": 4395630592
+        },
+        "afterInitializationAndFirstResponse": {
+          "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+          "usedJSHeapSize": 20568233,
+          "totalJSHeapSize": 25160893,
+          "jsHeapSizeLimit": 4395630592
+        },
+        "afterQueries": {
+          "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+          "usedJSHeapSize": 28777545,
+          "totalJSHeapSize": 59550909,
+          "jsHeapSizeLimit": 4395630592
+        }
+      },
+      "resources": [
+        {
+          "name": "/bench/harness.mjs",
+          "durationMs": 3.375,
+          "transferSize": 8073,
+          "encodedBodySize": 7773,
+          "decodedBodySize": 7773
+        },
+        {
+          "name": "/dictionaries/practical.compact",
+          "durationMs": 3.034999966621399,
+          "transferSize": 2135933,
+          "encodedBodySize": 2135633,
+          "decodedBodySize": 2135633
+        },
+        {
+          "name": "/packages/mbmigemo/dist/index.js",
+          "durationMs": 1.0600000023841858,
+          "transferSize": 4835,
+          "encodedBodySize": 4535,
+          "decodedBodySize": 4535
+        },
+        {
+          "name": "/packages/mbmigemo/dist/core.js",
+          "durationMs": 0.7950000166893005,
+          "transferSize": 186326,
+          "encodedBodySize": 186026,
+          "decodedBodySize": 186026
+        }
+      ],
+      "summary": {
+        "queryMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.020000040531158447,
+          "p95": 4.860000014305115,
+          "p99": 16.375,
+          "max": 30.365000009536743,
+          "zeroCount": 74
+        },
+        "regexCompileMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0,
+          "p95": 0.009999990463256836,
+          "p99": 0.0350000262260437,
+          "max": 0.04499995708465576,
+          "zeroCount": 397
+        },
+        "matchMs": {
+          "count": 550,
+          "min": 0.004999995231628418,
+          "median": 0.009999990463256836,
+          "p95": 0.04500001668930054,
+          "p99": 0.06000000238418579,
+          "max": 0.06499999761581421,
+          "zeroCount": 0
+        },
+        "totalMs": {
+          "count": 550,
+          "min": 0.004999995231628418,
+          "median": 0.034999966621398926,
+          "p95": 4.915000021457672,
+          "p99": 16.430000007152557,
+          "max": 30.4549999833107,
+          "zeroCount": 0
+        }
+      },
+      "diagnostic": {
+        "browserVersion": "153.0.8010.12",
+        "backend": "js",
+        "loadMs": 5.224999964237213,
+        "compileMs": null,
+        "dictionaryInitializationMs": 34.87999999523163,
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+          "crossOriginIsolated": true,
+          "hardwareConcurrency": 16,
+          "observedTimerStepMs": 0.004999995231628418
+        },
+        "memory": {
+          "before": {
+            "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+            "usedJSHeapSize": 3350841,
+            "totalJSHeapSize": 4568689,
+            "jsHeapSizeLimit": 4395630592
+          },
+          "afterInitialization": {
+            "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+            "usedJSHeapSize": 19918457,
+            "totalJSHeapSize": 23288657,
+            "jsHeapSizeLimit": 4395630592
+          }
+        },
+        "resources": [
+          {
+            "name": "/bench/harness.mjs",
+            "durationMs": 5.990000009536743,
+            "transferSize": 8073,
+            "encodedBodySize": 7773,
+            "decodedBodySize": 7773
+          },
+          {
+            "name": "/dictionaries/practical.compact",
+            "durationMs": 1.9699999690055847,
+            "transferSize": 2135933,
+            "encodedBodySize": 2135633,
+            "decodedBodySize": 2135633
+          },
+          {
+            "name": "/packages/mbmigemo/dist/core.js",
+            "durationMs": 0.9300000071525574,
+            "transferSize": 186326,
+            "encodedBodySize": 186026,
+            "decodedBodySize": 186026
+          }
+        ],
+        "method": "JS dynamic import combines network, parse, compile and module evaluation; these are not separately exposed."
+      }
+    },
+    {
+      "browser": "chromium",
+      "run": 3,
+      "browserVersion": "153.0.8010.12",
+      "backend": "wasm-gc",
+      "status": "ok",
+      "compatibility": true,
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+        "crossOriginIsolated": true,
+        "hardwareConcurrency": 16,
+        "observedTimerStepMs": 0.004999995231628418
+      },
+      "dictionaryBytes": 2135633,
+      "cold": {
+        "dictionaryFetchMs": 4.139999985694885,
+        "wrapperLoadMs": 1.39000004529953,
+        "coreLoadCompileAndInitializeMs": 87.68999999761581,
+        "initializeThroughPublicApiMs": 87.68999999761581,
+        "firstQueryMs": 0.9300000071525574,
+        "firstRegexCompileMs": 0.014999985694885254,
+        "firstMatchMs": 0.09499996900558472,
+        "firstResponseAfterDictionaryFetchMs": 90.12000000476837,
+        "fetchToFirstResponseMs": 94.25999999046326
+      },
+      "patternLengths": [
+        55,
+        103,
+        76,
+        188,
+        52,
+        56,
+        77,
+        42,
+        61,
+        29,
+        172,
+        32,
+        1030,
+        15,
+        20,
+        20,
+        22,
+        438,
+        239,
+        63,
+        89,
+        1387,
+        1537,
+        576,
+        596,
+        461,
+        691,
+        476,
+        714,
+        666,
+        739,
+        237,
+        148,
+        254,
+        406,
+        54,
+        26,
+        115,
+        17,
+        23,
+        17,
+        43,
+        35,
+        44,
+        44,
+        59,
+        39,
+        71,
+        55,
+        55,
+        270,
+        102,
+        47,
+        1263,
+        19,
+        13,
+        13,
+        36,
+        8,
+        9,
+        9,
+        118,
+        245,
+        12,
+        9,
+        9,
+        6,
+        6,
+        40,
+        5,
+        18,
+        27,
+        11,
+        14,
+        9,
+        25,
+        11,
+        9,
+        9,
+        13,
+        12,
+        13,
+        12,
+        14,
+        11,
+        30,
+        34,
+        60,
+        60,
+        56,
+        13,
+        43,
+        20,
+        5,
+        5,
+        6,
+        6,
+        8,
+        39,
+        39,
+        66,
+        61,
+        49,
+        15,
+        71,
+        5170,
+        1542,
+        5176,
+        3278,
+        6335
+      ],
+      "sink": 268695,
+      "memory": {
+        "before": {
+          "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+          "usedJSHeapSize": 2541258,
+          "totalJSHeapSize": 4562922,
+          "jsHeapSizeLimit": 4395630592
+        },
+        "afterInitializationAndFirstResponse": {
+          "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+          "usedJSHeapSize": 26425224,
+          "totalJSHeapSize": 35615788,
+          "jsHeapSizeLimit": 4395630592
+        },
+        "afterQueries": {
+          "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+          "usedJSHeapSize": 62273364,
+          "totalJSHeapSize": 100512812,
+          "jsHeapSizeLimit": 4395630592
+        }
+      },
+      "resources": [
+        {
+          "name": "/bench/harness.mjs",
+          "durationMs": 3.990000009536743,
+          "transferSize": 8073,
+          "encodedBodySize": 7773,
+          "decodedBodySize": 7773
+        },
+        {
+          "name": "/dictionaries/practical.compact",
+          "durationMs": 2.1700000166893005,
+          "transferSize": 2135933,
+          "encodedBodySize": 2135633,
+          "decodedBodySize": 2135633
+        },
+        {
+          "name": "/packages/mbmigemo/dist/index.js",
+          "durationMs": 0.8899999856948853,
+          "transferSize": 4835,
+          "encodedBodySize": 4535,
+          "decodedBodySize": 4535
+        },
+        {
+          "name": "/packages/mbmigemo/dist/feature-bytes.js",
+          "durationMs": 1.0950000286102295,
+          "transferSize": 1175,
+          "encodedBodySize": 875,
+          "decodedBodySize": 875
+        },
+        {
+          "name": "/packages/mbmigemo/dist/core.wasm",
+          "durationMs": 0.8850000500679016,
+          "transferSize": 53650,
+          "encodedBodySize": 53350,
+          "decodedBodySize": 53350
+        }
+      ],
+      "summary": {
+        "queryMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.019999980926513672,
+          "p95": 3.509999990463257,
+          "p99": 11.754999995231628,
+          "max": 24.180000007152557,
+          "zeroCount": 70
+        },
+        "regexCompileMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0,
+          "p95": 0.004999995231628418,
+          "p99": 0.009999990463256836,
+          "max": 0.010000050067901611,
+          "zeroCount": 472
+        },
+        "matchMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.009999990463256836,
+          "p95": 0.04000002145767212,
+          "p99": 0.05500000715255737,
+          "max": 0.1600000262260437,
+          "zeroCount": 12
+        },
+        "totalMs": {
+          "count": 550,
+          "min": 0.004999995231628418,
+          "median": 0.025000035762786865,
+          "p95": 3.5550000071525574,
+          "p99": 11.790000021457672,
+          "max": 24.219999969005585,
+          "zeroCount": 0
+        }
+      },
+      "diagnostic": {
+        "browserVersion": "153.0.8010.12",
+        "backend": "wasm-gc",
+        "loadMs": 1.300000011920929,
+        "compileMs": 2.7149999737739563,
+        "dictionaryInitializationMs": 82.46499997377396,
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+          "crossOriginIsolated": true,
+          "hardwareConcurrency": 16,
+          "observedTimerStepMs": 0.004999995231628418
+        },
+        "memory": {
+          "before": {
+            "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+            "usedJSHeapSize": 3350865,
+            "totalJSHeapSize": 4568689,
+            "jsHeapSizeLimit": 4395630592
+          },
+          "afterInitialization": {
+            "method": "performance.memory (nonstandard JS heap observation, no forced GC)",
+            "usedJSHeapSize": 25728602,
+            "totalJSHeapSize": 35315146,
+            "jsHeapSizeLimit": 4395630592
+          }
+        },
+        "resources": [
+          {
+            "name": "/bench/harness.mjs",
+            "durationMs": 3.310000002384186,
+            "transferSize": 8073,
+            "encodedBodySize": 7773,
+            "decodedBodySize": 7773
+          },
+          {
+            "name": "/dictionaries/practical.compact",
+            "durationMs": 1.7949999570846558,
+            "transferSize": 2135933,
+            "encodedBodySize": 2135633,
+            "decodedBodySize": 2135633
+          },
+          {
+            "name": "/packages/mbmigemo/dist/core.wasm",
+            "durationMs": 0.9549999833106995,
+            "transferSize": 53650,
+            "encodedBodySize": 53350,
+            "decodedBodySize": 53350
+          }
+        ],
+        "method": "Wasm fetch and WebAssembly.instantiate measured separately; instantiate includes compile and module instantiation. Dictionary init includes the public snapshot and Latin-1 transport, but feature detection is excluded from this diagnostic."
+      }
+    },
+    {
+      "browser": "firefox",
+      "run": 1,
+      "browserVersion": "155.0",
+      "backend": "js",
+      "status": "ok",
+      "compatibility": true,
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:155.0) Gecko/20100101 Firefox/155.0",
+        "crossOriginIsolated": true,
+        "hardwareConcurrency": 16,
+        "observedTimerStepMs": 0.01999999999998181
+      },
+      "dictionaryBytes": 2135633,
+      "cold": {
+        "dictionaryFetchMs": 4.8799999999999955,
+        "wrapperLoadMs": 2.3000000000000114,
+        "coreLoadCompileAndInitializeMs": 74.69999999999999,
+        "initializeThroughPublicApiMs": 74.69999999999999,
+        "firstQueryMs": 1.0600000000000023,
+        "firstRegexCompileMs": 0.01999999999998181,
+        "firstMatchMs": 0.2400000000000091,
+        "firstResponseAfterDictionaryFetchMs": 78.32,
+        "fetchToFirstResponseMs": 83.19999999999999
+      },
+      "patternLengths": [
+        55,
+        103,
+        76,
+        188,
+        52,
+        56,
+        77,
+        42,
+        61,
+        29,
+        172,
+        32,
+        1030,
+        15,
+        20,
+        20,
+        22,
+        438,
+        239,
+        63,
+        89,
+        1387,
+        1537,
+        576,
+        596,
+        461,
+        691,
+        476,
+        714,
+        666,
+        739,
+        237,
+        148,
+        254,
+        406,
+        54,
+        26,
+        115,
+        17,
+        23,
+        17,
+        43,
+        35,
+        44,
+        44,
+        59,
+        39,
+        71,
+        55,
+        55,
+        270,
+        102,
+        47,
+        1263,
+        19,
+        13,
+        13,
+        36,
+        8,
+        9,
+        9,
+        118,
+        245,
+        12,
+        9,
+        9,
+        6,
+        6,
+        40,
+        5,
+        18,
+        27,
+        11,
+        14,
+        9,
+        25,
+        11,
+        9,
+        9,
+        13,
+        12,
+        13,
+        12,
+        14,
+        11,
+        30,
+        34,
+        60,
+        60,
+        56,
+        13,
+        43,
+        20,
+        5,
+        5,
+        6,
+        6,
+        8,
+        39,
+        39,
+        66,
+        61,
+        49,
+        15,
+        71,
+        5170,
+        1542,
+        5176,
+        3278,
+        6335
+      ],
+      "sink": 268695,
+      "memory": {
+        "before": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterInitializationAndFirstResponse": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterQueries": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        }
+      },
+      "resources": [
+        {
+          "name": "/bench/harness.mjs",
+          "durationMs": 36.19999999999999,
+          "transferSize": 8073,
+          "encodedBodySize": 7773,
+          "decodedBodySize": 7773
+        },
+        {
+          "name": "/favicon.ico",
+          "durationMs": 9.580000000000013,
+          "transferSize": 309,
+          "encodedBodySize": 9,
+          "decodedBodySize": 9
+        },
+        {
+          "name": "/dictionaries/practical.compact",
+          "durationMs": 3.3000000000000114,
+          "transferSize": 2135933,
+          "encodedBodySize": 2135633,
+          "decodedBodySize": 2135633
+        },
+        {
+          "name": "/packages/mbmigemo/dist/index.js",
+          "durationMs": 1.3199999999999932,
+          "transferSize": 4835,
+          "encodedBodySize": 4535,
+          "decodedBodySize": 4535
+        },
+        {
+          "name": "/packages/mbmigemo/dist/core.js",
+          "durationMs": 1.4599999999999795,
+          "transferSize": 186326,
+          "encodedBodySize": 186026,
+          "decodedBodySize": 186026
+        }
+      ],
+      "summary": {
+        "queryMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.03999999999996362,
+          "p95": 9.120000000000118,
+          "p99": 30.76000000000022,
+          "max": 60.06000000000017,
+          "zeroCount": 164
+        },
+        "regexCompileMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0,
+          "p95": 0.01999999999998181,
+          "p99": 0.07999999999992724,
+          "max": 0.11999999999989086,
+          "zeroCount": 470
+        },
+        "matchMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.01999999999998181,
+          "p95": 0.05999999999994543,
+          "p99": 0.060000000000172804,
+          "max": 0.12000000000011823,
+          "zeroCount": 222
+        },
+        "totalMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.03999999999996362,
+          "p95": 9.180000000000064,
+          "p99": 30.860000000000127,
+          "max": 60.180000000000064,
+          "zeroCount": 57
+        }
+      },
+      "diagnostic": {
+        "browserVersion": "155.0",
+        "backend": "js",
+        "loadMs": 10.28000000000003,
+        "compileMs": null,
+        "dictionaryInitializationMs": 78.07999999999998,
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:155.0) Gecko/20100101 Firefox/155.0",
+          "crossOriginIsolated": true,
+          "hardwareConcurrency": 16,
+          "observedTimerStepMs": 0.01999999999998181
+        },
+        "memory": {
+          "before": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          },
+          "afterInitialization": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          }
+        },
+        "resources": [
+          {
+            "name": "/bench/harness.mjs",
+            "durationMs": 24.840000000000003,
+            "transferSize": 8073,
+            "encodedBodySize": 7773,
+            "decodedBodySize": 7773
+          },
+          {
+            "name": "/favicon.ico",
+            "durationMs": 87.73999999999998,
+            "transferSize": 309,
+            "encodedBodySize": 9,
+            "decodedBodySize": 9
+          },
+          {
+            "name": "/dictionaries/practical.compact",
+            "durationMs": 4.019999999999982,
+            "transferSize": 2135933,
+            "encodedBodySize": 2135633,
+            "decodedBodySize": 2135633
+          },
+          {
+            "name": "/packages/mbmigemo/dist/core.js",
+            "durationMs": 1.6999999999999886,
+            "transferSize": 186326,
+            "encodedBodySize": 186026,
+            "decodedBodySize": 186026
+          }
+        ],
+        "method": "JS dynamic import combines network, parse, compile and module evaluation; these are not separately exposed."
+      }
+    },
+    {
+      "browser": "firefox",
+      "run": 1,
+      "browserVersion": "155.0",
+      "backend": "wasm-gc",
+      "status": "ok",
+      "compatibility": true,
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:155.0) Gecko/20100101 Firefox/155.0",
+        "crossOriginIsolated": true,
+        "hardwareConcurrency": 16,
+        "observedTimerStepMs": 0.01999999999998181
+      },
+      "dictionaryBytes": 2135633,
+      "cold": {
+        "dictionaryFetchMs": 5.899999999999977,
+        "wrapperLoadMs": 3.6200000000000045,
+        "coreLoadCompileAndInitializeMs": 123.63999999999999,
+        "initializeThroughPublicApiMs": 123.63999999999999,
+        "firstQueryMs": 0.18000000000006366,
+        "firstRegexCompileMs": 0.01999999999998181,
+        "firstMatchMs": 0.31999999999993634,
+        "firstResponseAfterDictionaryFetchMs": 127.77999999999997,
+        "fetchToFirstResponseMs": 133.67999999999995
+      },
+      "patternLengths": [
+        55,
+        103,
+        76,
+        188,
+        52,
+        56,
+        77,
+        42,
+        61,
+        29,
+        172,
+        32,
+        1030,
+        15,
+        20,
+        20,
+        22,
+        438,
+        239,
+        63,
+        89,
+        1387,
+        1537,
+        576,
+        596,
+        461,
+        691,
+        476,
+        714,
+        666,
+        739,
+        237,
+        148,
+        254,
+        406,
+        54,
+        26,
+        115,
+        17,
+        23,
+        17,
+        43,
+        35,
+        44,
+        44,
+        59,
+        39,
+        71,
+        55,
+        55,
+        270,
+        102,
+        47,
+        1263,
+        19,
+        13,
+        13,
+        36,
+        8,
+        9,
+        9,
+        118,
+        245,
+        12,
+        9,
+        9,
+        6,
+        6,
+        40,
+        5,
+        18,
+        27,
+        11,
+        14,
+        9,
+        25,
+        11,
+        9,
+        9,
+        13,
+        12,
+        13,
+        12,
+        14,
+        11,
+        30,
+        34,
+        60,
+        60,
+        56,
+        13,
+        43,
+        20,
+        5,
+        5,
+        6,
+        6,
+        8,
+        39,
+        39,
+        66,
+        61,
+        49,
+        15,
+        71,
+        5170,
+        1542,
+        5176,
+        3278,
+        6335
+      ],
+      "sink": 268695,
+      "memory": {
+        "before": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterInitializationAndFirstResponse": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterQueries": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        }
+      },
+      "resources": [
+        {
+          "name": "/bench/harness.mjs",
+          "durationMs": 24.580000000000013,
+          "transferSize": 8073,
+          "encodedBodySize": 7773,
+          "decodedBodySize": 7773
+        },
+        {
+          "name": "/favicon.ico",
+          "durationMs": 12.180000000000007,
+          "transferSize": 309,
+          "encodedBodySize": 9,
+          "decodedBodySize": 9
+        },
+        {
+          "name": "/dictionaries/practical.compact",
+          "durationMs": 4.359999999999957,
+          "transferSize": 2135933,
+          "encodedBodySize": 2135633,
+          "decodedBodySize": 2135633
+        },
+        {
+          "name": "/packages/mbmigemo/dist/index.js",
+          "durationMs": 2.339999999999975,
+          "transferSize": 4835,
+          "encodedBodySize": 4535,
+          "decodedBodySize": 4535
+        },
+        {
+          "name": "/packages/mbmigemo/dist/feature-bytes.js",
+          "durationMs": 1.9800000000000182,
+          "transferSize": 1175,
+          "encodedBodySize": 875,
+          "decodedBodySize": 875
+        },
+        {
+          "name": "/packages/mbmigemo/dist/core.wasm",
+          "durationMs": 2.1399999999999864,
+          "transferSize": 53650,
+          "encodedBodySize": 53350,
+          "decodedBodySize": 53350
+        }
+      ],
+      "summary": {
+        "queryMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.03999999999996362,
+          "p95": 11.800000000000182,
+          "p99": 44.879999999999654,
+          "max": 71.01999999999998,
+          "zeroCount": 157
+        },
+        "regexCompileMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0,
+          "p95": 0.01999999999998181,
+          "p99": 0.01999999999998181,
+          "max": 0.09999999999990905,
+          "zeroCount": 495
+        },
+        "matchMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.01999999999998181,
+          "p95": 0.05999999999994543,
+          "p99": 0.07999999999992724,
+          "max": 0.2600000000002183,
+          "zeroCount": 195
+        },
+        "totalMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.03999999999996362,
+          "p95": 11.88000000000011,
+          "p99": 45.059999999999945,
+          "max": 71.07999999999993,
+          "zeroCount": 50
+        }
+      },
+      "diagnostic": {
+        "browserVersion": "155.0",
+        "backend": "wasm-gc",
+        "loadMs": 3.3799999999999955,
+        "compileMs": 9.879999999999995,
+        "dictionaryInitializationMs": 110.94,
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:155.0) Gecko/20100101 Firefox/155.0",
+          "crossOriginIsolated": true,
+          "hardwareConcurrency": 16,
+          "observedTimerStepMs": 0.01999999999998181
+        },
+        "memory": {
+          "before": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          },
+          "afterInitialization": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          }
+        },
+        "resources": [
+          {
+            "name": "/bench/harness.mjs",
+            "durationMs": 29.900000000000006,
+            "transferSize": 8073,
+            "encodedBodySize": 7773,
+            "decodedBodySize": 7773
+          },
+          {
+            "name": "/favicon.ico",
+            "durationMs": 14.919999999999987,
+            "transferSize": 309,
+            "encodedBodySize": 9,
+            "decodedBodySize": 9
+          },
+          {
+            "name": "/dictionaries/practical.compact",
+            "durationMs": 8.160000000000025,
+            "transferSize": 2135933,
+            "encodedBodySize": 2135633,
+            "decodedBodySize": 2135633
+          },
+          {
+            "name": "/packages/mbmigemo/dist/core.wasm",
+            "durationMs": 2.659999999999968,
+            "transferSize": 53650,
+            "encodedBodySize": 53350,
+            "decodedBodySize": 53350
+          }
+        ],
+        "method": "Wasm fetch and WebAssembly.instantiate measured separately; instantiate includes compile and module instantiation. Dictionary init includes the public snapshot and Latin-1 transport, but feature detection is excluded from this diagnostic."
+      }
+    },
+    {
+      "browser": "firefox",
+      "run": 2,
+      "browserVersion": "155.0",
+      "backend": "wasm-gc",
+      "status": "ok",
+      "compatibility": true,
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:155.0) Gecko/20100101 Firefox/155.0",
+        "crossOriginIsolated": true,
+        "hardwareConcurrency": 16,
+        "observedTimerStepMs": 0.019999999999527063
+      },
+      "dictionaryBytes": 2135633,
+      "cold": {
+        "dictionaryFetchMs": 4.439999999999998,
+        "wrapperLoadMs": 4.639999999999986,
+        "coreLoadCompileAndInitializeMs": 878.32,
+        "initializeThroughPublicApiMs": 878.32,
+        "firstQueryMs": 0.33999999999991815,
+        "firstRegexCompileMs": 0.01999999999998181,
+        "firstMatchMs": 0.40000000000009095,
+        "firstResponseAfterDictionaryFetchMs": 883.72,
+        "fetchToFirstResponseMs": 888.1600000000001
+      },
+      "patternLengths": [
+        55,
+        103,
+        76,
+        188,
+        52,
+        56,
+        77,
+        42,
+        61,
+        29,
+        172,
+        32,
+        1030,
+        15,
+        20,
+        20,
+        22,
+        438,
+        239,
+        63,
+        89,
+        1387,
+        1537,
+        576,
+        596,
+        461,
+        691,
+        476,
+        714,
+        666,
+        739,
+        237,
+        148,
+        254,
+        406,
+        54,
+        26,
+        115,
+        17,
+        23,
+        17,
+        43,
+        35,
+        44,
+        44,
+        59,
+        39,
+        71,
+        55,
+        55,
+        270,
+        102,
+        47,
+        1263,
+        19,
+        13,
+        13,
+        36,
+        8,
+        9,
+        9,
+        118,
+        245,
+        12,
+        9,
+        9,
+        6,
+        6,
+        40,
+        5,
+        18,
+        27,
+        11,
+        14,
+        9,
+        25,
+        11,
+        9,
+        9,
+        13,
+        12,
+        13,
+        12,
+        14,
+        11,
+        30,
+        34,
+        60,
+        60,
+        56,
+        13,
+        43,
+        20,
+        5,
+        5,
+        6,
+        6,
+        8,
+        39,
+        39,
+        66,
+        61,
+        49,
+        15,
+        71,
+        5170,
+        1542,
+        5176,
+        3278,
+        6335
+      ],
+      "sink": 268695,
+      "memory": {
+        "before": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterInitializationAndFirstResponse": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterQueries": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        }
+      },
+      "resources": [
+        {
+          "name": "/bench/harness.mjs",
+          "durationMs": 20.80000000000001,
+          "transferSize": 8073,
+          "encodedBodySize": 7773,
+          "decodedBodySize": 7773
+        },
+        {
+          "name": "/favicon.ico",
+          "durationMs": 15.860000000000014,
+          "transferSize": 309,
+          "encodedBodySize": 9,
+          "decodedBodySize": 9
+        },
+        {
+          "name": "/dictionaries/practical.compact",
+          "durationMs": 3.32000000000005,
+          "transferSize": 2135933,
+          "encodedBodySize": 2135633,
+          "decodedBodySize": 2135633
+        },
+        {
+          "name": "/packages/mbmigemo/dist/index.js",
+          "durationMs": 2.840000000000032,
+          "transferSize": 4835,
+          "encodedBodySize": 4535,
+          "decodedBodySize": 4535
+        },
+        {
+          "name": "/packages/mbmigemo/dist/feature-bytes.js",
+          "durationMs": 2.7800000000000296,
+          "transferSize": 1175,
+          "encodedBodySize": 875,
+          "decodedBodySize": 875
+        },
+        {
+          "name": "/packages/mbmigemo/dist/core.wasm",
+          "durationMs": 2.5,
+          "transferSize": 53650,
+          "encodedBodySize": 53350,
+          "decodedBodySize": 53350
+        }
+      ],
+      "summary": {
+        "queryMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.05999999999949068,
+          "p95": 13.720000000000255,
+          "p99": 50.48000000000002,
+          "max": 86.9399999999996,
+          "zeroCount": 103
+        },
+        "regexCompileMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0,
+          "p95": 0.01999999999998181,
+          "p99": 0.020000000000436557,
+          "max": 0.07999999999992724,
+          "zeroCount": 473
+        },
+        "matchMs": {
+          "count": 550,
+          "min": 0.15999999999985448,
+          "median": 0.1999999999998181,
+          "p95": 0.36000000000012733,
+          "p99": 0.6199999999998909,
+          "max": 0.9200000000000728,
+          "zeroCount": 0
+        },
+        "totalMs": {
+          "count": 550,
+          "min": 0.1799999999998363,
+          "median": 0.2600000000002183,
+          "p95": 14,
+          "p99": 50.69999999999982,
+          "max": 87.2199999999998,
+          "zeroCount": 0
+        }
+      },
+      "diagnostic": {
+        "browserVersion": "155.0",
+        "backend": "wasm-gc",
+        "loadMs": 13.360000000000014,
+        "compileMs": 10.919999999999959,
+        "dictionaryInitializationMs": 118.39999999999998,
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:155.0) Gecko/20100101 Firefox/155.0",
+          "crossOriginIsolated": true,
+          "hardwareConcurrency": 16,
+          "observedTimerStepMs": 0.01999999999998181
+        },
+        "memory": {
+          "before": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          },
+          "afterInitialization": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          }
+        },
+        "resources": [
+          {
+            "name": "/bench/harness.mjs",
+            "durationMs": 49.34,
+            "transferSize": 8073,
+            "encodedBodySize": 7773,
+            "decodedBodySize": 7773
+          },
+          {
+            "name": "/favicon.ico",
+            "durationMs": 113.32,
+            "transferSize": 309,
+            "encodedBodySize": 9,
+            "decodedBodySize": 9
+          },
+          {
+            "name": "/dictionaries/practical.compact",
+            "durationMs": 37.61999999999995,
+            "transferSize": 2135933,
+            "encodedBodySize": 2135633,
+            "decodedBodySize": 2135633
+          },
+          {
+            "name": "/packages/mbmigemo/dist/core.wasm",
+            "durationMs": 5.7999999999999545,
+            "transferSize": 53650,
+            "encodedBodySize": 53350,
+            "decodedBodySize": 53350
+          }
+        ],
+        "method": "Wasm fetch and WebAssembly.instantiate measured separately; instantiate includes compile and module instantiation. Dictionary init includes the public snapshot and Latin-1 transport, but feature detection is excluded from this diagnostic."
+      }
+    },
+    {
+      "browser": "firefox",
+      "run": 2,
+      "browserVersion": "155.0",
+      "backend": "js",
+      "status": "ok",
+      "compatibility": true,
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:155.0) Gecko/20100101 Firefox/155.0",
+        "crossOriginIsolated": true,
+        "hardwareConcurrency": 16,
+        "observedTimerStepMs": 0.01999999999998181
+      },
+      "dictionaryBytes": 2135633,
+      "cold": {
+        "dictionaryFetchMs": 5,
+        "wrapperLoadMs": 2.6999999999999886,
+        "coreLoadCompileAndInitializeMs": 89.90000000000003,
+        "initializeThroughPublicApiMs": 89.90000000000003,
+        "firstQueryMs": 1.240000000000009,
+        "firstRegexCompileMs": 0.01999999999998181,
+        "firstMatchMs": 0.2599999999999909,
+        "firstResponseAfterDictionaryFetchMs": 94.12,
+        "fetchToFirstResponseMs": 99.12
+      },
+      "patternLengths": [
+        55,
+        103,
+        76,
+        188,
+        52,
+        56,
+        77,
+        42,
+        61,
+        29,
+        172,
+        32,
+        1030,
+        15,
+        20,
+        20,
+        22,
+        438,
+        239,
+        63,
+        89,
+        1387,
+        1537,
+        576,
+        596,
+        461,
+        691,
+        476,
+        714,
+        666,
+        739,
+        237,
+        148,
+        254,
+        406,
+        54,
+        26,
+        115,
+        17,
+        23,
+        17,
+        43,
+        35,
+        44,
+        44,
+        59,
+        39,
+        71,
+        55,
+        55,
+        270,
+        102,
+        47,
+        1263,
+        19,
+        13,
+        13,
+        36,
+        8,
+        9,
+        9,
+        118,
+        245,
+        12,
+        9,
+        9,
+        6,
+        6,
+        40,
+        5,
+        18,
+        27,
+        11,
+        14,
+        9,
+        25,
+        11,
+        9,
+        9,
+        13,
+        12,
+        13,
+        12,
+        14,
+        11,
+        30,
+        34,
+        60,
+        60,
+        56,
+        13,
+        43,
+        20,
+        5,
+        5,
+        6,
+        6,
+        8,
+        39,
+        39,
+        66,
+        61,
+        49,
+        15,
+        71,
+        5170,
+        1542,
+        5176,
+        3278,
+        6335
+      ],
+      "sink": 268695,
+      "memory": {
+        "before": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterInitializationAndFirstResponse": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterQueries": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        }
+      },
+      "resources": [
+        {
+          "name": "/bench/harness.mjs",
+          "durationMs": 41.25999999999999,
+          "transferSize": 8073,
+          "encodedBodySize": 7773,
+          "decodedBodySize": 7773
+        },
+        {
+          "name": "/favicon.ico",
+          "durationMs": 13.319999999999993,
+          "transferSize": 309,
+          "encodedBodySize": 9,
+          "decodedBodySize": 9
+        },
+        {
+          "name": "/dictionaries/practical.compact",
+          "durationMs": 3.580000000000041,
+          "transferSize": 2135933,
+          "encodedBodySize": 2135633,
+          "decodedBodySize": 2135633
+        },
+        {
+          "name": "/packages/mbmigemo/dist/index.js",
+          "durationMs": 1.6599999999999682,
+          "transferSize": 4835,
+          "encodedBodySize": 4535,
+          "decodedBodySize": 4535
+        },
+        {
+          "name": "/packages/mbmigemo/dist/core.js",
+          "durationMs": 1.4599999999999795,
+          "transferSize": 186326,
+          "encodedBodySize": 186026,
+          "decodedBodySize": 186026
+        }
+      ],
+      "summary": {
+        "queryMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.03999999999996362,
+          "p95": 10.760000000000218,
+          "p99": 48.680000000000064,
+          "max": 76.77999999999997,
+          "zeroCount": 159
+        },
+        "regexCompileMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0,
+          "p95": 0.03999999999996362,
+          "p99": 0.10000000000013642,
+          "max": 0.14000000000010004,
+          "zeroCount": 461
+        },
+        "matchMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.01999999999998181,
+          "p95": 0.05999999999994543,
+          "p99": 0.11999999999989086,
+          "max": 1.4400000000000546,
+          "zeroCount": 163
+        },
+        "totalMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.05999999999994543,
+          "p95": 10.820000000000164,
+          "p99": 48.86000000000013,
+          "max": 76.96000000000004,
+          "zeroCount": 35
+        }
+      },
+      "diagnostic": {
+        "browserVersion": "155.0",
+        "backend": "js",
+        "loadMs": 12.21999999999997,
+        "compileMs": null,
+        "dictionaryInitializationMs": 69.14000000000004,
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:155.0) Gecko/20100101 Firefox/155.0",
+          "crossOriginIsolated": true,
+          "hardwareConcurrency": 16,
+          "observedTimerStepMs": 0.01999999999998181
+        },
+        "memory": {
+          "before": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          },
+          "afterInitialization": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          }
+        },
+        "resources": [
+          {
+            "name": "/bench/harness.mjs",
+            "durationMs": 22.319999999999993,
+            "transferSize": 8073,
+            "encodedBodySize": 7773,
+            "decodedBodySize": 7773
+          },
+          {
+            "name": "/favicon.ico",
+            "durationMs": 22.139999999999986,
+            "transferSize": 309,
+            "encodedBodySize": 9,
+            "decodedBodySize": 9
+          },
+          {
+            "name": "/dictionaries/practical.compact",
+            "durationMs": 5.900000000000034,
+            "transferSize": 2135933,
+            "encodedBodySize": 2135633,
+            "decodedBodySize": 2135633
+          },
+          {
+            "name": "/packages/mbmigemo/dist/core.js",
+            "durationMs": 3.2799999999999727,
+            "transferSize": 186326,
+            "encodedBodySize": 186026,
+            "decodedBodySize": 186026
+          }
+        ],
+        "method": "JS dynamic import combines network, parse, compile and module evaluation; these are not separately exposed."
+      }
+    },
+    {
+      "browser": "firefox",
+      "run": 3,
+      "browserVersion": "155.0",
+      "backend": "js",
+      "status": "ok",
+      "compatibility": true,
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:155.0) Gecko/20100101 Firefox/155.0",
+        "crossOriginIsolated": true,
+        "hardwareConcurrency": 16,
+        "observedTimerStepMs": 0.01999999999998181
+      },
+      "dictionaryBytes": 2135633,
+      "cold": {
+        "dictionaryFetchMs": 216.07999999999993,
+        "wrapperLoadMs": 3.980000000000018,
+        "coreLoadCompileAndInitializeMs": 93.84000000000003,
+        "initializeThroughPublicApiMs": 93.84000000000003,
+        "firstQueryMs": 1.240000000000009,
+        "firstRegexCompileMs": 0,
+        "firstMatchMs": 0.2599999999999909,
+        "firstResponseAfterDictionaryFetchMs": 99.32000000000005,
+        "fetchToFirstResponseMs": 315.4
+      },
+      "patternLengths": [
+        55,
+        103,
+        76,
+        188,
+        52,
+        56,
+        77,
+        42,
+        61,
+        29,
+        172,
+        32,
+        1030,
+        15,
+        20,
+        20,
+        22,
+        438,
+        239,
+        63,
+        89,
+        1387,
+        1537,
+        576,
+        596,
+        461,
+        691,
+        476,
+        714,
+        666,
+        739,
+        237,
+        148,
+        254,
+        406,
+        54,
+        26,
+        115,
+        17,
+        23,
+        17,
+        43,
+        35,
+        44,
+        44,
+        59,
+        39,
+        71,
+        55,
+        55,
+        270,
+        102,
+        47,
+        1263,
+        19,
+        13,
+        13,
+        36,
+        8,
+        9,
+        9,
+        118,
+        245,
+        12,
+        9,
+        9,
+        6,
+        6,
+        40,
+        5,
+        18,
+        27,
+        11,
+        14,
+        9,
+        25,
+        11,
+        9,
+        9,
+        13,
+        12,
+        13,
+        12,
+        14,
+        11,
+        30,
+        34,
+        60,
+        60,
+        56,
+        13,
+        43,
+        20,
+        5,
+        5,
+        6,
+        6,
+        8,
+        39,
+        39,
+        66,
+        61,
+        49,
+        15,
+        71,
+        5170,
+        1542,
+        5176,
+        3278,
+        6335
+      ],
+      "sink": 268695,
+      "memory": {
+        "before": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterInitializationAndFirstResponse": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterQueries": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        }
+      },
+      "resources": [
+        {
+          "name": "/bench/harness.mjs",
+          "durationMs": 33.72,
+          "transferSize": 8073,
+          "encodedBodySize": 7773,
+          "decodedBodySize": 7773
+        },
+        {
+          "name": "/favicon.ico",
+          "durationMs": 139.48,
+          "transferSize": 309,
+          "encodedBodySize": 9,
+          "decodedBodySize": 9
+        },
+        {
+          "name": "/dictionaries/practical.compact",
+          "durationMs": 214.65999999999997,
+          "transferSize": 2135933,
+          "encodedBodySize": 2135633,
+          "decodedBodySize": 2135633
+        },
+        {
+          "name": "/packages/mbmigemo/dist/index.js",
+          "durationMs": 2.3600000000000136,
+          "transferSize": 4835,
+          "encodedBodySize": 4535,
+          "decodedBodySize": 4535
+        },
+        {
+          "name": "/packages/mbmigemo/dist/core.js",
+          "durationMs": 1.67999999999995,
+          "transferSize": 186326,
+          "encodedBodySize": 186026,
+          "decodedBodySize": 186026
+        }
+      ],
+      "summary": {
+        "queryMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.03999999999996362,
+          "p95": 13.320000000000164,
+          "p99": 48.13999999999987,
+          "max": 244.98000000000002,
+          "zeroCount": 168
+        },
+        "regexCompileMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0,
+          "p95": 0.03999999999996362,
+          "p99": 0.1000000000003638,
+          "max": 0.14000000000032742,
+          "zeroCount": 450
+        },
+        "matchMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.01999999999998181,
+          "p95": 0.05999999999994543,
+          "p99": 0.11999999999989086,
+          "max": 0.3400000000001455,
+          "zeroCount": 168
+        },
+        "totalMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.05999999999994543,
+          "p95": 13.400000000000091,
+          "p99": 48.23999999999978,
+          "max": 245.1199999999999,
+          "zeroCount": 36
+        }
+      },
+      "diagnostic": {
+        "browserVersion": "155.0",
+        "backend": "js",
+        "loadMs": 23.220000000000027,
+        "compileMs": null,
+        "dictionaryInitializationMs": 1993.8799999999999,
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:155.0) Gecko/20100101 Firefox/155.0",
+          "crossOriginIsolated": true,
+          "hardwareConcurrency": 16,
+          "observedTimerStepMs": 0.01999999999998181
+        },
+        "memory": {
+          "before": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          },
+          "afterInitialization": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          }
+        },
+        "resources": [
+          {
+            "name": "/bench/harness.mjs",
+            "durationMs": 28.80000000000001,
+            "transferSize": 8073,
+            "encodedBodySize": 7773,
+            "decodedBodySize": 7773
+          },
+          {
+            "name": "/favicon.ico",
+            "durationMs": 23.28,
+            "transferSize": 309,
+            "encodedBodySize": 9,
+            "decodedBodySize": 9
+          },
+          {
+            "name": "/dictionaries/practical.compact",
+            "durationMs": 3.8000000000000114,
+            "transferSize": 2135933,
+            "encodedBodySize": 2135633,
+            "decodedBodySize": 2135633
+          },
+          {
+            "name": "/packages/mbmigemo/dist/core.js",
+            "durationMs": 7.779999999999973,
+            "transferSize": 186326,
+            "encodedBodySize": 186026,
+            "decodedBodySize": 186026
+          }
+        ],
+        "method": "JS dynamic import combines network, parse, compile and module evaluation; these are not separately exposed."
+      }
+    },
+    {
+      "browser": "firefox",
+      "run": 3,
+      "browserVersion": "155.0",
+      "backend": "wasm-gc",
+      "status": "ok",
+      "compatibility": true,
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:155.0) Gecko/20100101 Firefox/155.0",
+        "crossOriginIsolated": true,
+        "hardwareConcurrency": 16,
+        "observedTimerStepMs": 0.01999999999998181
+      },
+      "dictionaryBytes": 2135633,
+      "cold": {
+        "dictionaryFetchMs": 5,
+        "wrapperLoadMs": 3,
+        "coreLoadCompileAndInitializeMs": 117.90000000000003,
+        "initializeThroughPublicApiMs": 117.90000000000003,
+        "firstQueryMs": 0.1999999999999318,
+        "firstRegexCompileMs": 0,
+        "firstMatchMs": 0.5,
+        "firstResponseAfterDictionaryFetchMs": 121.59999999999997,
+        "fetchToFirstResponseMs": 126.59999999999997
+      },
+      "patternLengths": [
+        55,
+        103,
+        76,
+        188,
+        52,
+        56,
+        77,
+        42,
+        61,
+        29,
+        172,
+        32,
+        1030,
+        15,
+        20,
+        20,
+        22,
+        438,
+        239,
+        63,
+        89,
+        1387,
+        1537,
+        576,
+        596,
+        461,
+        691,
+        476,
+        714,
+        666,
+        739,
+        237,
+        148,
+        254,
+        406,
+        54,
+        26,
+        115,
+        17,
+        23,
+        17,
+        43,
+        35,
+        44,
+        44,
+        59,
+        39,
+        71,
+        55,
+        55,
+        270,
+        102,
+        47,
+        1263,
+        19,
+        13,
+        13,
+        36,
+        8,
+        9,
+        9,
+        118,
+        245,
+        12,
+        9,
+        9,
+        6,
+        6,
+        40,
+        5,
+        18,
+        27,
+        11,
+        14,
+        9,
+        25,
+        11,
+        9,
+        9,
+        13,
+        12,
+        13,
+        12,
+        14,
+        11,
+        30,
+        34,
+        60,
+        60,
+        56,
+        13,
+        43,
+        20,
+        5,
+        5,
+        6,
+        6,
+        8,
+        39,
+        39,
+        66,
+        61,
+        49,
+        15,
+        71,
+        5170,
+        1542,
+        5176,
+        3278,
+        6335
+      ],
+      "sink": 268695,
+      "memory": {
+        "before": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterInitializationAndFirstResponse": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterQueries": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        }
+      },
+      "resources": [
+        {
+          "name": "/bench/harness.mjs",
+          "durationMs": 39.900000000000006,
+          "transferSize": 8073,
+          "encodedBodySize": 7773,
+          "decodedBodySize": 7773
+        },
+        {
+          "name": "/favicon.ico",
+          "durationMs": 92.16,
+          "transferSize": 309,
+          "encodedBodySize": 9,
+          "decodedBodySize": 9
+        },
+        {
+          "name": "/dictionaries/practical.compact",
+          "durationMs": 3.5,
+          "transferSize": 2135933,
+          "encodedBodySize": 2135633,
+          "decodedBodySize": 2135633
+        },
+        {
+          "name": "/packages/mbmigemo/dist/index.js",
+          "durationMs": 1.6200000000000045,
+          "transferSize": 4835,
+          "encodedBodySize": 4535,
+          "decodedBodySize": 4535
+        },
+        {
+          "name": "/packages/mbmigemo/dist/feature-bytes.js",
+          "durationMs": 2.060000000000059,
+          "transferSize": 1175,
+          "encodedBodySize": 875,
+          "decodedBodySize": 875
+        },
+        {
+          "name": "/packages/mbmigemo/dist/core.wasm",
+          "durationMs": 1.580000000000041,
+          "transferSize": 53650,
+          "encodedBodySize": 53350,
+          "decodedBodySize": 53350
+        }
+      ],
+      "summary": {
+        "queryMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.03999999999996362,
+          "p95": 11.980000000000018,
+          "p99": 45.5,
+          "max": 82.2199999999998,
+          "zeroCount": 143
+        },
+        "regexCompileMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0,
+          "p95": 0.01999999999998181,
+          "p99": 0.01999999999998181,
+          "max": 0.020000000000209184,
+          "zeroCount": 489
+        },
+        "matchMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.01999999999998181,
+          "p95": 0.05999999999994543,
+          "p99": 0.09999999999990905,
+          "max": 0.18000000000029104,
+          "zeroCount": 164
+        },
+        "totalMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.05999999999994543,
+          "p95": 12.039999999999964,
+          "p99": 45.559999999999945,
+          "max": 82.27999999999975,
+          "zeroCount": 32
+        }
+      },
+      "diagnostic": {
+        "browserVersion": "155.0",
+        "backend": "wasm-gc",
+        "loadMs": 6.0400000000000205,
+        "compileMs": 8.379999999999995,
+        "dictionaryInitializationMs": 96.25999999999999,
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:155.0) Gecko/20100101 Firefox/155.0",
+          "crossOriginIsolated": true,
+          "hardwareConcurrency": 16,
+          "observedTimerStepMs": 0.01999999999998181
+        },
+        "memory": {
+          "before": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          },
+          "afterInitialization": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          }
+        },
+        "resources": [
+          {
+            "name": "/bench/harness.mjs",
+            "durationMs": 22.22,
+            "transferSize": 8073,
+            "encodedBodySize": 7773,
+            "decodedBodySize": 7773
+          },
+          {
+            "name": "/favicon.ico",
+            "durationMs": 64.78,
+            "transferSize": 309,
+            "encodedBodySize": 9,
+            "decodedBodySize": 9
+          },
+          {
+            "name": "/dictionaries/practical.compact",
+            "durationMs": 3.580000000000041,
+            "transferSize": 2135933,
+            "encodedBodySize": 2135633,
+            "decodedBodySize": 2135633
+          },
+          {
+            "name": "/packages/mbmigemo/dist/core.wasm",
+            "durationMs": 2.8000000000000114,
+            "transferSize": 53650,
+            "encodedBodySize": 53350,
+            "decodedBodySize": 53350
+          }
+        ],
+        "method": "Wasm fetch and WebAssembly.instantiate measured separately; instantiate includes compile and module instantiation. Dictionary init includes the public snapshot and Latin-1 transport, but feature detection is excluded from this diagnostic."
+      }
+    },
+    {
+      "browser": "webkit",
+      "run": 1,
+      "browserVersion": "26.6",
+      "backend": "js",
+      "status": "ok",
+      "compatibility": true,
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+        "crossOriginIsolated": true,
+        "hardwareConcurrency": 8,
+        "observedTimerStepMs": 0.01999999999998181
+      },
+      "dictionaryBytes": 2135633,
+      "cold": {
+        "dictionaryFetchMs": 9.100000000000023,
+        "wrapperLoadMs": 2.8799999999999955,
+        "coreLoadCompileAndInitializeMs": 70.92000000000002,
+        "initializeThroughPublicApiMs": 70.92000000000002,
+        "firstQueryMs": 2.180000000000007,
+        "firstRegexCompileMs": 0.01999999999998181,
+        "firstMatchMs": 1.3999999999999773,
+        "firstResponseAfterDictionaryFetchMs": 77.39999999999998,
+        "fetchToFirstResponseMs": 86.5
+      },
+      "patternLengths": [
+        55,
+        103,
+        76,
+        188,
+        52,
+        56,
+        77,
+        42,
+        61,
+        29,
+        172,
+        32,
+        1030,
+        15,
+        20,
+        20,
+        22,
+        438,
+        239,
+        63,
+        89,
+        1387,
+        1537,
+        576,
+        596,
+        461,
+        691,
+        476,
+        714,
+        666,
+        739,
+        237,
+        148,
+        254,
+        406,
+        54,
+        26,
+        115,
+        17,
+        23,
+        17,
+        43,
+        35,
+        44,
+        44,
+        59,
+        39,
+        71,
+        55,
+        55,
+        270,
+        102,
+        47,
+        1263,
+        19,
+        13,
+        13,
+        36,
+        8,
+        9,
+        9,
+        118,
+        245,
+        12,
+        9,
+        9,
+        6,
+        6,
+        40,
+        5,
+        18,
+        27,
+        11,
+        14,
+        9,
+        25,
+        11,
+        9,
+        9,
+        13,
+        12,
+        13,
+        12,
+        14,
+        11,
+        30,
+        34,
+        60,
+        60,
+        56,
+        13,
+        43,
+        20,
+        5,
+        5,
+        6,
+        6,
+        8,
+        39,
+        39,
+        66,
+        61,
+        49,
+        15,
+        71,
+        5170,
+        1542,
+        5176,
+        3278,
+        6335
+      ],
+      "sink": 268695,
+      "memory": {
+        "before": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterInitializationAndFirstResponse": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterQueries": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        }
+      },
+      "resources": [
+        {
+          "name": "/bench/harness.mjs",
+          "durationMs": 2.2600000000000193,
+          "transferSize": 8073,
+          "encodedBodySize": 7773,
+          "decodedBodySize": 7773
+        },
+        {
+          "name": "/dictionaries/practical.compact",
+          "durationMs": 2.6200000000000045,
+          "transferSize": 2135933,
+          "encodedBodySize": 2135633,
+          "decodedBodySize": 2135633
+        },
+        {
+          "name": "/packages/mbmigemo/dist/index.js",
+          "durationMs": 1.5,
+          "transferSize": 4835,
+          "encodedBodySize": 4535,
+          "decodedBodySize": 4535
+        },
+        {
+          "name": "/packages/mbmigemo/dist/core.js",
+          "durationMs": 1.400000000000034,
+          "transferSize": 186326,
+          "encodedBodySize": 186026,
+          "decodedBodySize": 186026
+        }
+      ],
+      "summary": {
+        "queryMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.01999999999998181,
+          "p95": 4.619999999999891,
+          "p99": 14.559999999999945,
+          "max": 26.1400000000001,
+          "zeroCount": 180
+        },
+        "regexCompileMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0,
+          "p95": 0.03999999999996362,
+          "p99": 0.11999999999989086,
+          "max": 0.2400000000000091,
+          "zeroCount": 455
+        },
+        "matchMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.01999999999998181,
+          "p95": 0.3000000000001819,
+          "p99": 0.8200000000001637,
+          "max": 1.599999999999909,
+          "zeroCount": 211
+        },
+        "totalMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.03999999999996362,
+          "p95": 5.079999999999927,
+          "p99": 16.339999999999918,
+          "max": 26.74000000000001,
+          "zeroCount": 75
+        }
+      },
+      "diagnostic": {
+        "browserVersion": "26.6",
+        "backend": "js",
+        "loadMs": 8.599999999999994,
+        "compileMs": null,
+        "dictionaryInitializationMs": 53.91999999999999,
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+          "crossOriginIsolated": true,
+          "hardwareConcurrency": 8,
+          "observedTimerStepMs": 0.01999999999998181
+        },
+        "memory": {
+          "before": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          },
+          "afterInitialization": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          }
+        },
+        "resources": [
+          {
+            "name": "/bench/harness.mjs",
+            "durationMs": 2.140000000000015,
+            "transferSize": 8073,
+            "encodedBodySize": 7773,
+            "decodedBodySize": 7773
+          },
+          {
+            "name": "/dictionaries/practical.compact",
+            "durationMs": 6.799999999999983,
+            "transferSize": 2135933,
+            "encodedBodySize": 2135633,
+            "decodedBodySize": 2135633
+          },
+          {
+            "name": "/packages/mbmigemo/dist/core.js",
+            "durationMs": 1.6599999999999966,
+            "transferSize": 186326,
+            "encodedBodySize": 186026,
+            "decodedBodySize": 186026
+          }
+        ],
+        "method": "JS dynamic import combines network, parse, compile and module evaluation; these are not separately exposed."
+      }
+    },
+    {
+      "browser": "webkit",
+      "run": 1,
+      "browserVersion": "26.6",
+      "backend": "wasm-gc",
+      "status": "ok",
+      "compatibility": true,
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+        "crossOriginIsolated": true,
+        "hardwareConcurrency": 8,
+        "observedTimerStepMs": 0.01999999999998181
+      },
+      "dictionaryBytes": 2135633,
+      "cold": {
+        "dictionaryFetchMs": 6.699999999999989,
+        "wrapperLoadMs": 2.900000000000034,
+        "coreLoadCompileAndInitializeMs": 98.56,
+        "initializeThroughPublicApiMs": 98.56,
+        "firstQueryMs": 2.019999999999982,
+        "firstRegexCompileMs": 0.01999999999998181,
+        "firstMatchMs": 1,
+        "firstResponseAfterDictionaryFetchMs": 104.5,
+        "fetchToFirstResponseMs": 111.19999999999999
+      },
+      "patternLengths": [
+        55,
+        103,
+        76,
+        188,
+        52,
+        56,
+        77,
+        42,
+        61,
+        29,
+        172,
+        32,
+        1030,
+        15,
+        20,
+        20,
+        22,
+        438,
+        239,
+        63,
+        89,
+        1387,
+        1537,
+        576,
+        596,
+        461,
+        691,
+        476,
+        714,
+        666,
+        739,
+        237,
+        148,
+        254,
+        406,
+        54,
+        26,
+        115,
+        17,
+        23,
+        17,
+        43,
+        35,
+        44,
+        44,
+        59,
+        39,
+        71,
+        55,
+        55,
+        270,
+        102,
+        47,
+        1263,
+        19,
+        13,
+        13,
+        36,
+        8,
+        9,
+        9,
+        118,
+        245,
+        12,
+        9,
+        9,
+        6,
+        6,
+        40,
+        5,
+        18,
+        27,
+        11,
+        14,
+        9,
+        25,
+        11,
+        9,
+        9,
+        13,
+        12,
+        13,
+        12,
+        14,
+        11,
+        30,
+        34,
+        60,
+        60,
+        56,
+        13,
+        43,
+        20,
+        5,
+        5,
+        6,
+        6,
+        8,
+        39,
+        39,
+        66,
+        61,
+        49,
+        15,
+        71,
+        5170,
+        1542,
+        5176,
+        3278,
+        6335
+      ],
+      "sink": 268695,
+      "memory": {
+        "before": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterInitializationAndFirstResponse": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterQueries": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        }
+      },
+      "resources": [
+        {
+          "name": "/bench/harness.mjs",
+          "durationMs": 2.640000000000015,
+          "transferSize": 8073,
+          "encodedBodySize": 7773,
+          "decodedBodySize": 7773
+        },
+        {
+          "name": "/dictionaries/practical.compact",
+          "durationMs": 3.3600000000000136,
+          "transferSize": 2135933,
+          "encodedBodySize": 2135633,
+          "decodedBodySize": 2135633
+        },
+        {
+          "name": "/packages/mbmigemo/dist/index.js",
+          "durationMs": 1.5,
+          "transferSize": 4835,
+          "encodedBodySize": 4535,
+          "decodedBodySize": 4535
+        },
+        {
+          "name": "/packages/mbmigemo/dist/feature-bytes.js",
+          "durationMs": 1.4399999999999977,
+          "transferSize": 1175,
+          "encodedBodySize": 875,
+          "decodedBodySize": 875
+        },
+        {
+          "name": "/packages/mbmigemo/dist/core.wasm",
+          "durationMs": 1.5400000000000205,
+          "transferSize": 53650,
+          "encodedBodySize": 53350,
+          "decodedBodySize": 53350
+        }
+      ],
+      "summary": {
+        "queryMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.03999999999996362,
+          "p95": 9.1400000000001,
+          "p99": 28.40000000000009,
+          "max": 53.039999999999964,
+          "zeroCount": 150
+        },
+        "regexCompileMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0,
+          "p95": 0.040000000000190994,
+          "p99": 0.1799999999998363,
+          "max": 0.20000000000004547,
+          "zeroCount": 461
+        },
+        "matchMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.01999999999998181,
+          "p95": 0.42000000000007276,
+          "p99": 1.9600000000000364,
+          "max": 2.0799999999999272,
+          "zeroCount": 162
+        },
+        "totalMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.040000000000190994,
+          "p95": 9.700000000000045,
+          "p99": 30.2800000000002,
+          "max": 55.25999999999999,
+          "zeroCount": 35
+        }
+      },
+      "diagnostic": {
+        "browserVersion": "26.6",
+        "backend": "wasm-gc",
+        "loadMs": 3.7399999999999807,
+        "compileMs": 4.02000000000001,
+        "dictionaryInitializationMs": 87.41999999999996,
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+          "crossOriginIsolated": true,
+          "hardwareConcurrency": 8,
+          "observedTimerStepMs": 0.01999999999998181
+        },
+        "memory": {
+          "before": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          },
+          "afterInitialization": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          }
+        },
+        "resources": [
+          {
+            "name": "/bench/harness.mjs",
+            "durationMs": 2.4799999999999898,
+            "transferSize": 8073,
+            "encodedBodySize": 7773,
+            "decodedBodySize": 7773
+          },
+          {
+            "name": "/dictionaries/practical.compact",
+            "durationMs": 3.5800000000000125,
+            "transferSize": 2135933,
+            "encodedBodySize": 2135633,
+            "decodedBodySize": 2135633
+          },
+          {
+            "name": "/packages/mbmigemo/dist/core.wasm",
+            "durationMs": 2.0999999999999943,
+            "transferSize": 53650,
+            "encodedBodySize": 53350,
+            "decodedBodySize": 53350
+          }
+        ],
+        "method": "Wasm fetch and WebAssembly.instantiate measured separately; instantiate includes compile and module instantiation. Dictionary init includes the public snapshot and Latin-1 transport, but feature detection is excluded from this diagnostic."
+      }
+    },
+    {
+      "browser": "webkit",
+      "run": 2,
+      "browserVersion": "26.6",
+      "backend": "wasm-gc",
+      "status": "ok",
+      "compatibility": true,
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+        "crossOriginIsolated": true,
+        "hardwareConcurrency": 8,
+        "observedTimerStepMs": 0.01999999999998181
+      },
+      "dictionaryBytes": 2135633,
+      "cold": {
+        "dictionaryFetchMs": 7.6200000000000045,
+        "wrapperLoadMs": 3.480000000000018,
+        "coreLoadCompileAndInitializeMs": 96.41999999999996,
+        "initializeThroughPublicApiMs": 96.41999999999996,
+        "firstQueryMs": 2.4399999999999977,
+        "firstRegexCompileMs": 0.040000000000020464,
+        "firstMatchMs": 0.36000000000001364,
+        "firstResponseAfterDictionaryFetchMs": 102.74000000000001,
+        "fetchToFirstResponseMs": 110.36000000000001
+      },
+      "patternLengths": [
+        55,
+        103,
+        76,
+        188,
+        52,
+        56,
+        77,
+        42,
+        61,
+        29,
+        172,
+        32,
+        1030,
+        15,
+        20,
+        20,
+        22,
+        438,
+        239,
+        63,
+        89,
+        1387,
+        1537,
+        576,
+        596,
+        461,
+        691,
+        476,
+        714,
+        666,
+        739,
+        237,
+        148,
+        254,
+        406,
+        54,
+        26,
+        115,
+        17,
+        23,
+        17,
+        43,
+        35,
+        44,
+        44,
+        59,
+        39,
+        71,
+        55,
+        55,
+        270,
+        102,
+        47,
+        1263,
+        19,
+        13,
+        13,
+        36,
+        8,
+        9,
+        9,
+        118,
+        245,
+        12,
+        9,
+        9,
+        6,
+        6,
+        40,
+        5,
+        18,
+        27,
+        11,
+        14,
+        9,
+        25,
+        11,
+        9,
+        9,
+        13,
+        12,
+        13,
+        12,
+        14,
+        11,
+        30,
+        34,
+        60,
+        60,
+        56,
+        13,
+        43,
+        20,
+        5,
+        5,
+        6,
+        6,
+        8,
+        39,
+        39,
+        66,
+        61,
+        49,
+        15,
+        71,
+        5170,
+        1542,
+        5176,
+        3278,
+        6335
+      ],
+      "sink": 268695,
+      "memory": {
+        "before": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterInitializationAndFirstResponse": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterQueries": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        }
+      },
+      "resources": [
+        {
+          "name": "/bench/harness.mjs",
+          "durationMs": 4.260000000000019,
+          "transferSize": 8073,
+          "encodedBodySize": 7773,
+          "decodedBodySize": 7773
+        },
+        {
+          "name": "/dictionaries/practical.compact",
+          "durationMs": 3.340000000000032,
+          "transferSize": 2135933,
+          "encodedBodySize": 2135633,
+          "decodedBodySize": 2135633
+        },
+        {
+          "name": "/packages/mbmigemo/dist/index.js",
+          "durationMs": 1.759999999999991,
+          "transferSize": 4835,
+          "encodedBodySize": 4535,
+          "decodedBodySize": 4535
+        },
+        {
+          "name": "/packages/mbmigemo/dist/feature-bytes.js",
+          "durationMs": 1.6399999999999864,
+          "transferSize": 1175,
+          "encodedBodySize": 875,
+          "decodedBodySize": 875
+        },
+        {
+          "name": "/packages/mbmigemo/dist/core.wasm",
+          "durationMs": 2.259999999999991,
+          "transferSize": 53650,
+          "encodedBodySize": 53350,
+          "decodedBodySize": 53350
+        }
+      ],
+      "summary": {
+        "queryMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.03999999999996362,
+          "p95": 8.1400000000001,
+          "p99": 27.61999999999989,
+          "max": 52.3599999999999,
+          "zeroCount": 164
+        },
+        "regexCompileMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0,
+          "p95": 0.040000000000190994,
+          "p99": 0.16000000000008185,
+          "max": 0.18000000000006366,
+          "zeroCount": 460
+        },
+        "matchMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.01999999999998181,
+          "p95": 0.44000000000005457,
+          "p99": 1.7200000000000273,
+          "max": 2.1800000000000637,
+          "zeroCount": 170
+        },
+        "totalMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.03999999999996362,
+          "p95": 8.660000000000082,
+          "p99": 28.580000000000155,
+          "max": 54.700000000000045,
+          "zeroCount": 44
+        }
+      },
+      "diagnostic": {
+        "browserVersion": "26.6",
+        "backend": "wasm-gc",
+        "loadMs": 2.920000000000016,
+        "compileMs": 4.099999999999966,
+        "dictionaryInitializationMs": 90.5,
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+          "crossOriginIsolated": true,
+          "hardwareConcurrency": 8,
+          "observedTimerStepMs": 0.01999999999998181
+        },
+        "memory": {
+          "before": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          },
+          "afterInitialization": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          }
+        },
+        "resources": [
+          {
+            "name": "/bench/harness.mjs",
+            "durationMs": 2.460000000000008,
+            "transferSize": 8073,
+            "encodedBodySize": 7773,
+            "decodedBodySize": 7773
+          },
+          {
+            "name": "/dictionaries/practical.compact",
+            "durationMs": 2.859999999999985,
+            "transferSize": 2135933,
+            "encodedBodySize": 2135633,
+            "decodedBodySize": 2135633
+          },
+          {
+            "name": "/packages/mbmigemo/dist/core.wasm",
+            "durationMs": 1.6200000000000045,
+            "transferSize": 53650,
+            "encodedBodySize": 53350,
+            "decodedBodySize": 53350
+          }
+        ],
+        "method": "Wasm fetch and WebAssembly.instantiate measured separately; instantiate includes compile and module instantiation. Dictionary init includes the public snapshot and Latin-1 transport, but feature detection is excluded from this diagnostic."
+      }
+    },
+    {
+      "browser": "webkit",
+      "run": 2,
+      "browserVersion": "26.6",
+      "backend": "js",
+      "status": "ok",
+      "compatibility": true,
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+        "crossOriginIsolated": true,
+        "hardwareConcurrency": 8,
+        "observedTimerStepMs": 0.01999999999998181
+      },
+      "dictionaryBytes": 2135633,
+      "cold": {
+        "dictionaryFetchMs": 6.180000000000007,
+        "wrapperLoadMs": 3.0600000000000023,
+        "coreLoadCompileAndInitializeMs": 63.339999999999975,
+        "initializeThroughPublicApiMs": 63.339999999999975,
+        "firstQueryMs": 2.160000000000025,
+        "firstRegexCompileMs": 0,
+        "firstMatchMs": 0.21999999999997044,
+        "firstResponseAfterDictionaryFetchMs": 68.77999999999997,
+        "fetchToFirstResponseMs": 74.95999999999998
+      },
+      "patternLengths": [
+        55,
+        103,
+        76,
+        188,
+        52,
+        56,
+        77,
+        42,
+        61,
+        29,
+        172,
+        32,
+        1030,
+        15,
+        20,
+        20,
+        22,
+        438,
+        239,
+        63,
+        89,
+        1387,
+        1537,
+        576,
+        596,
+        461,
+        691,
+        476,
+        714,
+        666,
+        739,
+        237,
+        148,
+        254,
+        406,
+        54,
+        26,
+        115,
+        17,
+        23,
+        17,
+        43,
+        35,
+        44,
+        44,
+        59,
+        39,
+        71,
+        55,
+        55,
+        270,
+        102,
+        47,
+        1263,
+        19,
+        13,
+        13,
+        36,
+        8,
+        9,
+        9,
+        118,
+        245,
+        12,
+        9,
+        9,
+        6,
+        6,
+        40,
+        5,
+        18,
+        27,
+        11,
+        14,
+        9,
+        25,
+        11,
+        9,
+        9,
+        13,
+        12,
+        13,
+        12,
+        14,
+        11,
+        30,
+        34,
+        60,
+        60,
+        56,
+        13,
+        43,
+        20,
+        5,
+        5,
+        6,
+        6,
+        8,
+        39,
+        39,
+        66,
+        61,
+        49,
+        15,
+        71,
+        5170,
+        1542,
+        5176,
+        3278,
+        6335
+      ],
+      "sink": 268695,
+      "memory": {
+        "before": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterInitializationAndFirstResponse": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterQueries": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        }
+      },
+      "resources": [
+        {
+          "name": "/bench/harness.mjs",
+          "durationMs": 2.460000000000008,
+          "transferSize": 8073,
+          "encodedBodySize": 7773,
+          "decodedBodySize": 7773
+        },
+        {
+          "name": "/dictionaries/practical.compact",
+          "durationMs": 2.7200000000000273,
+          "transferSize": 2135933,
+          "encodedBodySize": 2135633,
+          "decodedBodySize": 2135633
+        },
+        {
+          "name": "/packages/mbmigemo/dist/index.js",
+          "durationMs": 1.5200000000000387,
+          "transferSize": 4835,
+          "encodedBodySize": 4535,
+          "decodedBodySize": 4535
+        },
+        {
+          "name": "/packages/mbmigemo/dist/core.js",
+          "durationMs": 1.4599999999999795,
+          "transferSize": 186326,
+          "encodedBodySize": 186026,
+          "decodedBodySize": 186026
+        }
+      ],
+      "summary": {
+        "queryMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.01999999999998181,
+          "p95": 4.540000000000077,
+          "p99": 16.25999999999999,
+          "max": 25.879999999999995,
+          "zeroCount": 188
+        },
+        "regexCompileMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0,
+          "p95": 0.03999999999996362,
+          "p99": 0.14000000000010004,
+          "max": 0.2599999999999909,
+          "zeroCount": 449
+        },
+        "matchMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.01999999999998181,
+          "p95": 0.32000000000005,
+          "p99": 1.0599999999999454,
+          "max": 1.759999999999991,
+          "zeroCount": 162
+        },
+        "totalMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.03999999999996362,
+          "p95": 4.980000000000018,
+          "p99": 18.25999999999999,
+          "max": 26.680000000000064,
+          "zeroCount": 59
+        }
+      },
+      "diagnostic": {
+        "browserVersion": "26.6",
+        "backend": "js",
+        "loadMs": 9.219999999999999,
+        "compileMs": null,
+        "dictionaryInitializationMs": 63.23999999999998,
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+          "crossOriginIsolated": true,
+          "hardwareConcurrency": 8,
+          "observedTimerStepMs": 0.01999999999998181
+        },
+        "memory": {
+          "before": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          },
+          "afterInitialization": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          }
+        },
+        "resources": [
+          {
+            "name": "/bench/harness.mjs",
+            "durationMs": 2.5,
+            "transferSize": 8073,
+            "encodedBodySize": 7773,
+            "decodedBodySize": 7773
+          },
+          {
+            "name": "/dictionaries/practical.compact",
+            "durationMs": 3.0800000000000125,
+            "transferSize": 2135933,
+            "encodedBodySize": 2135633,
+            "decodedBodySize": 2135633
+          },
+          {
+            "name": "/packages/mbmigemo/dist/core.js",
+            "durationMs": 1.9000000000000057,
+            "transferSize": 186326,
+            "encodedBodySize": 186026,
+            "decodedBodySize": 186026
+          }
+        ],
+        "method": "JS dynamic import combines network, parse, compile and module evaluation; these are not separately exposed."
+      }
+    },
+    {
+      "browser": "webkit",
+      "run": 3,
+      "browserVersion": "26.6",
+      "backend": "js",
+      "status": "ok",
+      "compatibility": true,
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+        "crossOriginIsolated": true,
+        "hardwareConcurrency": 8,
+        "observedTimerStepMs": 0.01999999999998181
+      },
+      "dictionaryBytes": 2135633,
+      "cold": {
+        "dictionaryFetchMs": 7.5,
+        "wrapperLoadMs": 3.159999999999968,
+        "coreLoadCompileAndInitializeMs": 70.28000000000003,
+        "initializeThroughPublicApiMs": 70.28000000000003,
+        "firstQueryMs": 2.3600000000000136,
+        "firstRegexCompileMs": 0.01999999999998181,
+        "firstMatchMs": 0.22000000000002728,
+        "firstResponseAfterDictionaryFetchMs": 76.04000000000002,
+        "fetchToFirstResponseMs": 83.54000000000002
+      },
+      "patternLengths": [
+        55,
+        103,
+        76,
+        188,
+        52,
+        56,
+        77,
+        42,
+        61,
+        29,
+        172,
+        32,
+        1030,
+        15,
+        20,
+        20,
+        22,
+        438,
+        239,
+        63,
+        89,
+        1387,
+        1537,
+        576,
+        596,
+        461,
+        691,
+        476,
+        714,
+        666,
+        739,
+        237,
+        148,
+        254,
+        406,
+        54,
+        26,
+        115,
+        17,
+        23,
+        17,
+        43,
+        35,
+        44,
+        44,
+        59,
+        39,
+        71,
+        55,
+        55,
+        270,
+        102,
+        47,
+        1263,
+        19,
+        13,
+        13,
+        36,
+        8,
+        9,
+        9,
+        118,
+        245,
+        12,
+        9,
+        9,
+        6,
+        6,
+        40,
+        5,
+        18,
+        27,
+        11,
+        14,
+        9,
+        25,
+        11,
+        9,
+        9,
+        13,
+        12,
+        13,
+        12,
+        14,
+        11,
+        30,
+        34,
+        60,
+        60,
+        56,
+        13,
+        43,
+        20,
+        5,
+        5,
+        6,
+        6,
+        8,
+        39,
+        39,
+        66,
+        61,
+        49,
+        15,
+        71,
+        5170,
+        1542,
+        5176,
+        3278,
+        6335
+      ],
+      "sink": 268695,
+      "memory": {
+        "before": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterInitializationAndFirstResponse": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterQueries": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        }
+      },
+      "resources": [
+        {
+          "name": "/bench/harness.mjs",
+          "durationMs": 4,
+          "transferSize": 8073,
+          "encodedBodySize": 7773,
+          "decodedBodySize": 7773
+        },
+        {
+          "name": "/dictionaries/practical.compact",
+          "durationMs": 3.079999999999984,
+          "transferSize": 2135933,
+          "encodedBodySize": 2135633,
+          "decodedBodySize": 2135633
+        },
+        {
+          "name": "/packages/mbmigemo/dist/index.js",
+          "durationMs": 1.7600000000000477,
+          "transferSize": 4835,
+          "encodedBodySize": 4535,
+          "decodedBodySize": 4535
+        },
+        {
+          "name": "/packages/mbmigemo/dist/core.js",
+          "durationMs": 1.3199999999999932,
+          "transferSize": 186326,
+          "encodedBodySize": 186026,
+          "decodedBodySize": 186026
+        }
+      ],
+      "summary": {
+        "queryMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.020000000000095497,
+          "p95": 5.240000000000009,
+          "p99": 17.960000000000036,
+          "max": 33.680000000000064,
+          "zeroCount": 180
+        },
+        "regexCompileMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0,
+          "p95": 0.04000000000007731,
+          "p99": 0.18000000000006366,
+          "max": 0.2599999999999909,
+          "zeroCount": 442
+        },
+        "matchMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.01999999999998181,
+          "p95": 0.36000000000012733,
+          "p99": 1,
+          "max": 2.060000000000173,
+          "zeroCount": 158
+        },
+        "totalMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.03999999999996362,
+          "p95": 5.899999999999864,
+          "p99": 20.24000000000001,
+          "max": 33.88000000000011,
+          "zeroCount": 47
+        }
+      },
+      "diagnostic": {
+        "browserVersion": "26.6",
+        "backend": "js",
+        "loadMs": 8.799999999999983,
+        "compileMs": null,
+        "dictionaryInitializationMs": 57.18000000000001,
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+          "crossOriginIsolated": true,
+          "hardwareConcurrency": 8,
+          "observedTimerStepMs": 0.01999999999998181
+        },
+        "memory": {
+          "before": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          },
+          "afterInitialization": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          }
+        },
+        "resources": [
+          {
+            "name": "/bench/harness.mjs",
+            "durationMs": 2.3600000000000136,
+            "transferSize": 8073,
+            "encodedBodySize": 7773,
+            "decodedBodySize": 7773
+          },
+          {
+            "name": "/dictionaries/practical.compact",
+            "durationMs": 2.960000000000008,
+            "transferSize": 2135933,
+            "encodedBodySize": 2135633,
+            "decodedBodySize": 2135633
+          },
+          {
+            "name": "/packages/mbmigemo/dist/core.js",
+            "durationMs": 1.9399999999999977,
+            "transferSize": 186326,
+            "encodedBodySize": 186026,
+            "decodedBodySize": 186026
+          }
+        ],
+        "method": "JS dynamic import combines network, parse, compile and module evaluation; these are not separately exposed."
+      }
+    },
+    {
+      "browser": "webkit",
+      "run": 3,
+      "browserVersion": "26.6",
+      "backend": "wasm-gc",
+      "status": "ok",
+      "compatibility": true,
+      "environment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+        "crossOriginIsolated": true,
+        "hardwareConcurrency": 8,
+        "observedTimerStepMs": 0.01999999999998181
+      },
+      "dictionaryBytes": 2135633,
+      "cold": {
+        "dictionaryFetchMs": 6.060000000000002,
+        "wrapperLoadMs": 2.5399999999999636,
+        "coreLoadCompileAndInitializeMs": 77.13999999999999,
+        "initializeThroughPublicApiMs": 77.13999999999999,
+        "firstQueryMs": 1.5,
+        "firstRegexCompileMs": 0.040000000000020464,
+        "firstMatchMs": 0.2599999999999909,
+        "firstResponseAfterDictionaryFetchMs": 81.47999999999996,
+        "fetchToFirstResponseMs": 87.53999999999996
+      },
+      "patternLengths": [
+        55,
+        103,
+        76,
+        188,
+        52,
+        56,
+        77,
+        42,
+        61,
+        29,
+        172,
+        32,
+        1030,
+        15,
+        20,
+        20,
+        22,
+        438,
+        239,
+        63,
+        89,
+        1387,
+        1537,
+        576,
+        596,
+        461,
+        691,
+        476,
+        714,
+        666,
+        739,
+        237,
+        148,
+        254,
+        406,
+        54,
+        26,
+        115,
+        17,
+        23,
+        17,
+        43,
+        35,
+        44,
+        44,
+        59,
+        39,
+        71,
+        55,
+        55,
+        270,
+        102,
+        47,
+        1263,
+        19,
+        13,
+        13,
+        36,
+        8,
+        9,
+        9,
+        118,
+        245,
+        12,
+        9,
+        9,
+        6,
+        6,
+        40,
+        5,
+        18,
+        27,
+        11,
+        14,
+        9,
+        25,
+        11,
+        9,
+        9,
+        13,
+        12,
+        13,
+        12,
+        14,
+        11,
+        30,
+        34,
+        60,
+        60,
+        56,
+        13,
+        43,
+        20,
+        5,
+        5,
+        6,
+        6,
+        8,
+        39,
+        39,
+        66,
+        61,
+        49,
+        15,
+        71,
+        5170,
+        1542,
+        5176,
+        3278,
+        6335
+      ],
+      "sink": 268695,
+      "memory": {
+        "before": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterInitializationAndFirstResponse": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        },
+        "afterQueries": {
+          "method": "unavailable",
+          "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+        }
+      },
+      "resources": [
+        {
+          "name": "/bench/harness.mjs",
+          "durationMs": 1.8799999999999955,
+          "transferSize": 8073,
+          "encodedBodySize": 7773,
+          "decodedBodySize": 7773
+        },
+        {
+          "name": "/dictionaries/practical.compact",
+          "durationMs": 2.819999999999993,
+          "transferSize": 2135933,
+          "encodedBodySize": 2135633,
+          "decodedBodySize": 2135633
+        },
+        {
+          "name": "/packages/mbmigemo/dist/index.js",
+          "durationMs": 1.259999999999991,
+          "transferSize": 4835,
+          "encodedBodySize": 4535,
+          "decodedBodySize": 4535
+        },
+        {
+          "name": "/packages/mbmigemo/dist/feature-bytes.js",
+          "durationMs": 1.099999999999966,
+          "transferSize": 1175,
+          "encodedBodySize": 875,
+          "decodedBodySize": 875
+        },
+        {
+          "name": "/packages/mbmigemo/dist/core.wasm",
+          "durationMs": 1.259999999999991,
+          "transferSize": 53650,
+          "encodedBodySize": 53350,
+          "decodedBodySize": 53350
+        }
+      ],
+      "summary": {
+        "queryMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.03999999999996362,
+          "p95": 8.11999999999989,
+          "p99": 26.2199999999998,
+          "max": 49.51999999999998,
+          "zeroCount": 156
+        },
+        "regexCompileMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0,
+          "p95": 0.03999999999996362,
+          "p99": 0.15999999999985448,
+          "max": 0.18000000000006366,
+          "zeroCount": 464
+        },
+        "matchMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.01999999999998181,
+          "p95": 0.44000000000005457,
+          "p99": 1.7200000000000273,
+          "max": 1.8800000000001091,
+          "zeroCount": 206
+        },
+        "totalMs": {
+          "count": 550,
+          "min": 0,
+          "median": 0.03999999999996362,
+          "p95": 8.659999999999854,
+          "p99": 28.279999999999973,
+          "max": 51.5,
+          "zeroCount": 54
+        }
+      },
+      "diagnostic": {
+        "browserVersion": "26.6",
+        "backend": "wasm-gc",
+        "loadMs": 2.359999999999985,
+        "compileMs": 3.719999999999999,
+        "dictionaryInitializationMs": 84.98000000000002,
+        "environment": {
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+          "crossOriginIsolated": true,
+          "hardwareConcurrency": 8,
+          "observedTimerStepMs": 0.01999999999998181
+        },
+        "memory": {
+          "before": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          },
+          "afterInitialization": {
+            "method": "unavailable",
+            "reason": "This browser exposes no performance.memory; no portable per-library memory API is assumed."
+          }
+        },
+        "resources": [
+          {
+            "name": "/bench/harness.mjs",
+            "durationMs": 2.780000000000001,
+            "transferSize": 8073,
+            "encodedBodySize": 7773,
+            "decodedBodySize": 7773
+          },
+          {
+            "name": "/dictionaries/practical.compact",
+            "durationMs": 4.0800000000000125,
+            "transferSize": 2135933,
+            "encodedBodySize": 2135633,
+            "decodedBodySize": 2135633
+          },
+          {
+            "name": "/packages/mbmigemo/dist/core.wasm",
+            "durationMs": 1.259999999999991,
+            "transferSize": 53650,
+            "encodedBodySize": 53350,
+            "decodedBodySize": 53350
+          }
+        ],
+        "method": "Wasm fetch and WebAssembly.instantiate measured separately; instantiate includes compile and module instantiation. Dictionary init includes the public snapshot and Latin-1 transport, but feature detection is excluded from this diagnostic."
+      }
+    }
+  ],
+  "decision": {
+    "rule": "compatibility AND (code Brotli <= 80% OR query p95 <= 80%) AND first response after dictionary fetch <= 110%, on every independent run (at least 3) in every measured browser",
+    "complete": true,
+    "eligible": false,
+    "recommendation": "retain-js-default",
+    "codeBrotliRatio": 1.0605907599091138,
+    "missing": [],
+    "results": [
+      {
+        "browser": "chromium",
+        "run": 1,
+        "compatibility": true,
+        "measurementsValid": true,
+        "firstResponseRatio": 2.045847632563974,
+        "queryP95Ratio": 0.7677595579915,
+        "sizePass": false,
+        "queryPass": true,
+        "latencyPass": false,
+        "pass": false
+      },
+      {
+        "browser": "chromium",
+        "run": 2,
+        "compatibility": true,
+        "measurementsValid": true,
+        "firstResponseRatio": 2.1523449806825417,
+        "queryP95Ratio": 0.7392995979601018,
+        "sizePass": false,
+        "queryPass": true,
+        "latencyPass": false,
+        "pass": false
+      },
+      {
+        "browser": "chromium",
+        "run": 3,
+        "compatibility": true,
+        "measurementsValid": true,
+        "firstResponseRatio": 2.2794991799887407,
+        "queryP95Ratio": 0.7222222181341121,
+        "sizePass": false,
+        "queryPass": true,
+        "latencyPass": false,
+        "pass": false
+      },
+      {
+        "browser": "firefox",
+        "run": 1,
+        "compatibility": true,
+        "measurementsValid": true,
+        "firstResponseRatio": 1.6315117466802858,
+        "queryP95Ratio": 1.2938596491228103,
+        "sizePass": false,
+        "queryPass": false,
+        "latencyPass": false,
+        "pass": false
+      },
+      {
+        "browser": "firefox",
+        "run": 2,
+        "compatibility": true,
+        "measurementsValid": true,
+        "firstResponseRatio": 9.389290267743306,
+        "queryP95Ratio": 1.2750929368029718,
+        "sizePass": false,
+        "queryPass": false,
+        "latencyPass": false,
+        "pass": false
+      },
+      {
+        "browser": "firefox",
+        "run": 3,
+        "compatibility": true,
+        "measurementsValid": true,
+        "firstResponseRatio": 1.2243254128070873,
+        "queryP95Ratio": 0.8993993993993897,
+        "sizePass": false,
+        "queryPass": false,
+        "latencyPass": false,
+        "pass": false
+      },
+      {
+        "browser": "webkit",
+        "run": 1,
+        "compatibility": true,
+        "measurementsValid": true,
+        "firstResponseRatio": 1.3501291989664086,
+        "queryP95Ratio": 1.9783549783550467,
+        "sizePass": false,
+        "queryPass": false,
+        "latencyPass": false,
+        "pass": false
+      },
+      {
+        "browser": "webkit",
+        "run": 2,
+        "compatibility": true,
+        "measurementsValid": true,
+        "firstResponseRatio": 1.4937481826112249,
+        "queryP95Ratio": 1.7929515418502118,
+        "sizePass": false,
+        "queryPass": false,
+        "latencyPass": false,
+        "pass": false
+      },
+      {
+        "browser": "webkit",
+        "run": 3,
+        "compatibility": true,
+        "measurementsValid": true,
+        "firstResponseRatio": 1.0715412940557594,
+        "queryP95Ratio": 1.5496183206106635,
+        "sizePass": false,
+        "queryPass": false,
+        "latencyPass": true,
+        "pass": false
+      }
+    ]
+  },
+  "finished": "2026-09-08T04:38:29.916Z"
+}

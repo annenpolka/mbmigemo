@@ -45,7 +45,7 @@ Linuxでブラウザのシステム依存も導入する場合は、`PLAYWRIGHT_
 
 GitHub Actionsの現定義は6ジョブ。Linux/macOS × PBT seed 20260908/104729の4構成で固定C参照とMoonBit SDKを復元し、`test:all`、辞書再生成の一致、小辞書のpackを検証する。追加のLinux/macOS各1構成で実用辞書、3ブラウザ、benchの判定テスト、両辞書のpackを検証する。PBT、互換性、browser trace、packの記録をartifactへ保存する。性能の採用判断は共有CIランナーで測らず、環境を記録した別の計測で行う。
 
-2026-09-08にコミット `4b3a7bb` の[旧4構成のActions実行](https://github.com/annenpolka/mbmigemo/actions/runs/34184453471)は全成功を確認した。実用辞書・ブラウザを追加した6ジョブのCIは、この記録時点では実行結果未確認。過去の4ジョブ成功を新定義の成功として扱わない。
+2026-09-08に実装コミット `1215a72` の[6構成のActions実行](https://github.com/annenpolka/mbmigemo/actions/runs/34187248404)で全ジョブの成功を確認した。実用辞書の新規取得・変換、両版の全互換性、各OSの48ブラウザテスト、独立TypeScriptプロジェクトでのpack利用も含む。先行するM2の[旧4構成の実行](https://github.com/annenpolka/mbmigemo/actions/runs/34184453471)とは検証範囲を区別する。
 
 ## PBTの性質と再現
 

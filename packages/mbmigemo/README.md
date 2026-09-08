@@ -16,7 +16,7 @@ new RegExp(migemo.query('kensaku'), 'u').test('検索'); // true
 
 `createMigemo`は非同期、初期化後の`query(input: string): string`は同期。空入力は常に不一致の`(?!)`になり、空白やUnicodeを勝手に正規化しない。文書の照合は呼び出し側の`RegExp`で行う。大量の文書や大きな展開を扱う場合はWorker内でも利用できる。
 
-`backend`は`js`（既定）、`wasm-gc`、`auto`。Wasm版にはWasm GCとJS String Builtinsの両方が必要で、明示した方式が未対応なら`UnsupportedBackend`になる。`auto`は機能未対応時にJSを選ぶ。配布物の読み込み失敗や破損をfallbackで隠さず、`InitializationFailed`として返す。エラーは`MigemoError`の`code`で判別できる。インスタンスの`backend`は実際に選んだ方式を返す。
+`backend`は`js`（既定）、`wasm-gc`、`auto`。固定環境での実測に基づき、Wasm GCは利用者が選択できる実験版としている。Wasm版にはWasm GCとJS String Builtinsの両方が必要で、明示した方式が未対応なら`UnsupportedBackend`になる。`auto`は機能未対応時にJSを選ぶ。配布物の読み込み失敗や破損をfallbackで隠さず、`InitializationFailed`として返す。エラーは`MigemoError`の`code`で判別できる。インスタンスの`backend`は実際に選んだ方式を返す。
 
 ブラウザへ配置するときは`dist/`内の相対位置を維持し、`.wasm`を`application/wasm`で配信する。選択したコアを遅延ロードするため、そのファイルも配信対象に含める。
 
