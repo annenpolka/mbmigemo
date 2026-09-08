@@ -16,7 +16,7 @@ pub fn snapshot_bytes(value : Bytes) -> Bytes {
 
 ///|
 /// Wasm GC prototype: each JS string code unit carries one input byte.
-/// This is a measured copy path, not a commitment to the final dictionary ABI.
+/// This is an explicit copy path, not a commitment to the final dictionary ABI.
 pub fn snapshot_latin1(value : String) -> Bytes {
   Bytes::makei(value.length(), i => value.code_unit_at(i).to_int().to_byte())
 }

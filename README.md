@@ -20,8 +20,8 @@ npm run reference:prepare
 npm test
 ```
 
-107件の手書きケース、固定シードの10,000入力、辞書の再現性、比較器の故障検出を確認する。記録したMoonBit SDKがある環境では `npm run test:all` でJS／Wasm GCへの接続も検証できる。
+107件の手書きケース、固定シードの10,000入力、辞書の再現性、比較器の故障検出に加え、fast-checkによるPBTを実行する。PBTは各500試行、失敗時の反例を縮小してseed/pathを保存する。`npm run test:pbt:stress` は各5,000試行。記録したMoonBit SDKがある環境では `npm run test:all` でJS／Wasm GCの接続PBTも検証できる。
 
 [テストの実行と本体の接続方法](docs/testing.md)、[ツールチェーン](docs/toolchain.md)、[辞書形式](docs/dictionary-format.md)、[上流とライセンス](docs/upstream.md)を参照。`test:api` と `test:compat` は未実装の本体を要求するため、現段階では失敗する。基盤テストの成功は検索機能の完成を意味しない。
 
-ライセンスは未決定。辞書や参照実装を取り込む段階で、出所・版・チェックサム・再配布条件を記録する。
+プロジェクト全体のライセンスは未決定。今回使用した参照実装と辞書の出所・版・チェックサム・利用条件は記録済み。

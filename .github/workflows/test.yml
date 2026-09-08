@@ -9,13 +9,16 @@ permissions:
 
 jobs:
   foundation:
-    name: Reference and harness (${{ matrix.os }})
+    name: Reference and PBT (${{ matrix.os }}, seed ${{ matrix.seed }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-24.04, macos-15]
+        seed: [20260908, 104729]
+    env:
+      PBT_SEED: ${{ matrix.seed }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
@@ -31,6 +34,13 @@ jobs:
       - run: npm test
       - name: Ensure ordinary checks do not rewrite fixtures
         run: git diff --exit-code -- tests/fixtures
+      - name: Preserve PBT seeds and counterexamples
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: pbt-${{ matrix.os }}-${{ matrix.seed }}
+          path: test-results/pbt/
+          if-no-files-found: ignore
 
   # MoonBit probes run locally with the recorded SDK (npm run test:all).
   # M1 must provide a reproducible SDK download before adding a MoonBit CI job.

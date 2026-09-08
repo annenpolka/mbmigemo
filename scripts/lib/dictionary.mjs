@@ -22,13 +22,28 @@ export function parseTSV(source) {
 export function compileDictionary(source) {
   const entries = parseTSV(source);
   const bytes = Buffer.from(CompactDictionaryBuilder.build(new Map(entries)));
-  const dict = new CompactDictionary(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength));
+  const dict = readCompactDictionary(bytes);
   // Verify every reading and value survives conversion, including shared prefixes.
   for (const [key, values] of entries) {
     const found = [...dict.search(key)].sort();
     if (JSON.stringify(found) !== JSON.stringify([...values].sort())) throw new Error(`dictionary roundtrip failed: ${key}`);
   }
   return bytes;
+}
+
+export function readCompactDictionary(bytes) {
+  const dictionary = new CompactDictionary(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength));
+  // jsmigemo 0.5.2's mapping reader expects a zero after the final group of
+  // ones, but when the serialized bit count is a multiple of 64 there is no
+  // padding word. Use the logical end when no zero exists. Only the test
+  // reader is adapted; the upstream builder and dictionary bytes are intact.
+  const mapping = dictionary.mappingBitVector;
+  const nextClearBit = mapping.nextClearBit.bind(mapping);
+  mapping.nextClearBit = (from) => {
+    const end = nextClearBit(from);
+    return end < 0 ? mapping.size() : end;
+  };
+  return dictionary;
 }
 
 export async function loadDictionary(fixture = 'tiny') {

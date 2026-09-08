@@ -6,7 +6,7 @@ import { loadFixtures } from '../../scripts/lib/fixtures.mjs';
 import { referencePatterns, adaptPattern } from '../../scripts/lib/reference.mjs';
 import { documentsFor } from '../../scripts/lib/corpus.mjs';
 
-test('pinned C/Migemo still produces the reviewed golden patterns and match sets', async () => {
+test('pinned C/Migemo still produces the recorded golden patterns and match sets', async () => {
   const f = await loadFixtures();
   const actual = await referencePatterns(f.manual.map((c) => c.input));
   for (let i = 0; i < f.manual.length; i++) {

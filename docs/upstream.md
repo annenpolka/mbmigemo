@@ -8,6 +8,8 @@
 
 compact変換器は [jsmigemo 0.5.2](https://www.npmjs.com/package/jsmigemo/v/0.5.2)。npmパッケージのintegrityはpackage-lock.jsonに固定しており、MITライセンス。正規表現生成機能はmbmigemoの合否基準に使わない。jsmigemo固有の空白の扱いなどをC/Migemoへ混ぜない。
 
+PBTでこの版のreaderに64ビット境界の末尾候補欠落を発見したため、テスト用読取関数に論理終端の補正を加えている。builderと辞書バイト列は上流のまま。縮小例・切り分け・回帰テストはdocs/testing.mdに記録する。PBTツールはfast-check 4.9.0（MIT）、間接依存もpackage-lock.jsonで固定する。
+
 C/Migemo上流の実用辞書はSKK-JISYO.L由来で、[上流READMEは辞書にGPLが適用されると記載](https://github.com/koron/cmigemo/blob/e780fcf8dfe59fe3266ca8676906a3cefa1683e8/README.md#licenses)している。今回のCビルドは `BUILD_DICT=OFF` とし、その辞書を取得しない。jsmigemoの同梱辞書もテストや製品には接続しない。実用辞書の選定・版と原データの固定・配布時のライセンス整理はM3で行う。
 
 本プロジェクト全体のライセンスは未決定。上流のライセンスを本プロジェクトへ自動で適用したことにはしない。

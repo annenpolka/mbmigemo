@@ -7,6 +7,7 @@
 | Node.js | 26.0.0（`.nvmrc`） |
 | npm | 11.16.0（`packageManager`） |
 | jsmigemo | 0.5.2（devDependency、package-lockのintegrity付き） |
+| fast-check | 4.9.0（devDependency、PRNGはxoroshiro128plus） |
 | C/Migemo | 1.8.0、e780fcf8dfe59fe3266ca8676906a3cefa1683e8（archive SHA-256付き） |
 | moon | 0.1.20260427、48d7def、2026-04-27 |
 | moonc / core | 0.9.1+cd5b07232、2026-04-28 |

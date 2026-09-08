@@ -18,6 +18,7 @@
 - [x] (2026-09-08 01:56:26Z) MoonBitの出力先、文字列処理、nativeライブラリ出力の制限を調査した。
 - [x] (2026-09-08 01:56:26Z) プロジェクト名をmbmigemoとし、初版の範囲と検証方法をこの計画にまとめた。
 - [x] (2026-09-08 02:39:08Z) テスト基盤を先行整備した。固定C/Migemo、小辞書二種類、107手書きケース、10,000生成入力、比較器の故障検出、将来の公開API契約、JS・Wasm GC接続プローブを追加した。
+- [x] (2026-09-08 03:02:17Z) fast-check 4.9.0でPBTを追加した。通常6プロパティと接続2プロパティを各500試行、別seedで通常6プロパティを各5,000試行して成功。反例の縮小とseed/path再現、API用PBT、CIの複数seedと結果保存も追加した。
 - [ ] M1: ツールチェーンと参照実装を固定し、JS・Wasm GCの文字列と辞書バイト列の受け渡しを検証する（参照固定と接続プローブは完了。SDKの新規環境への復元・MoonBit CI・実用辞書の選定は残る）。
 - [ ] M2: 小さい辞書でローマ字変換・辞書探索・正規表現生成を実装する。
 - [ ] M3: 実用辞書とJS向けの公開APIを接続し、互換性を確認する。
@@ -28,6 +29,8 @@
 
 ## Surprises & Discoveries
 
+
+PBTのseed 20260908で、jsmigemo 0.5.2の対応ビット列が64ビット境界で終わると末尾候補が欠落するケースを発見した。185回の縮小で7項目の辞書となり、さらにASCIIの1読み・62候補でも再現した。候補index列は正しく、readerのnextClearBitが終端で-1を返すのが原因。テスト用readCompactDictionaryで論理終端を補い、元の縮小例と64/128/192ビット境界を回帰テストにした。辞書バイト列・builder・C検索参照は変更していない。
 
 2026-09-08の実行で、C/Migemo 1.8.0は空白入力を保持し、jsmigemo 0.5.2は空白を読み飛ばすことを確認した。両方を無条件に同じ検索仕様とは扱えない。ユーザーの提案を受け、検索結果の基準をC/Migemoにした。
 
@@ -46,6 +49,10 @@ C/MigemoのCLI対話入力は255バイトまでのため、テストはC APIを�
 
 ## Decision Log
 
+
+- Decision: 固定コーパスに加えてfast-checkの縮小可能なPBTを使い、結果と再現情報を保存する。
+  Rationale: 固定された1万入力だけでは辞書構造・バイト境界・操作履歴の組み合わせを探索できない。Map/startsWith、文字列includes、BigIntのチェックサムを独立した期待値として使う。SDK不要のPBTはnpm testへ、実コンパイルを要する接続PBTはtest:bridgeへ入れる。
+  Date/Author: 2026-09-08 / Codex
 
 - Decision: 現在成立する基盤検証と、まだ存在しない本体への契約テストを別コマンドにする。
   Rationale: npm testの成功を本体の互換性達成と誤認しないため。test:apiとtest:compatは実装がなければ失敗し、代替実装やskipでは成功させない。実装接続後はtest:implementationをCIの必須検証へ加える。
@@ -83,7 +90,9 @@ C/MigemoのCLI対話入力は255バイトまでのため、テストはC APIを�
 ## Outcomes & Retrospective
 
 
-2026-09-08時点で、C/Migemoの固定ビルドと小辞書二種類、手書き・生成ケース、意味比較器、将来の公開API契約、両出力先の接続プローブ、Linux/macOS用CI定義が存在する。ローカルのtest:allは基盤15件、MoonBit各3件、接続4件が成功した。検索コア、実用辞書、ブラウザ検証、ベンチマーク、公開パッケージはまだない。
+PBT追加後のtest:allは固定基盤18件、PBT6件、MoonBit各3件、接続固定4件とPBT2件の計36件が成功。seed 104729で通常PBTを各5,000回、合計30,000試行して成功した。保存した上流不具合のseed/pathによる再実行も成功。API用PBTは生成辞書の候補保持・任意切断・二インスタンスの編集履歴を定義したが、本体がないためまだ合格していない。
+
+2026-09-08時点で、C/Migemoの固定ビルドと小辞書二種類、手書き・生成ケース、意味比較器、将来の公開API契約、両出力先の接続プローブ、Linux/macOS用CI定義が存在する。ローカルのtest:allは基盤15件、MoonBit各3件、接続4件が成功した。キャッシュとビルド結果を持ち込まない別ディレクトリでも、npm ci、C参照の新規取得とビルド、辞書生成、test:allの成功を確認した（MoonBit SDKは同じマシンの既存環境を使用）。検索コア、実用辞書、ブラウザ検証、ベンチマーク、公開パッケージはまだない。
 
 M1の残項目はSDKを新規環境に復元する経路とそのCI、実用辞書の選定。接続時の論理的なデータ実体化は説明できるが、エンジン内部の物理コピー数は未測定。Actionsのリモート実行もまだ確認していない。実行手順と検証範囲はdocs/testing.mdに記録した。
 
@@ -115,7 +124,7 @@ M1の接続実験では、文字列を往復させる関数と、入力バイト
 
 M2では小さい辞書で検索コアを実装する。src/romaji/はローマ字から読み候補を作り、src/dictionary/は辞書バイト列を検証して前方一致の候補を列挙する。src/pattern/は候補をエスケープしてJavaScriptのRegExpで使えるパターンを作り、src/migemo/はそれらをつなぐ。辞書全体を毎問い合わせで作り直さない。索引はバイト列やオフセットを主体に読み、ノードごとの大量のオブジェクト化は必要性を測ってから行う。
 
-M2の語彙と入力では、候補文書の集合へ照合した結果を基準実装と比較する。パターン文字列の差は診断値にする。参照自体のgolden変動検知のみ文字列の一致も要求する。共有接頭辞で候補をまとめるなど、等価な正規表現の改善を許容する。空入力は検索対象なしとして常に不一致となるパターン(?!)を返す。入力途中のn/nn、shi/si、促音、拗音、全角・半角の扱いは、固定した基準実装の結果からテストケースを作る。意図的に異なる空入力の契約は別ケースとして明示する。M2終了時にはmoon test --target jsとnpm run test:compat -- --fixture tinyが成功し、kensakuから作ったパターンで「検索」を検索できることを確認する。
+M2の語彙と入力では、候補文書の集合へ照合した結果を基準実装と比較する。パターン文字列の差は診断値にする。参照自体のgolden変動検知のみ文字列の一致も要求する。共有接頭辞で候補をまとめるなど、等価な正規表現の改善を許容する。空入力は検索対象なしとして常に不一致となるパターン(?!)を返す。入力途中のn/nn、shi/si、促音、拗音、全角・半角の扱いは、固定した基準実装の結果からテストケースを作る。意図的に異なる空入力の契約は別ケースとして明示する。M2終了時にはmoon test --target jsとnpm run test:compat -- --fixture tiny --backend jsが成功し、kensakuから作ったパターンで「検索」を検索できることを確認する。
 
 M3では実用辞書とJS公開APIを接続する。packages/mbmigemo/src/index.tsに非同期の初期化関数を置き、辞書をバイト列から受け取る。取得失敗と辞書形式不正を区別し、原因不明の空の辞書に置き換えない。辞書のURL取得は呼び出し側が行うため、ライブラリ自身に固定の配布URLを埋めない。実用辞書はscripts/prepare-dictionary.mjsで準備し、チェックサムが一致したものだけを測定に使う。
 
@@ -143,6 +152,8 @@ M6ではnpmへ送信せずnpm packで配布物を作り、別の小さいプロ�
     npm run reference:prepare
     npm run dictionary:prepare -- --fixture tiny
     npm test
+    npm run test:pbt
+    PBT_SEED=104729 npm run test:pbt:stress
     npm run test:all
 
 npm testはNode/Cの基盤、test:allは記録したSDKでのMoonBitと接続も含む。test:apiとtest:compatは本体が存在しないため失敗する。以下の製品ビルド・demo・browser・bench・packコマンドは対応する実装を追加した後に実行する。存在しないコマンドを実行済みと記録しない。作業ディレクトリはmbmigemoのリポジトリルートである。
@@ -173,7 +184,7 @@ M2とM3では次を実行する。tinyでは小さい辞書、allでは固定し
 
     moon test --target js
     moon test --target wasm-gc
-    npm run test:compat -- --fixture tiny
+    npm run test:compat -- --fixture tiny --backend js
     npm run dictionary:prepare -- --fixture all
     npm run test:compat
 
