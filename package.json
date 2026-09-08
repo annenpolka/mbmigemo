@@ -18,19 +18,25 @@
     "test:moon": "node scripts/check-toolchain.mjs --moon && npm run moon -- fmt --check && npm run moon -- test --target js --deny-warn && npm run moon -- test --target wasm-gc --deny-warn",
     "build:bridge": "node scripts/build-bridge.mjs",
     "test:bridge": "npm run build:bridge && node --test --test-timeout=60000 tests/bridge/*.test.mjs",
-    "test:all": "npm test && npm run test:moon && npm run test:bridge",
+    "test:all": "npm test && npm run conversions:check && npm run test:moon && npm run test:bridge && npm run test:implementation",
     "test:api": "node --test --test-timeout=60000 tests/contracts/*.test.mjs",
     "test:compat": "node scripts/test-compat.mjs",
-    "test:implementation": "npm run test:api && npm run test:compat",
+    "test:implementation": "npm run build && npm run test:api && npm run test:compat",
     "test:pbt": "node scripts/check-toolchain.mjs && node --test --test-timeout=120000 tests/pbt/*.test.mjs",
     "test:pbt:stress": "PBT_RUNS=5000 npm run test:pbt",
     "test:pbt:bridge": "npm run build:bridge && node --test --test-timeout=120000 tests/bridge/bridge.pbt.test.mjs",
     "test:pbt:api": "node --test --test-timeout=120000 tests/contracts/api.pbt.test.mjs",
+    "build": "node scripts/build.mjs",
     "toolchain:prepare": "node scripts/prepare-toolchain.mjs",
-    "moon": "node scripts/moon.mjs"
+    "moon": "node scripts/moon.mjs",
+    "conversions:check": "node scripts/generate-conversions.mjs --check",
+    "test:pbt:dictionary": "node --test --test-timeout=120000 tests/contracts/dictionary-fuzz.pbt.test.mjs",
+    "pack:check": "npm run build && node scripts/pack-check.mjs"
   },
   "devDependencies": {
+    "@types/node": "26.0.0",
     "fast-check": "4.9.0",
-    "jsmigemo": "0.5.2"
+    "jsmigemo": "0.5.2",
+    "typescript": "7.0.2"
   }
 }

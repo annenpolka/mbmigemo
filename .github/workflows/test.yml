@@ -1,4 +1,4 @@
-name: Test foundation
+name: Test
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   foundation:
-    name: Reference and PBT (${{ matrix.os }}, seed ${{ matrix.seed }})
+    name: Core, reference and PBT (${{ matrix.os }}, seed ${{ matrix.seed }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
     strategy:
@@ -31,9 +31,10 @@ jobs:
         run: npm run reference:prepare
       - name: Verify deterministic dictionary generation
         run: npm run dictionary:prepare -- --fixture tiny
-      - name: Restore the pinned MoonBit SDK and core
+      - name: Restore the pinned MoonBit SDK and core from verified archives
         run: npm run toolchain:prepare
       - run: npm run test:all
+      - run: node scripts/pack-check.mjs
       - name: Ensure ordinary checks do not rewrite fixtures
         run: git diff --exit-code -- tests/fixtures
       - name: Preserve PBT seeds and counterexamples
@@ -41,5 +42,5 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: pbt-${{ matrix.os }}-${{ matrix.seed }}
-          path: test-results/pbt/
+          path: test-results/
           if-no-files-found: ignore

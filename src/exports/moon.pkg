@@ -1,0 +1,14 @@
+import {
+  "annenpolka/mbmigemo/dictionary",
+  "annenpolka/mbmigemo/migemo",
+}
+
+options(
+  link: {
+    "js": { "exports": [ "initialize", "is_valid", "query" ], "format": "esm" },
+    "wasm-gc": {
+      "exports": [ "initialize_latin1", "is_valid", "query" ],
+      "use-js-builtin-string": true,
+    },
+  },
+)

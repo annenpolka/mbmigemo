@@ -1,7 +1,7 @@
 # mbmigemoの共通コアとブラウザ向け配布を実装する
 
 
-この計画は実装とともに更新する。Progress、Surprises & Discoveries、Decision Log、Outcomes & Retrospectiveには、実際に完了したこと、観測した事実、判断と理由を記録する。初期コミットは計画のみで、2026-09-08にテスト基盤を先行追加した。検索コア・公開APIと、後半の実装用コマンドはまだこれから作る。
+この計画は実装とともに更新する。Progress、Surprises & Discoveries、Decision Log、Outcomes & Retrospectiveには、実際に完了したこと、観測した事実、判断と理由を記録する。初期コミットは計画のみで、2026-09-08にテスト基盤を先行追加した。現在は小辞書の検索コア・公開APIを実装済みで、後半の実用辞書・ブラウザ検証・測定へ進める状態。
 
 
 ## Purpose / Big Picture
@@ -19,16 +19,22 @@
 - [x] (2026-09-08 01:56:26Z) プロジェクト名をmbmigemoとし、初版の範囲と検証方法をこの計画にまとめた。
 - [x] (2026-09-08 02:39:08Z) テスト基盤を先行整備した。固定C/Migemo、小辞書二種類、107手書きケース、10,000生成入力、比較器の故障検出、将来の公開API契約、JS・Wasm GC接続プローブを追加した。
 - [x] (2026-09-08 03:02:17Z) fast-check 4.9.0でPBTを追加した。通常6プロパティと接続2プロパティを各500試行、別seedで通常6プロパティを各5,000試行して成功。反例の縮小とseed/path再現、API用PBT、CIの複数seedと結果保存も追加した。
-- [ ] M1: ツールチェーンと参照実装を固定し、JS・Wasm GCの文字列と辞書バイト列の受け渡しを検証する（参照固定と接続プローブは完了。SDKの新規環境への復元・MoonBit CI・実用辞書の選定は残る）。
-- [ ] M2: 小さい辞書でローマ字変換・辞書探索・正規表現生成を実装する。
-- [ ] M3: 実用辞書とJS向けの公開APIを接続し、互換性を確認する。
-- [ ] M4: Wasm GC版を接続し、ブラウザでの切り替えと失敗時の動作を確認する。
+- [ ] M1: ツールチェーンと参照実装を固定し、JS・Wasm GCの文字列と辞書バイト列の受け渡しを検証する（SDKの固定復元とローカル検証は完了、更新したCIの結果確認が残る。実用辞書の選定はM3で行う）。
+- [x] (2026-09-08 03:38:54Z) M2: 小辞書の共通検索コアとJS／Wasm GCの公開APIを実装。両版で10,107ケース・各1,232,198文書照合と、追加1,781入力・各68,576候補照合が成功。
+- [ ] M3: 実用辞書とJS向けの公開APIを接続し、互換性を確認する（小辞書のJS APIは完了、実用辞書とdemoは残る）。
+- [ ] M4: Wasm GC版を接続し、ブラウザでの切り替えと失敗時の動作を確認する（Nodeの接続・機能判定・auto／失敗／再試行は完了、実ブラウザは残る）。
 - [ ] M5: 容量・初期化・応答・メモリを比較し、標準配布の対象を決める。
-- [ ] M6: パッケージのローカル配布検証と、実装結果の記録を完了する。
+- [ ] M6: パッケージのローカル配布検証と、実装結果の記録を完了する（小辞書を使うnpm packの別TypeScriptプロジェクトからの利用は成功、製品全体の検証・記録は残る）。
 
 
 ## Surprises & Discoveries
 
+
+小辞書の10,107ケースの文書照合が成功した後、変換表から生成した正規表現の有限候補を直接列挙する検証で、KensakuNihongoが検索機Nihongoに誤って一致する差分を発見した。C/Migemoは句ごとに短い受理候補があればその子孫を除いてから連結する。この処理を合わせ、単独サロゲートが補助平面文字を誤って除かないようUnicode境界を確認する。既定のMoonBit String Compareは長さ優先なので、接頭辞をまとめる順序には明示的なlexical_compareを用いる。
+
+初期の正規表現エスケープで、UTF-16コード単位をStringViewの検査付きsliceで取り出すと、絵文字の途中で例外になることを実際の両コアで確認した。位置を検査したcode-unit単位のsubstringへ修正し、補助平面・孤立サロゲートをMoonBitとAPI PBTで検証する。
+
+旧SDKの復元不能を解消するため、固定URLで取得できるmoonc/core 0.10.11+6ff76a5f9へ更新した。macOS ARM64／Linux x64のSDKとcoreアーカイブをSHA-256で固定し、リポジトリの.cacheへ復元する。グローバルSDKは変更しない。新SDKのformatterに合わせ、moon.mod.jsonをmoon.modへ移行した。
 
 PBTのseed 20260908で、jsmigemo 0.5.2の対応ビット列が64ビット境界で終わると末尾候補が欠落するケースを発見した。185回の縮小で7項目の辞書となり、さらにASCIIの1読み・62候補でも再現した。候補index列は正しく、readerのnextClearBitが終端で-1を返すのが原因。テスト用readCompactDictionaryで論理終端を補い、元の縮小例と64/128/192ビット境界を回帰テストにした。辞書バイト列・builder・C検索参照は変更していない。
 
@@ -36,7 +42,7 @@ PBTのseed 20260908で、jsmigemo 0.5.2の対応ビット列が64ビット境界
 
 C/MigemoのCLI対話入力は255バイトまでのため、テストはC APIを静的リンクした16進数プロトコルのドライバを使用する。改行を含む入力と1,024文字の入力を実際に通した。変換表の不足も明示的に失敗させる。
 
-このマシンに入っていたMoonBit SDKはmoonc/core 0.9.1+cd5b07232。JS・Wasm GCの接続テストは成功したが、公式の同版archive URLは403となった。SDKの再導入を完了したとは扱わず、CIでは当面Node/Cの基盤を検証する。
+テスト基盤作成時、このマシンのMoonBit SDKはmoonc/core 0.9.1+cd5b07232だった。JS・Wasm GCの接続テストは成功したが、同版archive URLは403となった。この時点ではCIをNode/Cの基盤に限定し、M2実装時に上記の固定SDK復元へ移行した。
 
 事実として、2026年9月8日に確認したMoonBit公式文書では、nativeバックエンドのforeign_libraryからリンク可能なライブラリ成果物を出す経路は未対応で、.soと.dllも含まれる。C ABIとは、C言語の関数として別のプログラムから呼ぶ際の取り決めである。MoonBitからC関数を呼べることを、C ABIのライブラリ配布が完成している証拠にはしない。
 
@@ -49,6 +55,18 @@ C/MigemoのCLI対話入力は255バイトまでのため、テストはC APIを�
 
 ## Decision Log
 
+
+- Decision: M2で小辞書の公開APIをJS／Wasm GC双方へ接続し、実用辞書の選定はM3にまとめる。
+  Rationale: 既存のAPI契約とPBTを実コアへ早く適用できる。Nodeでの両版の成功はブラウザ配布・実用辞書の完成とは区別し、既定はJSのままとする。
+  Date/Author: 2026-09-08 / Codex
+
+- Decision: 固定文書集合の比較に、有限な正規表現の候補を列挙して相互に照合する検証を追加する。
+  Rationale: 句ごとの候補の省略が連結後に与える影響を、既存文書に現れない候補でも検出するため。列挙器は対応構文と生成量を限定し、未対応を明示的に失敗させる。
+  Date/Author: 2026-09-08 / Codex
+
+- Decision: 初期実装の辞書は検証済みの平坦な索引配列へ一度展開する。
+  Rationale: ノードごとのオブジェクトや問い合わせごとの全辞書再構築を避けつつ、LOUDSの不正・範囲外・終端を初期化時に検証できる。JSの通常配列によるメモリ増加は実用辞書で測定する。
+  Date/Author: 2026-09-08 / Codex
 
 - Decision: 固定コーパスに加えてfast-checkの縮小可能なPBTを使い、結果と再現情報を保存する。
   Rationale: 固定された1万入力だけでは辞書構造・バイト境界・操作履歴の組み合わせを探索できない。Map/startsWith、文字列includes、BigIntのチェックサムを独立した期待値として使う。SDK不要のPBTはnpm testへ、実コンパイルを要する接続PBTはtest:bridgeへ入れる。
@@ -90,11 +108,17 @@ C/MigemoのCLI対話入力は255バイトまでのため、テストはC APIを�
 ## Outcomes & Retrospective
 
 
+M2のtest:allが成功した。固定基盤18件、基盤PBT6件、MoonBit各23件、接続固定／PBT6件、API契約・PBT・追加オラクル1,046件（辞書切断の子テストを含む）。18プロパティは各500試行。API・辞書変異の10プロパティは別seed 104729でも各500試行が成功。SDKだけの独立したGitツリーを別ディレクトリへ取り出し、npm ci、SDKのfresh復元、C参照再ビルド、基盤test:allを確認した。C比較は両版とも10,107ケース、重複を除く10,082入力、各1,232,198文書照合で差分0。追加の有限候補照合は各1,781入力・68,576候補で成功した。npm packした配布物を別のTypeScriptプロジェクトへoffline導入し、型チェックとJS／Wasm GC／autoの検索・所有権・エラーを確認した。npm公開は行っていない。
+
+検索コアはsrc/dictionary、src/romaji、src/pattern、src/migemo、薄い公開関数はsrc/exportsにある。src/featuresがGC構造体とJS String Builtinsを検査し、packages/mbmigemo/src/index.tsが選択したコアだけを遅延ロードする。空辞書を正常に受け取る場合と、破損をInvalidDictionaryで拒否する場合を区別する。接続プローブはsrc/bridgeへ移動した。
+
+残項目は実用辞書の固定と比較、実ブラウザ、性能・メモリと配布方式の判断。現在の検証値を実用辞書や全入力での完成として扱わない。
+
 PBT追加後のtest:allは固定基盤18件、PBT6件、MoonBit各3件、接続固定4件とPBT2件の計36件が成功。seed 104729で通常PBTを各5,000回、合計30,000試行して成功した。保存した上流不具合のseed/pathによる再実行も成功。API用PBTは生成辞書の候補保持・任意切断・二インスタンスの編集履歴を定義したが、本体がないためまだ合格していない。
 
-2026-09-08時点で、C/Migemoの固定ビルドと小辞書二種類、手書き・生成ケース、意味比較器、将来の公開API契約、両出力先の接続プローブ、Linux/macOS用CI定義が存在する。ローカルのtest:allは基盤15件、MoonBit各3件、接続4件が成功した。キャッシュとビルド結果を持ち込まない別ディレクトリでも、npm ci、C参照の新規取得とビルド、辞書生成、test:allの成功を確認した（MoonBit SDKは同じマシンの既存環境を使用）。検索コア、実用辞書、ブラウザ検証、ベンチマーク、公開パッケージはまだない。
+2026-09-08の最初のテスト基盤作成時点では、C/Migemoの固定ビルドと小辞書二種類、手書き・生成ケース、意味比較器、将来の公開API契約、両出力先の接続プローブ、Linux/macOS用CI定義が存在する。ローカルのtest:allは基盤15件、MoonBit各3件、接続4件が成功した。キャッシュとビルド結果を持ち込まない別ディレクトリでも、npm ci、C参照の新規取得とビルド、辞書生成、test:allの成功を確認した（MoonBit SDKは同じマシンの既存環境を使用）。この時点では検索コア、実用辞書、ブラウザ検証、ベンチマーク、公開パッケージはなかった。
 
-M1の残項目はSDKを新規環境に復元する経路とそのCI、実用辞書の選定。接続時の論理的なデータ実体化は説明できるが、エンジン内部の物理コピー数は未測定。2026-09-08にコミット1a92c08のGitHub Actionsを確認し、Linux/macOS × seed 20260908/104729の4構成すべてが成功した（run 34182583661）。MoonBitのCI導入は引き続き未完了。実行手順と検証範囲はdocs/testing.mdに記録した。
+テスト基盤作成直後のM1の残項目はSDKを新規環境に復元する経路とそのCI、実用辞書の選定だった。接続時の論理的なデータ実体化は説明できるが、エンジン内部の物理コピー数は未測定。2026-09-08にコミット1a92c08のGitHub Actionsを確認し、Linux/macOS × seed 20260908/104729の4構成すべてが成功した（run 34182583661）。当時はMoonBitのCI導入が未完了だった。実行手順と検証範囲はdocs/testing.mdに記録した。
 
 M1以降の各段階が終わったら、利用できる機能、実際に実行した検証、残った問題、採用した出力先をこの節に追記する。
 
@@ -116,7 +140,7 @@ MoonBitのStringはUTF-16のコード単位を基本に扱う。UTF-8の辞書�
 ## Plan of Work
 
 
-M1では、小さい接続実験と再現可能な評価環境を作る。MoonBit SDKの利用する版、Node.js、npm、依存パッケージを固定し、docs/toolchain.mdへ記録する。現在確認したSDKではmoon.mod.jsonと各moon.pkgを使い、出力先をjsとwasm-gcとして明示する。既定の出力先に依存しない。package.jsonの検証用依存にjsmigemoを完全な版番号で追加し、package-lock.jsonも記録する。Node 26.0.0、npm 11.16.0、辞書変換用jsmigemo 0.5.2は固定済み。参照C/Migemoはtests/reference/lock.jsonのコミットとSHA-256から復元し、自動更新しない。
+M1では、小さい接続実験と再現可能な評価環境を作る。MoonBit SDKの利用する版、Node.js、npm、依存パッケージを固定し、docs/toolchain.mdへ記録する。現在採用したSDKではmoon.modと各moon.pkgを使い、出力先をjsとwasm-gcとして明示する。既定の出力先に依存しない。package.jsonの検証用依存にjsmigemoを完全な版番号で追加し、package-lock.jsonも記録する。Node 26.0.0、npm 11.16.0、辞書変換用jsmigemo 0.5.2は固定済み。参照C/Migemoはtests/reference/lock.jsonのコミットとSHA-256から復元し、自動更新しない。
 
 同時に、固定したjsmigemoのソースから辞書形式を読み取り、自作の小さい語彙をその形式に変換する手順を用意する。tests/fixtures/tiny-dict.tsvには「けんさく」から「検索」、「にほんご」から「日本語」を引ける項目を持たせる。元データ、変換器の版、生成物のSHA-256を記録する。SHA-256とは内容が同じか確認するための固定長のチェックサムである。実用辞書の取得元・版・利用条件もdocs/upstream.mdへ記録する。辞書形式と参照実装の版が決まったら、この計画にもその実際の値を追記する。
 
@@ -156,7 +180,7 @@ M6ではnpmへ送信せずnpm packで配布物を作り、別の小さいプロ�
     PBT_SEED=104729 npm run test:pbt:stress
     npm run test:all
 
-npm testはNode/Cの基盤、test:allは記録したSDKでのMoonBitと接続も含む。test:apiとtest:compatは本体が存在しないため失敗する。以下の製品ビルド・demo・browser・bench・packコマンドは対応する実装を追加した後に実行する。存在しないコマンドを実行済みと記録しない。作業ディレクトリはmbmigemoのリポジトリルートである。
+npm testはNode/Cの基盤、test:allは記録したSDKでのMoonBitと接続も含む。test:apiとtest:compatはnpm run buildで作った本体を検証する。toolchain:prepare、build、pack:checkは実装済み。以下のdemo・browser・benchコマンドは対応する実装を追加した後に実行する。存在しないコマンドを実行済みと記録しない。作業ディレクトリはmbmigemoのリポジトリルートである。
 
 最初に環境を確認し、結果をdocs/toolchain.mdに記録する。未導入のSDKをインストールする段階では、採用する版を固定してから作業する。
 
@@ -166,12 +190,12 @@ npm testはNode/Cの基盤、test:allは記録したSDKでのMoonBitと接続も
     node --version
     npm --version
 
-scripts/prepare-dictionary.mjsとテスト用npm scripts、package-lock.jsonは作成済み。現在の接続実験はscripts/build-bridge.mjsで_build/に出力する。製品用scripts/build.mjsは後続で作る。再開時の依存復元はnpm ciを使う。ビルドスクリプトは、次のMoonBitコマンドを実行して出力をpackages/mbmigemo/dist/へ配置する。
+scripts/prepare-dictionary.mjsとテスト用npm scripts、package-lock.jsonは作成済み。現在の接続実験はscripts/build-bridge.mjsで_build/に出力する。製品用scripts/build.mjsは実装済みで、型定義と両コア・ライセンスを生成する。再開時の依存復元はnpm ciを使う。ビルドスクリプトは、次のMoonBitコマンドを実行して出力をpackages/mbmigemo/dist/へ配置する。
 
-    moon check --target js
-    moon check --target wasm-gc
-    moon build --release --target js
-    moon build --release --target wasm-gc
+    npm run moon -- check --target js
+    npm run moon -- check --target wasm-gc
+    npm run moon -- build --release --target js
+    npm run moon -- build --release --target wasm-gc
 
 M1が完成すると、次のコマンドで固定辞書の準備と両対象の接続実験が成功し、入力文字列とバイト列の一致を確認できる。
 
@@ -182,8 +206,8 @@ M1が完成すると、次のコマンドで固定辞書の準備と両対象の
 
 M2とM3では次を実行する。tinyでは小さい辞書、allでは固定した実用辞書も含めて比較する。test:compatは対象ケース数、比較した入力数、照合結果の不一致数を報告し、不一致があれば終了コード1、なければ0を返す。
 
-    moon test --target js
-    moon test --target wasm-gc
+    npm run moon -- test --target js
+    npm run moon -- test --target wasm-gc
     npm run test:compat -- --fixture tiny --backend js
     npm run dictionary:prepare -- --fixture all
     npm run test:compat
@@ -237,7 +261,7 @@ JS版とWasm GC版は同じ互換性テストを通す。autoの機能未対応�
 
 実装が進んだら、docs/toolchain.mdへ使用した版、docs/upstream.mdへ参照実装と辞書の出所、docs/dictionary-format.mdへ読取仕様、docs/benchmarks/baseline.mdへ測定条件と採用判断を記録する。ベンチマークの数値だけを貼らず、その数値で配布方法をどう決めたかを残す。
 
-期待する利用例は次のとおりであり、この初期コミットで実行できるコードではない。
+公開APIの利用例は次のとおり。辞書URLは呼び出し側で用意し、現在の小辞書での実行例はREADMEに記録する。
 
     const bytes = new Uint8Array(await (await fetch("/migemo-compact-dict")).arrayBuffer());
     const migemo = await createMigemo({ dictionary: bytes, backend: "js" });

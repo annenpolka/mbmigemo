@@ -1,0 +1,5 @@
+import {
+  "annenpolka/mbmigemo/dictionary",
+  "annenpolka/mbmigemo/romaji",
+  "annenpolka/mbmigemo/pattern",
+}

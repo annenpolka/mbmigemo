@@ -1,0 +1,8 @@
+options(
+  link: {
+    "wasm-gc": {
+      "exports": [ "create", "read" ],
+      "use-js-builtin-string": true,
+    },
+  },
+)

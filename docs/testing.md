@@ -1,6 +1,6 @@
 # テスト基盤
 
-検索結果の基準はC/Migemo 1.8.0、コミット `e780fcf8dfe59fe3266ca8676906a3cefa1683e8`。jsmigemo 0.5.2はcompact辞書の変換と読取確認にだけ使う。検索コア・公開APIはまだ実装していない。
+検索結果の基準はC/Migemo 1.8.0、コミット `e780fcf8dfe59fe3266ca8676906a3cefa1683e8`。jsmigemo 0.5.2はcompact辞書の変換と読取確認にだけ使う。検索コアと公開APIは実装済みで、小辞書をNode.js上のJS／Wasm GC両バックエンドで検証している。
 
 ## 最初の実行
 
@@ -9,7 +9,8 @@ Node.js 26.0.0、npm 11.16.0、C11コンパイラ、CMake 3.21以上、tarを用
     npm ci --ignore-scripts
     npm run reference:prepare
     npm run dictionary:prepare -- --fixture tiny
-    npm test
+    npm run toolchain:prepare
+    npm run test:all
 
 `reference:prepare`だけがC/Migemoのソースアーカイブを取得する。SHA-256を検証してから展開・静的リンクし、`.cache/reference/`へテスト用ドライバとUTF-8変換表を置く。グローバルのcmigemoやシステム辞書は使わない。二回目以降は検証したアーカイブから再ビルドできる。キャッシュが壊れていれば失敗し、別の版には切り替えない。再取得する場合は `.cache/upstream/cmigemo.tar.gz` のみを削除してやり直す。
 
@@ -23,18 +24,20 @@ Node.js 26.0.0、npm 11.16.0、C11コンパイラ、CMake 3.21以上、tarを用
 | `npm run test:pbt` | 辞書・比較器・C参照の6プロパティ、各500試行 | ローカルで成功 |
 | `npm run test:pbt:stress` | 同じ6プロパティを各5,000試行 | seedは環境変数で変更できる |
 | `npm run test:coverage` | テスト補助コードの実行カバレッジ | 検索コアのカバレッジではない |
-| `npm run test:moon` | MoonBitの文字列・バイト列プローブ、両出力先で各3件 | ローカルで成功 |
+| `npm run test:moon` | 検索コアと接続プローブ、両出力先で各23件 | ローカルで成功 |
 | `npm run test:bridge` | releaseビルドと両バックエンドの固定4件＋PBT2種類 | ローカルで成功 |
 | `npm run test:pbt:bridge` | 両バックエンドの文字列・バイト列PBTだけ | ローカルで成功 |
-| `npm run test:all` | 上の基盤・MoonBit・接続テスト | 記録したSDKが必要 |
-| `npm run test:api` | 将来の公開APIの契約 | 本体未実装のため失敗する |
-| `npm run test:pbt:api` | 生成辞書・切断・編集履歴のAPI用PBT | 本体未実装のため失敗する |
-| `npm run test:compat -- --fixture tiny` | 本体のJS／Wasm GCとC/Migemoの意味比較 | 本体未実装のため失敗する |
-| `npm run test:implementation` | API契約と互換性の両方 | M2以降の受け入れ用 |
+| `npm run test:all` | 基盤・変換表整合性・MoonBit・接続・ビルド・API・互換性 | 復元済みSDKが必要 |
+| `npm run test:api` | 公開API、PBT、変換候補列挙、エラー／遅延ロード | ビルド後に実行 |
+| `npm run test:pbt:api` | 生成辞書・切断・編集履歴のAPI用PBT | ビルド後に実行 |
+| `npm run test:compat -- --fixture tiny` | 本体のJS／Wasm GCとC/Migemoの意味比較 | ビルド後に実行 |
+| `npm run test:implementation` | ビルド、API契約と互換性 | M2の受け入れ用 |
+| `npm run test:pbt:dictionary` | 任意バイト列・辞書変異のPBT | 各500試行 |
+| `npm run pack:check` | npm packした成果物を別のTypeScriptプロジェクトから利用 | npmへの送信なし |
 
-GitHub ActionsはLinux/macOS × PBT seed 20260908/104729の4構成で `npm test` と辞書の再生成一致を実行し、PBTの記録をartifactへ保存する。2026-09-08にコミット `1a92c08` の[Actions実行](https://github.com/annenpolka/mbmigemo/actions/runs/34182583661)で4構成すべての成功を確認した。MoonBit SDKの新規環境への復元が未解決のため、MoonBitのCIはM1の残項目。ブラウザの機能検出・auto切替・配布検証はM4/M6で追加する。
+GitHub ActionsはLinux/macOS × PBT seed 20260908/104729の4構成で固定C参照とMoonBit SDKを復元し、`test:all`、辞書再生成の一致、パッケージの別プロジェクトからの利用を検証する。PBTと互換性・packの記録をartifactへ保存する。SDK復元は固定URLとSHA-256を使い、グローバルSDKに依存しない。
 
-ローカルではキャッシュ・node_modules・ビルド結果を含めず別ディレクトリへコピーし、npm ci、C参照の新規取得・ビルド、辞書再生成、test:allまで成功した。MoonBitについては同じマシンの既存SDKを利用しており、SDKの新規導入を検証したものではない。
+ブラウザの機能検出・auto切替の実ブラウザ検証はM4で行う。現在のバックエンドテストはNode上で、Wasmなし・対応あり・読み込み失敗・破損・再試行を確認する。機能未対応と製品アーカイブ破損を同一のfallbackにしない。
 
 ## PBTの性質と再現
 
@@ -51,9 +54,11 @@ fast-check 4.9.0を完全な版番号で固定し、PRNGはxoroshiro128plusを�
 | `bridge-utf16` | 任意のUTF-16列が両バックエンドを往復しても変わらない |
 | `bridge-byte-ownership` | 任意のbyte viewの内容・長さ・チェックサムが両バックエンドで一致し、元配列の変更や追加確保で変わらない |
 
-接続PBTは0/31/32/33/63/64/65/127/128/129/255/256/257/1024/4096などの長さへ生成を偏らせ、NUL、単独サロゲート、結合文字も明示的に生成する。辞書の検証はテスト用のjsmigemo readerに対するもの。本体の辞書実装が正しいことは、後続のAPI用PBTで別に検証する。
+接続PBTは0/31/32/33/63/64/65/127/128/129/255/256/257/1024/4096などの長さへ生成を偏らせ、NUL、単独サロゲート、結合文字も明示的に生成する。辞書の検証はテスト用のjsmigemo readerに対するもの。本体の辞書実装はAPIの生成辞書・切断・変異PBTで別に検証する。
 
-API用PBTは各バックエンドに `api-js-dictionary-candidates`、`api-js-truncation`、`api-js-edit-history` を用意する（Wasm側は `api-wasm-gc-...`）。生成辞書の全候補を保持すること、生成辞書の任意の切断を拒否すること、二インスタンスの入力の追加・削除・置換・クリアをC参照の期待値と比較する。操作列は単純な配列として生成するため、seed/pathだけで縮小した履歴を再現できる。
+API用PBTは任意のUTF-16入力に対する文字どおりの一致と空文書への不一致を含み、各バックエンドに `api-js-dictionary-candidates`、`api-js-truncation`、`api-js-edit-history` を用意する（Wasm側は `api-wasm-gc-...`）。生成辞書の全候補を保持すること、生成辞書の任意の切断を拒否すること、二インスタンスの入力の追加・削除・置換・クリアをC参照の期待値と比較する。操作列は単純な配列として生成するため、seed/pathだけで縮小した履歴を再現できる。
+
+`api-dictionary-arbitrary-bytes` と `api-dictionary-byte-mutations` は、任意のバイト列・正常な辞書に変更を加えたバイト列について、両バックエンドが同じ判定をすること、拒否が `InvalidDictionary` になること、受理後のパターンが一致し `/u` でコンパイルできることを検証する。変更しても形式上正常な辞書はあり得るため、すべての変更を拒否するとは要求しない。
 
 結果は `test-results/pbt/<property>.json` に保存する。失敗時にはseed、path、試行数、縮小回数、縮小した反例、原因を含む。同じプロパティが成功すれば成功記録で上書きし、古い失敗を残さない。固定のテスト内で意図的に最後のバイトを落とす処理を動かし、反例が1バイトまで縮小され、同じseed/pathで再現できることも検証する。
 
@@ -67,7 +72,7 @@ API用PBTは各バックエンドに `api-js-dictionary-candidates`、`api-js-tr
 
     PBT_PROPERTY=dictionary-prefix-model PBT_SEED=20260908 PBT_PATH='<ログのpath>' npm run test:pbt
 
-接続PBTの再実行には `npm run test:pbt:bridge`、API用には `npm run test:pbt:api` を使う。pathを指定するときはプロパティ名とseedも必須。未知の名前や試行数0は成功扱いにしない。実用辞書や全入力についての完全性をPBTの成功だけで主張しない。
+接続PBTの再実行には `npm run test:pbt:bridge`、API用には `npm run test:pbt:api`、辞書変異用には `npm run test:pbt:dictionary` を使う。pathを指定するときはプロパティ名とseedも必須。未知の名前や試行数0は成功扱いにしない。実用辞書や全入力についての完全性をPBTの成功だけで主張しない。
 
 ## PBTで発見した既知の上流不具合
 
@@ -79,18 +84,16 @@ Unicode値の問題、builderの破損、readerの終端処理を切り分け、
 
 [fast-checkの公式説明](https://fast-check.dev/docs/introduction/what-is-property-based-testing/)と[再現用パラメータ](https://fast-check.dev/docs/api/interfaces/Parameters/)を参考に、実際の縮小・再実行を確認した。
 
-## 実装を接続する
+## 実装の互換性を確認する
 
-`packages/mbmigemo/dist/index.js` が `createMigemo` をexportすると、公開APIテストと互換性テストがそのまま使える。未実装時の成功扱い、参照実装への代替、skipやtodoは入れていない。
+`npm run build` が `packages/mbmigemo/dist/index.js` と型定義・両コアを作る。テストは実装を直接呼び、参照実装への代替、skipやtodoは入れていない。
 
-M2でJSだけを試す場合:
+コア契約と比較をJSだけに絞る場合（バックエンド選択のテストは両版の配布物を使う）:
 
     MBMIGEMO_BACKENDS=js npm run test:api
     npm run test:compat -- --fixture tiny --backend js --cases manual
 
-別の場所にある試作を接続する場合:
-
-    MBMIGEMO_MODULE=./path/to/index.mjs MBMIGEMO_BACKENDS=js npm run test:api
+別の場所にある試作を比較する場合:
     npm run test:compat -- --module ./path/to/index.mjs --backend js
 
 既定の互換性テストは両バックエンドで全10,107ケースを実行する。`cases`はケース数、`inputs`は重複を除いた入力数、`comparisons`は文書への照合回数。`patternDifferences`は表記だけの差も数える診断値で、意味の不一致数は `mismatches`。不一致があれば終了コード1になる。バックエンドが存在しない場合も失敗する。
@@ -98,6 +101,13 @@ M2でJSだけを試す場合:
 不一致の入力・クラス・両パターン・長さ・不足/過剰に一致した文書を `test-results/compat.json` に保存する。`--report PATH`で変更できる。有限の文書集合に対する一致であり、全入力・全文書についての同値証明ではない。
 
 公開API契約には、空入力 `(?!)`、同期query、UTF-16の保存、バイト列viewの範囲、初期化後の元配列変更、並行した二辞書インスタンス、入力の追加/削除、512候補の保持、辞書489バイトの全切断位置と12種類の形式破損を含む。形式破損は `InvalidDictionary` を要求する。SHA-256の検証は準備時の別契約であり、利用者が渡す全辞書に既知のチェックサムを要求しない。
+
+
+追加の `romaji-oracle.test.mjs` は、変換表から作った1,781入力についてC/Migemoと本体の有限な正規表現を列挙し、相互に全候補を照合する。固定文書に現れない候補も検証でき、現在は各バックエンドで68,576候補の照合が成功している。列挙器は未対応の正規表現構文を拒否し、候補の欠落・追加を検出する自己テストを持つ。
+
+このテストで、`KensakuNihongo` が誤って `検索機Nihongo` に一致する不具合を発見した。C/Migemoは句ごとに「検索」があれば「検索機」を除いてから次の句と連結する。単一の句では冗長な候補でも、連結後の意味は変わる。実装はUnicodeの文字境界を守って同じ処理を行う。表記の短縮や速度のための候補上限とは区別する。
+
+辞書リーダーは正規の54バイトの空辞書も受け入れ、ローマ字変換を利用できる。破損を空辞書へ置き換える処理はない。辞書に意図的に空の候補が登録されている場合、その読みは空文字列にも一致する。空の問い合わせ自体は常に `(?!)` の契約を優先する。
 
 ## 参照実装とmbmigemo固有の契約
 

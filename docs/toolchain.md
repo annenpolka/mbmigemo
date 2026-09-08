@@ -31,9 +31,9 @@ node scripts/prepare-toolchain.mjs
 
 接続プローブはreleaseビルドをNodeから実際に呼ぶ。JSのBytesはUint8Arrayとして渡し、MoonBit内で一回コピーする。Wasm GCでは試験用に各バイトを同値のUTF-16コード単位へ載せた一時JS文字列を作り、MoonBitのBytesへ一回コピーする。戻り値のGC参照は不透明なハンドルとして扱う。入力を変えても古いハンドルは変化しない。
 
-Wasm側の転送は一括の関数呼出しだが、JSでの文字列の実体化とMoonBitでのバイト配列の実体化がある。エンジン内部の物理コピー回数は測っていない。検索APIへの接続と実用辞書でのメモリ測定は後続の実装で検証する。
+Wasm側の転送は一括の関数呼出しだが、JSでの文字列の実体化とMoonBitでのバイト配列の実体化がある。エンジン内部の物理コピー回数は測っていない。検索APIでも現段階はこの一括文字列転送を使う。APIは最初にbyte viewを取り込み、辞書リーダーは初期化時に平坦な索引配列へ変換する。JS版の整数索引は通常の配列で、圧縮されたバイト列のまま保持する実装ではない。常駐メモリと物理コピー量は実用辞書での測定が必要。
 
-文字列はJS String Builtinsを有効にして通常の `WebAssembly.instantiate` を使う。JS／Wasm GCの両方で日本語、半角カナ、結合濁点、補助平面文字、NUL、単独サロゲートを確認した。バイト列は0/127/128/255、全256値を含む65,536バイト、小辞書二種類、途中のviewを確認した。検索APIとautoの機能検出・実ブラウザの検証は後続の実装で行う。
+文字列はJS String Builtinsを有効にして通常の `WebAssembly.instantiate` を使う。JS／Wasm GCの両方で日本語、半角カナ、結合濁点、補助平面文字、NUL、単独サロゲートを確認した。バイト列は0/127/128/255、全256値を含む65,536バイト、小辞書二種類、途中のviewを確認した。NodeではGC構造体とJS文字列機能のプローブ、auto切替、遅延ロードと失敗時の扱いを公開APIのテストで確認する。実ブラウザは未検証。
 
 設定は[MoonBit公式のpackage設定](https://docs.moonbitlang.com/en/latest/toolchain/moon/package.html)と[FFIの型対応](https://docs.moonbitlang.com/en/latest/language/ffi.html)を参照し、上のSDKで実行して確認した。公式文書は更新されるため、版の変更時は両出力先のプローブを再実行する。
 

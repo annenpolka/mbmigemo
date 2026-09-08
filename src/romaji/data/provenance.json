@@ -1,0 +1,11 @@
+{
+  "upstream": "https://github.com/koron/cmigemo",
+  "revision": "e780fcf8dfe59fe3266ca8676906a3cefa1683e8",
+  "license": "../LICENSE-CMIGEMO",
+  "files": {
+    "roma2hira": "0de647650c7c4b754bf71bdbe846afeacf28cbce731d2e56e3ae6e5c6f9b1cc1",
+    "hira2kata": "f3c5a0d078745f2107aa99cc20e70af09d231e1d02c164be427e2ed047670ec4",
+    "han2zen": "a8131e3514a6ee49004803a4a9b540709b1a966bbd8906dae7868348aea87be3",
+    "zen2han": "5e71649821d7db06a707dab39da383b8c840f80651bcf6fae3386c783dc0a24d"
+  }
+}

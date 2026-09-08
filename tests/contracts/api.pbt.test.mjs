@@ -7,7 +7,7 @@ import { loadFixtures } from '../../scripts/lib/fixtures.mjs';
 import { referencePatterns } from '../../scripts/lib/reference.mjs';
 import { compareCase } from '../../scripts/lib/compare.mjs';
 import { registerProperties } from '../support/pbt.mjs';
-import { dictionaryEntries, toTSV, edit, editedInput } from '../support/arbitraries.mjs';
+import { dictionaryEntries, toTSV, edit, editedInput, utf16Text } from '../support/arbitraries.mjs';
 
 // Deliberately requires the actual implementation, like the fixed API contracts.
 const { createMigemo } = await import(pathToFileURL(path(process.env.MBMIGEMO_MODULE ?? 'packages/mbmigemo/dist/index.js')));
@@ -19,6 +19,17 @@ const { documents } = await loadFixtures();
 const properties = {};
 
 for (const backend of backends) {
+  const literalInstance = await createMigemo({ dictionary: await loadDictionary(), backend });
+  properties[`api-${backend}-utf16-literal`] = fc.property(utf16Text, (input) => {
+    const pattern = literalInstance.query(input);
+    if (input === '') assert.equal(pattern, '(?!)');
+    else {
+      const re = new RegExp(pattern, 'u');
+      assert.ok(re.test(input), JSON.stringify(input));
+      assert.ok(!re.test(''), 'a nonempty query must not match empty text');
+    }
+  });
+
   properties[`api-${backend}-dictionary-candidates`] = fc.asyncProperty(dictionaryEntries, async (entries) => {
     const instance = await createMigemo({ dictionary: new Uint8Array(compileDictionary(toTSV(entries))), backend });
     assert.equal(instance.backend, backend);

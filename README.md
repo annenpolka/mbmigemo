@@ -1,27 +1,47 @@
 # mbmigemo
 
-MoonBitで実装する、ブラウザ向けの軽量なMigemoライブラリ。
+MoonBitで実装する、ブラウザ向けのMigemoライブラリ。
 
-ローマ字の `kensaku` から「検索」「けんさく」「ケンサク」などに一致する正規表現を生成する。同じ処理をJavaScriptとWasm GCへ出力し、配布容量・初期化時間・検索時の応答を実測して配布方法を決める。
+`kensaku` から「検索」「けんさく」「ケンサク」などに一致する正規表現を生成する。ローマ字変換・compact辞書の探索・正規表現生成は共通のMoonBitコアで行い、JavaScriptとWasm GCへ出力する。
 
-現在は**テスト基盤の整備段階**。検索コア・公開API・性能測定はまだ実装していない。
+現在は**小辞書の検索コアと公開APIを実装済み**。Node.jsで両バックエンドを検証している。実用辞書、ブラウザでの検証、性能測定は後続の段階。進捗と残項目は[PLAN.md](PLAN.md)に記録する。
 
-[実装計画](PLAN.md)に、段階ごとの成果物、公開API案、互換性の基準、検証手順を記載している。[技術調査](docs/research/2026-09-08-moonbit-migemo.md)にはMoonBitの出力方式と現行の制限、一次資料をまとめた。
+## ビルドして検索する
 
-初期方針は、MoonBitの共通コアにローマ字変換・辞書探索・正規表現生成を置き、辞書取得と実際の照合はJavaScript側で行うこと。JavaScript版を先に仕上げ、Wasm GC版は同じ辞書・入力で比較する。
-
-初版の検索結果の基準は **C/Migemo 1.8.0の固定コミット**。同じ語彙の小辞書とJavaScriptの `RegExp(..., "u")` で比較する。jsmigemo 0.5.2はcompact辞書の変換と読取確認に使う。C ABIの配布や全正規表現方言への対応は後続の検討対象。
-
-Node.js 26.0.0、npm 11.16.0、C11コンパイラ、CMake 3.21以上、tarを用意して実行する。
+Node.js 26.0.0、npm 11.16.0、tarを用意する。SDKの自動復元はmacOS ARM64とLinux x64に対応し、システムのMoonBitを変更しない。
 
 ```sh
 npm ci --ignore-scripts
-npm run reference:prepare
-npm test
+npm run toolchain:prepare
+npm run build
+node --input-type=module <<'JS'
+import { readFile } from 'node:fs/promises';
+import { createMigemo } from './packages/mbmigemo/dist/index.js';
+
+const dictionary = new Uint8Array(await readFile('tests/fixtures/tiny.compact'));
+const migemo = await createMigemo({ dictionary });
+console.log(migemo.backend); // js
+console.log(new RegExp(migemo.query('kensaku'), 'u').test('検索')); // true
+JS
 ```
 
-107件の手書きケース、固定シードの10,000入力、辞書の再現性、比較器の故障検出に加え、fast-checkによるPBTを実行する。PBTは各500試行、失敗時の反例を縮小してseed/pathを保存する。`npm run test:pbt:stress` は各5,000試行。記録したMoonBit SDKがある環境では `npm run test:all` でJS／Wasm GCの接続PBTも検証できる。
+`createMigemo` はPromiseを返し、初期化後の `query` は同期的にパターン文字列を返す。辞書取得と `RegExp` による照合は呼び出し側で行う。辞書バイト列は初期化時に取り込み、元の配列を変更しても検索内容は変わらない。
 
-[テストの実行と本体の接続方法](docs/testing.md)、[ツールチェーン](docs/toolchain.md)、[辞書形式](docs/dictionary-format.md)、[上流とライセンス](docs/upstream.md)を参照。`test:api` と `test:compat` は未実装の本体を要求するため、現段階では失敗する。基盤テストの成功は検索機能の完成を意味しない。
+`backend` は `js`（既定）、`wasm-gc`、`auto`。`auto` はWasm GCとJS String Builtinsが使える場合にWasm版を選び、機能未対応時にJSへ移る。辞書破損や読み込み失敗は `InvalidDictionary`、`InitializationFailed`、明示したWasmの未対応は `UnsupportedBackend` の `error.code` で判別できる。
 
-プロジェクト全体のライセンスは未決定。今回使用した参照実装と辞書の出所・版・チェックサム・利用条件は記録済み。
+空入力は常に不一致の `(?!)`。空白、NUL、単独サロゲートを勝手に除去・正規化しない。候補数に上限を設けず、C/Migemoと同様に語ごとに既存の候補で始まる長い候補をまとめてから連結する。
+
+## 検証
+
+C11コンパイラとCMake 3.21以上も用意する。
+
+```sh
+npm run reference:prepare
+npm run test:all
+```
+
+C/Migemo 1.8.0の固定コミットと、同じ語彙の小辞書で検索結果を比較する。107手書きケース＋10,000生成ケースに加え、変換表の各キー・入力途中・連結語について生成された有限な正規表現の候補を列挙して検証する。jsmigemo 0.5.2は開発時の辞書変換と読取確認に使い、製品の検索処理には依存しない。
+
+fast-checkのPBTは生成辞書、辞書破損、UTF-16、二インスタンスの編集履歴などを検証し、失敗時の反例を縮小してseed/pathを保存する。詳細は[テスト手順](docs/testing.md)、[ツールチェーン](docs/toolchain.md)、[辞書形式](docs/dictionary-format.md)、[上流とライセンス](docs/upstream.md)を参照。
+
+プロジェクト全体のライセンスは未決定。C/Migemo由来の変換表と処理、MoonBit標準ライブラリのライセンス・NOTICEは配布用ビルドへ含める。辞書は本体へ埋め込まない。
