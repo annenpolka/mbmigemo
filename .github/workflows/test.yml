@@ -31,7 +31,9 @@ jobs:
         run: npm run reference:prepare
       - name: Verify deterministic dictionary generation
         run: npm run dictionary:prepare -- --fixture tiny
-      - run: npm test
+      - name: Restore the pinned MoonBit SDK and core
+        run: npm run toolchain:prepare
+      - run: npm run test:all
       - name: Ensure ordinary checks do not rewrite fixtures
         run: git diff --exit-code -- tests/fixtures
       - name: Preserve PBT seeds and counterexamples
@@ -41,7 +43,3 @@ jobs:
           name: pbt-${{ matrix.os }}-${{ matrix.seed }}
           path: test-results/pbt/
           if-no-files-found: ignore
-
-  # MoonBit probes run locally with the recorded SDK (npm run test:all).
-  # M1 must provide a reproducible SDK download before adding a MoonBit CI job.
-  # M2/M3 must add test:implementation as a required job once the API exists.

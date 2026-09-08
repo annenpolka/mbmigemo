@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "release": "0.10.11+6ff76a5f9",
+  "versions": {
+    "moon": "moon 0.1.20260827 (d0aaa07 2026-08-27)",
+    "moonc": "v0.10.11+6ff76a5f9 (2026-08-28)",
+    "core": "0.10.11+6ff76a5f9"
+  },
+  "core": {
+    "url": "https://cli.moonbitlang.com/cores/core-0.10.11%2B6ff76a5f9.tar.gz",
+    "sha256": "661425df9bb8ff7cb1497dd3cb28a873b5a476fb3b07c587a225453ffd0aa9b4"
+  },
+  "platforms": {
+    "darwin-arm64": {
+      "url": "https://cli.moonbitlang.com/binaries/0.10.11%2B6ff76a5f9/moonbit-darwin-aarch64.tar.gz",
+      "sha256": "9f617c9ae78b08e19354e70a4203c2157ff5373c78c340aebe722883441ae5b5",
+      "upstreamChecksumUrl": "https://cli.moonbitlang.com/binaries/0.10.11%2B6ff76a5f9/moonbit-darwin-aarch64.tar.gz.sha256"
+    },
+    "linux-x64": {
+      "url": "https://cli.moonbitlang.com/binaries/0.10.11%2B6ff76a5f9/moonbit-linux-x86_64.tar.gz",
+      "sha256": "9573f4df56ff7fe99aa200ddeabc379919e80203c37986642d8e74add1a7e7be",
+      "upstreamChecksumUrl": "https://cli.moonbitlang.com/binaries/0.10.11%2B6ff76a5f9/moonbit-linux-x86_64.tar.gz.sha256"
+    }
+  }
+}

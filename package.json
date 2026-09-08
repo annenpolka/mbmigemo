@@ -15,7 +15,7 @@
     "test": "npm run test:foundation && npm run test:pbt",
     "test:foundation": "node scripts/check-toolchain.mjs && node --test --test-timeout=60000 tests/harness/*.test.mjs",
     "test:coverage": "node --test --experimental-test-coverage --test-coverage-include='scripts/lib/*.mjs' tests/harness/*.test.mjs",
-    "test:moon": "node scripts/check-toolchain.mjs --moon && moon fmt --check && moon test --target js --deny-warn && moon test --target wasm-gc --deny-warn",
+    "test:moon": "node scripts/check-toolchain.mjs --moon && npm run moon -- fmt --check && npm run moon -- test --target js --deny-warn && npm run moon -- test --target wasm-gc --deny-warn",
     "build:bridge": "node scripts/build-bridge.mjs",
     "test:bridge": "npm run build:bridge && node --test --test-timeout=60000 tests/bridge/*.test.mjs",
     "test:all": "npm test && npm run test:moon && npm run test:bridge",
@@ -25,7 +25,9 @@
     "test:pbt": "node scripts/check-toolchain.mjs && node --test --test-timeout=120000 tests/pbt/*.test.mjs",
     "test:pbt:stress": "PBT_RUNS=5000 npm run test:pbt",
     "test:pbt:bridge": "npm run build:bridge && node --test --test-timeout=120000 tests/bridge/bridge.pbt.test.mjs",
-    "test:pbt:api": "node --test --test-timeout=120000 tests/contracts/api.pbt.test.mjs"
+    "test:pbt:api": "node --test --test-timeout=120000 tests/contracts/api.pbt.test.mjs",
+    "toolchain:prepare": "node scripts/prepare-toolchain.mjs",
+    "moon": "node scripts/moon.mjs"
   },
   "devDependencies": {
     "fast-check": "4.9.0",
