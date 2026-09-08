@@ -32,7 +32,7 @@ Node.js 26.0.0、npm 11.16.0、C11コンパイラ、CMake 3.21以上、tarを用
 | `npm run test:compat -- --fixture tiny` | 本体のJS／Wasm GCとC/Migemoの意味比較 | 本体未実装のため失敗する |
 | `npm run test:implementation` | API契約と互換性の両方 | M2以降の受け入れ用 |
 
-GitHub ActionsはLinux/macOS × PBT seed 20260908/104729の4構成で `npm test` と辞書の再生成一致を実行し、PBTの記録をartifactへ保存する。リモートのActions実行自体はまだ確認していない。MoonBit SDKの新規環境への復元が未解決のため、MoonBitのCIはM1の残項目。ブラウザの機能検出・auto切替・配布検証はM4/M6で追加する。
+GitHub ActionsはLinux/macOS × PBT seed 20260908/104729の4構成で `npm test` と辞書の再生成一致を実行し、PBTの記録をartifactへ保存する。2026-09-08にコミット `1a92c08` の[Actions実行](https://github.com/annenpolka/mbmigemo/actions/runs/34182583661)で4構成すべての成功を確認した。MoonBit SDKの新規環境への復元が未解決のため、MoonBitのCIはM1の残項目。ブラウザの機能検出・auto切替・配布検証はM4/M6で追加する。
 
 ローカルではキャッシュ・node_modules・ビルド結果を含めず別ディレクトリへコピーし、npm ci、C参照の新規取得・ビルド、辞書再生成、test:allまで成功した。MoonBitについては同じマシンの既存SDKを利用しており、SDKの新規導入を検証したものではない。
 
