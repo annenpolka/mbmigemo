@@ -35,7 +35,7 @@ Node.js 26.0.0、npm 11.16.0、C11コンパイラ、CMake 3.21以上、tarを用
 | `npm run test:pbt:dictionary` | 任意バイト列・辞書変異のPBT | 各500試行 |
 | `npm run pack:check` | npm packした成果物を別のTypeScriptプロジェクトから利用 | npmへの送信なし |
 
-GitHub ActionsはLinux/macOS × PBT seed 20260908/104729の4構成で固定C参照とMoonBit SDKを復元し、`test:all`、辞書再生成の一致、パッケージの別プロジェクトからの利用を検証する。PBTと互換性・packの記録をartifactへ保存する。SDK復元は固定URLとSHA-256を使い、グローバルSDKに依存しない。
+GitHub ActionsはLinux/macOS × PBT seed 20260908/104729の4構成で固定C参照とMoonBit SDKを復元し、`test:all`、辞書再生成の一致、パッケージの別プロジェクトからの利用を検証する。PBTと互換性・packの記録をartifactへ保存する。2026-09-08に、コミット `4b3a7bb` の[Actions実行](https://github.com/annenpolka/mbmigemo/actions/runs/34184453471)で4構成すべての成功を確認した。SDK復元は固定URLとSHA-256を使い、グローバルSDKに依存しない。
 
 ブラウザの機能検出・auto切替の実ブラウザ検証はM4で行う。現在のバックエンドテストはNode上で、Wasmなし・対応あり・読み込み失敗・破損・再試行を確認する。機能未対応と製品アーカイブ破損を同一のfallbackにしない。
 
