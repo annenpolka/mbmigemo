@@ -107,7 +107,7 @@ Unicode値の問題、builderの破損、readerの終端処理を切り分け、
 
 既定の互換性テストは両バックエンドで全10,107ケースを実行する。`cases`はケース数、`inputs`は重複を除いた入力数、`comparisons`は文書への照合回数。`patternDifferences`は表記だけの差も数える診断値で、意味の不一致数は `mismatches`。不一致があれば終了コード1になる。バックエンドが存在しない場合も失敗する。
 
-不一致の入力・クラス・両パターン・長さ・不足/過剰に一致した文書を `test-results/compat.json` に保存する。`--report PATH`で変更できる。有限の文書集合に対する一致であり、全入力・全文書についての同値証明ではない。
+不一致の入力・クラス・両パターン・長さ・不足/過剰に一致した文書を、通常の`test:compat`は`test-results/compat.json`、`test:practical`／`test:compat:all`は`test-results/compat-practical.json`に保存する。失敗検出用のCLIテストは一時ディレクトリを使い、実装の記録を上書きしない。`--report PATH`で変更できる。有限の文書集合に対する一致であり、全入力・全文書についての同値証明ではない。
 
 公開API契約には、空入力 `(?!)`、同期query、UTF-16の保存、バイト列viewの範囲、初期化後の元配列変更、並行した二辞書インスタンス、入力の追加/削除、512候補の保持、辞書489バイトの全切断位置と12種類の形式破損を含む。形式破損は `InvalidDictionary` を要求する。SHA-256の検証は準備時の別契約であり、利用者が渡す全辞書に既知のチェックサムを要求しない。
 
@@ -168,7 +168,7 @@ Safari実機はRemote Automationが無効のため、WebDriverの自動検証で
 
 `test:bench` の8件は採用基準と互換性記録の出所を検証する固定テストで、実機の速度測定とは別。`size` はコード・接続JSと辞書のraw/gzip/Brotliバイト数を分けて保存する。`bench` は同じ辞書とワークロードを各ブラウザ・各backendの新規プロセスで順番に測り、起動、展開、RegExp構築、照合、取得可能なメモリ観測を記録する。測定中はビルドや重いテストを同時実行しない。
 
-実用辞書の計測開始には `npm run test:practical` の完了済みpassing記録が必要で、現在のartifact・辞書・入力・文書・C参照との一致を検査する。`--compat-report` で記録の場所を指定できる。`--fixture tiny --runs 1 --warmup 1 --rounds 1` はハーネスのsmoke確認に限り、採用判断には使わない。計測値の読み方、未対応・欠測の扱い、3回の採用条件と出力先は[ベンチマークの手法](benchmarks/methodology.md)を参照する。コマンドの実装やテスト成功だけで性能目標を達成したとはしない。
+実用辞書の計測開始には `npm run test:practical` の完了済みpassing記録（`test-results/compat-practical.json`）が必要で、現在のartifact・辞書・入力・文書・C参照との一致を検査する。`--compat-report` で記録の場所を指定できる。`--fixture tiny --runs 1 --warmup 1 --rounds 1` はハーネスのsmoke確認に限り、採用判断には使わない。計測値の読み方、未対応・欠測の扱い、3回の採用条件と出力先は[ベンチマークの手法](benchmarks/methodology.md)を参照する。コマンドの実装やテスト成功だけで性能目標を達成したとはしない。
 
 ## 参照実装とmbmigemo固有の契約
 

@@ -35,7 +35,7 @@
     "demo": "node scripts/demo.mjs",
     "browser:prepare": "PLAYWRIGHT_BROWSERS_PATH=.cache/ms-playwright playwright install chromium firefox webkit",
     "test:browser": "PLAYWRIGHT_BROWSERS_PATH=.cache/ms-playwright playwright test",
-    "test:compat:all": "node scripts/test-compat.mjs --fixture all",
+    "test:compat:all": "node scripts/test-compat.mjs --fixture all --report test-results/compat-practical.json",
     "size": "node scripts/size.mjs",
     "bench": "node scripts/bench.mjs",
     "test:bench": "node --test bench/*.test.mjs",

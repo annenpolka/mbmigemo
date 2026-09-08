@@ -4,7 +4,7 @@
 
 対象を絞る例は`npm run bench -- --browsers chromium --runs 3`。`--fixture tiny --runs 1 --warmup 1 --rounds 1`はハーネスのsmoke確認用で、実用辞書の採用根拠には使わない。`--output`は生データのディレクトリ、`--summary`はMarkdownと同名JSONの書き出し先を指定する。実用辞書で3回以上測った場合の既定出力先は`docs/benchmarks/baseline.md`と`baseline.json`。
 
-実用辞書では`test-results/compat.json`（変更する場合は`--compat-report`）の完了済みpassing結果を必須とする。JS・Wasm GCの各laneが10,000以上のdistinct入力で差分0であり、4つの公開artifact・辞書/元TSV・現在の全入力/文書コーパス・C参照のSHA/版が一致することを測定前に検証する。report自身のSHAと各laneの件数をreceiptのreferenceEligibilityへ保存し、測定中のreport変更も失敗にする。古いbuildの成功や手書きだけの成功では測定を開始しない。tiny smokeは免除するが採用判断を行わない。
+実用辞書では`test-results/compat-practical.json`（変更する場合は`--compat-report`）の完了済みpassing結果を必須とする。JS・Wasm GCの各laneが10,000以上のdistinct入力で差分0であり、4つの公開artifact・辞書/元TSV・現在の全入力/文書コーパス・C参照のSHA/版が一致することを測定前に検証する。report自身のSHAと各laneの件数をreceiptのreferenceEligibilityへ保存し、測定中のreport変更も失敗にする。古いbuildの成功や手書きだけの成功では測定を開始しない。tiny smokeは免除するが採用判断を行わない。
 
 ## ワークロードと妥当性
 

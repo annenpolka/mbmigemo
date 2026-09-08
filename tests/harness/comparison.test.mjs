@@ -68,9 +68,18 @@ test('CLI succeeds for equivalent regexes, reports mutations, and clears stale s
   } finally { await rm(temporary, { recursive: true, force: true }); }
 });
 
-test('CLI never turns missing implementation or unknown fixture/backend into a green run', () => {
-  for (const args of [['--module', path('.cache/no-such-implementation.mjs')], ['--fixture', 'unknown'], ['--backend', 'typo'], ['--cases', 'empty'], ['--unknown', 'value']]) {
-    const result = spawnSync(process.execPath, [path('scripts/test-compat.mjs'), ...args], { encoding: 'utf8', timeout: 5000 });
-    assert.equal(result.status, 1);
-  }
+test('CLI failures cannot overwrite the implementation compatibility receipt', async () => {
+  const temporary = await mkdtemp(join(tmpdir(), 'mbmigemo-cli-failures-'));
+  const currentReceipt = () => readFile(path('test-results/compat.json')).catch((error) => {
+    if (error.code === 'ENOENT') return null;
+    throw error;
+  });
+  const before = await currentReceipt();
+  try {
+    for (const args of [['--module', join(temporary, 'missing.mjs')], ['--fixture', 'unknown'], ['--backend', 'typo'], ['--cases', 'empty'], ['--unknown', 'value']]) {
+      const result = spawnSync(process.execPath, [path('scripts/test-compat.mjs'), ...args, '--report', join(temporary, 'report.json')], { encoding: 'utf8', timeout: 5000 });
+      assert.equal(result.status, 1);
+    }
+    assert.deepEqual(await currentReceipt(), before);
+  } finally { await rm(temporary, { recursive: true, force: true }); }
 });

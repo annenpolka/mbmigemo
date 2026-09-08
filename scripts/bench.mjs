@@ -43,10 +43,10 @@ if (fixture === 'practical') {
   const { practicalCases } = await import('./lib/practical-corpus.mjs');
   const fixtures = await loadFixtures();
   const fullCorpus = await practicalCases(fixtures, metadata, 'all');
-  const reportPath = path(args['--compat-report'] ?? 'test-results/compat.json');
+  const reportPath = path(args['--compat-report'] ?? 'test-results/compat-practical.json');
   let reportBytes;
   try { reportBytes = await readFile(reportPath); }
-  catch (cause) { throw new Error('A full practical compatibility report is required. Run npm run test:practical before benchmarking.', { cause }); }
+  catch (cause) { throw new Error('A full practical compatibility report is required at test-results/compat-practical.json (or --compat-report). Run npm run test:practical before benchmarking.', { cause }); }
   referenceEligibility = { ...compatibilityEligibility(JSON.parse(reportBytes), {
     artifactSha256: Object.fromEntries(Object.entries(sizes.files).map(([name, info]) => [name, info.sha256])),
     dictionarySha256: metadata.sha256, sourceSha256: metadata.sourceSha256,
