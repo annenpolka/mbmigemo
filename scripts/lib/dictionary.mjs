@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { CompactDictionaryBuilder, CompactDictionary } from 'jsmigemo';
 import { path, json, verifyHash, sha256 } from './common.mjs';
+import { loadPracticalDictionaryMetadata } from './practical-dictionary.mjs';
 
 export function parseTSV(source) {
   if (!source.endsWith('\n')) throw new Error('dictionary must end with LF');
@@ -47,6 +48,12 @@ export function readCompactDictionary(bytes) {
 }
 
 export async function loadDictionary(fixture = 'tiny') {
+  if (fixture === 'practical') {
+    const metadata = await loadPracticalDictionaryMetadata();
+    const bytes = await readFile(path(metadata.file));
+    verifyHash(bytes, metadata.sha256, 'practical compact dictionary');
+    return new Uint8Array(bytes);
+  }
   if (!['tiny', 'alternate'].includes(fixture)) throw new Error(`unsupported fixture: ${fixture}`);
   const manifest = await json(path('tests/fixtures/manifest.json'));
   const entry = manifest.dictionaries[fixture];

@@ -44,3 +44,39 @@ jobs:
           name: pbt-${{ matrix.os }}-${{ matrix.seed }}
           path: test-results/
           if-no-files-found: ignore
+
+  practical-browser:
+    name: Practical dictionary and browsers (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-15]
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: .cache/ms-playwright
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm install --global npm@11.16.0 --ignore-scripts
+      - run: npm ci --ignore-scripts
+      - run: npm run toolchain:prepare
+      - run: npm run reference:prepare
+      - run: npm run dictionary:prepare -- --fixture all
+      - run: npx playwright install --with-deps chromium firefox webkit
+      - run: npm run build
+      - run: npm run test:bench
+      - run: npm run test:practical
+      - run: npm run test:browser
+      - run: node scripts/pack-check.mjs --fixture all
+      - run: git diff --exit-code -- tests/fixtures tests/dictionaries
+      - name: Preserve browser traces and compatibility results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: practical-browser-${{ matrix.os }}
+          path: test-results/
+          if-no-files-found: error

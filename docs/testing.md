@@ -1,6 +1,6 @@
 # テスト基盤
 
-検索結果の基準はC/Migemo 1.8.0、コミット `e780fcf8dfe59fe3266ca8676906a3cefa1683e8`。jsmigemo 0.5.2はcompact辞書の変換と読取確認にだけ使う。検索コアと公開APIは実装済みで、小辞書をNode.js上のJS／Wasm GC両バックエンドで検証している。
+検索結果の基準はC/Migemo 1.8.0、コミット `e780fcf8dfe59fe3266ca8676906a3cefa1683e8`。jsmigemo 0.5.2はcompact辞書の変換と読取確認にだけ使う。検索コアと公開API、小辞書・実用辞書、ブラウザdemo、配布物とベンチマークの検証を用意している。既定のバックエンドはJSで、Wasm GCは明示選択または `auto` で利用できる。
 
 ## 最初の実行
 
@@ -8,36 +8,44 @@ Node.js 26.0.0、npm 11.16.0、C11コンパイラ、CMake 3.21以上、tarを用
 
     npm ci --ignore-scripts
     npm run reference:prepare
-    npm run dictionary:prepare -- --fixture tiny
+    npm run dictionary:prepare -- --fixture all
     npm run toolchain:prepare
-    npm run test:all
+    npm run browser:prepare
+    npm run test:release
+
+Linuxでブラウザのシステム依存も導入する場合は、`PLAYWRIGHT_BROWSERS_PATH=.cache/ms-playwright npx playwright install --with-deps chromium firefox webkit` を使う。小辞書だけのコア開発なら辞書準備を `--fixture tiny` にし、ブラウザ準備を省いて `npm run test:all` を実行できる。`test:release` は実用辞書とブラウザを必須とし、未準備の対象をskipしない。
 
 `reference:prepare`だけがC/Migemoのソースアーカイブを取得する。SHA-256を検証してから展開・静的リンクし、`.cache/reference/`へテスト用ドライバとUTF-8変換表を置く。グローバルのcmigemoやシステム辞書は使わない。二回目以降は検証したアーカイブから再ビルドできる。キャッシュが壊れていれば失敗し、別の版には切り替えない。再取得する場合は `.cache/upstream/cmigemo.tar.gz` のみを削除してやり直す。
 
-`npm test`は現在成立するテスト基盤の検証。18件の固定テストと6種類のPBTで、107件の手書き入力と10,000件の保存済み生成入力、小辞書、比較器の故障検出を検証する。保存済み生成入力のシードは20260908。8クラスそれぞれ1,250件で、入力・比較用文字列を `tests/fixtures/generated.jsonl` に保存している。PBTの生成と縮小はこれとは独立して行う。
+`npm test`はテスト基盤の検証。23件の固定テストと6種類のPBTで、107件の手書き入力と10,000件の保存済み生成入力、小辞書、実用辞書変換規則、サーバーの入力処理、比較器の故障検出を検証する。保存済み生成入力のシードは20260908。8クラスそれぞれ1,250件で、入力・比較用文字列を `tests/fixtures/generated.jsonl` に保存している。PBTの生成と縮小はこれとは独立して行う。
 
 ## 各コマンドの意味
 
-| コマンド | 検証対象 | 現在の状態 |
+| コマンド | 検証対象 | 前提・範囲 |
 | --- | --- | --- |
-| `npm test` | 固定データ、参照実装、意味比較とPBT | ローカルで成功 |
-| `npm run test:pbt` | 辞書・比較器・C参照の6プロパティ、各500試行 | ローカルで成功 |
+| `npm test` | 固定データ、参照実装、意味比較とPBT | 固定C参照が必要 |
+| `npm run test:pbt` | 辞書・比較器・C参照の6プロパティ、各500試行 | 固定C参照が必要 |
 | `npm run test:pbt:stress` | 同じ6プロパティを各5,000試行 | seedは環境変数で変更できる |
 | `npm run test:coverage` | テスト補助コードの実行カバレッジ | 検索コアのカバレッジではない |
-| `npm run test:moon` | 検索コアと接続プローブ、両出力先で各23件 | ローカルで成功 |
-| `npm run test:bridge` | releaseビルドと両バックエンドの固定4件＋PBT2種類 | ローカルで成功 |
-| `npm run test:pbt:bridge` | 両バックエンドの文字列・バイト列PBTだけ | ローカルで成功 |
+| `npm run test:moon` | 検索コアと接続プローブ、両出力先で各27件 | 復元済みSDKが必要 |
+| `npm run test:bridge` | releaseビルドと両バックエンドの固定4件＋PBT2種類 | 復元済みSDKが必要 |
+| `npm run test:pbt:bridge` | 両バックエンドの文字列・バイト列PBTだけ | 復元済みSDKが必要 |
 | `npm run test:all` | 基盤・変換表整合性・MoonBit・接続・ビルド・API・互換性 | 復元済みSDKが必要 |
 | `npm run test:api` | 公開API、PBT、変換候補列挙、エラー／遅延ロード | ビルド後に実行 |
-| `npm run test:pbt:api` | 生成辞書・切断・編集履歴のAPI用PBT | ビルド後に実行 |
+| `npm run test:pbt:api` | UTF-16・生成辞書・切断・編集履歴のAPI用PBT | ビルド後に実行 |
 | `npm run test:compat -- --fixture tiny` | 本体のJS／Wasm GCとC/Migemoの意味比較 | ビルド後に実行 |
-| `npm run test:implementation` | ビルド、API契約と互換性 | M2の受け入れ用 |
+| `npm run test:compat:all` | 小辞書と実用辞書を両バックエンドでC/Migemoと比較 | ビルド・両辞書・固定C参照が必要 |
+| `npm run test:implementation` | ビルド、API契約と小辞書の互換性 | 実用辞書・ブラウザは含まない |
 | `npm run test:pbt:dictionary` | 任意バイト列・辞書変異のPBT | 各500試行 |
-| `npm run pack:check` | npm packした成果物を別のTypeScriptプロジェクトから利用 | npmへの送信なし |
+| `npm run test:practical` | 実用辞書のJIT回帰と、小辞書・実用辞書の全比較 | 実装済みの両バックエンドを必須とする |
+| `npm run test:browser` | Chromium・Firefox・WebKitのAPI／画面48件 | ビルド・実用辞書・ブラウザが必要 |
+| `npm run test:bench` | 計測の採用基準と互換性結果の出所確認、8件 | 速度測定そのものは行わない |
+| `npm run pack:check` | ビルド後のnpm packを別のTypeScriptプロジェクトから利用 | 両辞書、JS／Wasm GC／auto。npmへの送信なし |
+| `npm run test:release` | test:all、bench判定、実用辞書、ブラウザ、両辞書のpack確認 | 準備後の一括受け入れ |
 
-GitHub ActionsはLinux/macOS × PBT seed 20260908/104729の4構成で固定C参照とMoonBit SDKを復元し、`test:all`、辞書再生成の一致、パッケージの別プロジェクトからの利用を検証する。PBTと互換性・packの記録をartifactへ保存する。2026-09-08に、コミット `4b3a7bb` の[Actions実行](https://github.com/annenpolka/mbmigemo/actions/runs/34184453471)で4構成すべての成功を確認した。SDK復元は固定URLとSHA-256を使い、グローバルSDKに依存しない。
+GitHub Actionsの現定義は6ジョブ。Linux/macOS × PBT seed 20260908/104729の4構成で固定C参照とMoonBit SDKを復元し、`test:all`、辞書再生成の一致、小辞書のpackを検証する。追加のLinux/macOS各1構成で実用辞書、3ブラウザ、benchの判定テスト、両辞書のpackを検証する。PBT、互換性、browser trace、packの記録をartifactへ保存する。性能の採用判断は共有CIランナーで測らず、環境を記録した別の計測で行う。
 
-ブラウザの機能検出・auto切替の実ブラウザ検証はM4で行う。現在のバックエンドテストはNode上で、Wasmなし・対応あり・読み込み失敗・破損・再試行を確認する。機能未対応と製品アーカイブ破損を同一のfallbackにしない。
+2026-09-08にコミット `4b3a7bb` の[旧4構成のActions実行](https://github.com/annenpolka/mbmigemo/actions/runs/34184453471)は全成功を確認した。実用辞書・ブラウザを追加した6ジョブのCIは、この記録時点では実行結果未確認。過去の4ジョブ成功を新定義の成功として扱わない。
 
 ## PBTの性質と再現
 
@@ -56,7 +64,7 @@ fast-check 4.9.0を完全な版番号で固定し、PRNGはxoroshiro128plusを�
 
 接続PBTは0/31/32/33/63/64/65/127/128/129/255/256/257/1024/4096などの長さへ生成を偏らせ、NUL、単独サロゲート、結合文字も明示的に生成する。辞書の検証はテスト用のjsmigemo readerに対するもの。本体の辞書実装はAPIの生成辞書・切断・変異PBTで別に検証する。
 
-API用PBTは任意のUTF-16入力に対する文字どおりの一致と空文書への不一致を含み、各バックエンドに `api-js-dictionary-candidates`、`api-js-truncation`、`api-js-edit-history` を用意する（Wasm側は `api-wasm-gc-...`）。生成辞書の全候補を保持すること、生成辞書の任意の切断を拒否すること、二インスタンスの入力の追加・削除・置換・クリアをC参照の期待値と比較する。操作列は単純な配列として生成するため、seed/pathだけで縮小した履歴を再現できる。
+API用PBTは各バックエンドに `api-js-utf16-literal`、`api-js-dictionary-candidates`、`api-js-truncation`、`api-js-edit-history` を用意する（Wasm側は `api-wasm-gc-...`）。任意のUTF-16入力に対する文字どおりの一致と空文書への不一致、生成辞書の全候補の保持、生成辞書の任意の切断の拒否、二インスタンスの入力の追加・削除・置換・クリアを検証する。編集履歴はC参照と比較する。操作列は単純な配列として生成するため、seed/pathだけで縮小した履歴を再現できる。
 
 `api-dictionary-arbitrary-bytes` と `api-dictionary-byte-mutations` は、任意のバイト列・正常な辞書に変更を加えたバイト列について、両バックエンドが同じ判定をすること、拒否が `InvalidDictionary` になること、受理後のパターンが一致し `/u` でコンパイルできることを検証する。変更しても形式上正常な辞書はあり得るため、すべての変更を拒否するとは要求しない。
 
@@ -94,6 +102,7 @@ Unicode値の問題、builderの破損、readerの終端処理を切り分け、
     npm run test:compat -- --fixture tiny --backend js --cases manual
 
 別の場所にある試作を比較する場合:
+
     npm run test:compat -- --module ./path/to/index.mjs --backend js
 
 既定の互換性テストは両バックエンドで全10,107ケースを実行する。`cases`はケース数、`inputs`は重複を除いた入力数、`comparisons`は文書への照合回数。`patternDifferences`は表記だけの差も数える診断値で、意味の不一致数は `mismatches`。不一致があれば終了コード1になる。バックエンドが存在しない場合も失敗する。
@@ -108,6 +117,58 @@ Unicode値の問題、builderの破損、readerの終端処理を切り分け、
 このテストで、`KensakuNihongo` が誤って `検索機Nihongo` に一致する不具合を発見した。C/Migemoは句ごとに「検索」があれば「検索機」を除いてから次の句と連結する。単一の句では冗長な候補でも、連結後の意味は変わる。実装はUnicodeの文字境界を守って同じ処理を行う。表記の短縮や速度のための候補上限とは区別する。
 
 辞書リーダーは正規の54バイトの空辞書も受け入れ、ローマ字変換を利用できる。破損を空辞書へ置き換える処理はない。辞書に意図的に空の候補が登録されている場合、その読みは空文字列にも一致する。空の問い合わせ自体は常に `(?!)` の契約を優先する。
+
+## 実用辞書と正規表現JITの回帰
+
+`--fixture practical` は固定したSKK-JISYO.Lから作る辞書、`--fixture all` は小辞書と実用辞書を意味する。
+
+    npm run dictionary:prepare -- --fixture all
+    npm run build
+    npm run test:practical
+
+実用辞書の元データ・版・チェックサムは `tests/dictionaries/practical.lock.json` に固定する。変換後は163,556の読み、224,044候補、2,135,633バイト。SHA-256は `8fa973194468b4cc37e713e0c26c4a08625ee850d5c5db8497eb409d1263bc21`。C参照とmbmigemoは同じ変換後TSVの語彙を使う。元SKKのすべての構文を検索語として受理するものではなく、注釈・送り仮名・特殊キー等の変換規則と除外記録は[上流資料と辞書の扱い](upstream.md)を参照する。ソース、変換TSV、compact、除外記録、ライセンス、receiptは `.cache/dictionaries/practical/` に置き、npmパッケージへ辞書を埋め込まない。
+
+実用辞書の全比較には共通の10,107ケースと、固定seedで辞書から抽出した読み・接頭辞の2,000ケースを使う。各バックエンドで12,107ケース、11,707の重複なし入力、1,471,006回の文書照合を実行する。生成した追加入力は `.cache/dictionaries/practical/compat-cases.jsonl` に保存する。比較記録はコアartifact・辞書・元TSV・入力・文書のハッシュとC参照の版を含み、別ビルドの成功記録を性能測定に流用できない。
+
+2026-09-08に、この全比較がJS・Wasm GCの双方で差分0となることを確認した。有限の入力と文書集合についての結果であり、未知の全入力を含む同値証明ではない。
+
+この全比較で、大小文字の混在した `ToUKYoUGaKKoUtouKyoU` と `ShASHiNnIhOngOkensaku` がV8の正規表現JITに数秒を要する問題を発見した。選択肢を平坦に連結する出力を、Unicodeコードポイント単位で共通接頭辞と文字クラスを共有するtrie出力へ変更した。候補数を切り詰めず、C参照のprefix shadowと孤立surrogateの意味を維持する。長い一子枝は平坦に出力し、生成処理は明示スタックを使う。
+
+`tests/practical/cases.json` の2入力と `KaKaKaKaKa` を回帰ケースとして固定する。各入力・各バックエンドを別プロセスで実行し、実際の `RegExp.test()` まで含めてC参照との一致を検証する。同期JIT中は同じプロセス内のタイマーで中断できないため、親プロセスが15秒の上限を持つ。この上限は停止の検知用で、性能の目標値ではない。constructorだけの計測では遅延コンパイルを見逃す。
+
+## ブラウザとdemo
+
+    npm run browser:prepare
+    npm run test:browser
+    npm run demo
+
+demoは既定で `http://127.0.0.1:4173`、自動テストは4174を使用する。使用中のポートを止めず、demoは `npm run demo -- --port 4175`、自動テストは `MBMIGEMO_TEST_PORT=4176 npm run test:browser` で変更できる。Playwrightは既存サーバーを流用しない。共有サーバーはdemo・bench・公開コア・指定辞書のルートだけを公開し、`.git` や任意のリポジトリファイルを配信しない。
+
+demoは実用辞書を既定とし、辞書がなければ取得エラーを表示する。小辞書を使う場合は `?dictionary=tiny` を明示する。入力するたびに元の文書を検索し、一致箇所はテキストノードと `mark` で表示する。入力を消すと0件になり、字形の正規化やHTMLとしての挿入は行わない。辞書SHA-256、実際のbackend、生成パターンは「開発用の確認情報」で確認できる。検索のたびに通信する処理はない。
+
+2026-09-08のローカル確認では48テストが全成功（14.9秒）。各エンジン16件で、JS強制、Wasm GC強制、native機能判定、機能を無効にした `auto`、必要なartifactだけの遅延ロード、破損辞書・破損コア・取得失敗・runtime trapの非フォールバック、Wasm取得の再試行、同時初期化と入力履歴、107手書きケースのC参照比較、実用辞書UIと安全なハイライト、狭い画面、遅い初期化後の選択変更を検証した。
+
+| 実行環境 | 確認した版 | 確認範囲 |
+| --- | --- | --- |
+| Playwright Chromium | 153.0.8010.12 | 16件成功。Wasm GCとJS String Builtinsの実プローブ成功 |
+| Playwright Firefox | 155.0 | 同上 |
+| Playwright WebKit | 26.6 | 同上。Safari実機とは別の検証対象 |
+| Safari実機 | 26.6.2（21624.5.1.11.3） | 手動UIでJSのkensakuが1/6件、Wasm GCのnihongoが2/6件、autoの実backendがwasm-gc、クリア後0/6件と `(?!)` を確認 |
+
+Safari実機はRemote Automationが無効のため、WebDriverの自動検証ではなく画面操作で確認した。これはWasm未対応という意味ではない。Safari実機でPlaywrightの48件全体や性能測定まで実行したとは扱わない。自動結果と機能判定の記録は `test-results/browser/results.json`、失敗時のtrace・画像は `test-results/browser/artifacts/` に保存する。
+
+## 配布物と性能測定
+
+    npm run pack:check
+    npm run test:bench
+    npm run size -- --fixture practical
+    npm run bench -- --fixture practical --runs 3
+
+`pack:check` はビルドしてからtarballを作り、一時ディレクトリのTypeScript利用プロジェクトへoffline installする。型定義、両コア、feature probe、ライセンス類の同梱を確認し、小辞書・実用辞書それぞれでJS／Wasm GC／autoの検索、空入力、元配列の変更、不正辞書のエラーを実行する。記録は `test-results/pack.json`、tarballは `.cache/pack/` に置く。npmへの公開や名前の確保はしない。小辞書だけを検証する場合はビルド後に `node scripts/pack-check.mjs --fixture tiny` を使う。
+
+`test:bench` の8件は採用基準と互換性記録の出所を検証する固定テストで、実機の速度測定とは別。`size` はコード・接続JSと辞書のraw/gzip/Brotliバイト数を分けて保存する。`bench` は同じ辞書とワークロードを各ブラウザ・各backendの新規プロセスで順番に測り、起動、展開、RegExp構築、照合、取得可能なメモリ観測を記録する。測定中はビルドや重いテストを同時実行しない。
+
+実用辞書の計測開始には `npm run test:practical` の完了済みpassing記録が必要で、現在のartifact・辞書・入力・文書・C参照との一致を検査する。`--compat-report` で記録の場所を指定できる。`--fixture tiny --runs 1 --warmup 1 --rounds 1` はハーネスのsmoke確認に限り、採用判断には使わない。計測値の読み方、未対応・欠測の扱い、3回の採用条件と出力先は[ベンチマークの手法](benchmarks/methodology.md)を参照する。コマンドの実装やテスト成功だけで性能目標を達成したとはしない。
 
 ## 参照実装とmbmigemo固有の契約
 
@@ -130,4 +191,4 @@ C/MigemoのC APIを使う理由は、CLIの対話入力が255バイトまでで�
 
 更新時はパターンだけでなく照合文書の増減、シード、辞書のSHA-256、参照コミット、変換表の出所を確認する。新しい失敗はまず手書きケースまたは入力列へ追加する。
 
-実用辞書の準備・互換性はまだない。`--fixture all`を指定すると明示的に失敗する。現在の小辞書10,000入力の成功を、M3の実用辞書互換性達成とは扱わない。
+実用辞書のpinや変換規則を更新する場合は `tests/dictionaries/practical.lock.json` のソース・出力・除外記録のハッシュと件数を見直し、小辞書のgolden更新と混同しない。両辞書の全互換性、実用辞書のJIT回帰、ブラウザ、packを再実行し、旧artifactに結び付いた計測結果を新しい実装の結果として採用しない。

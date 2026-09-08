@@ -31,9 +31,19 @@
     "moon": "node scripts/moon.mjs",
     "conversions:check": "node scripts/generate-conversions.mjs --check",
     "test:pbt:dictionary": "node --test --test-timeout=120000 tests/contracts/dictionary-fuzz.pbt.test.mjs",
-    "pack:check": "npm run build && node scripts/pack-check.mjs"
+    "pack:check": "npm run build && node scripts/pack-check.mjs --fixture all",
+    "demo": "node scripts/demo.mjs",
+    "browser:prepare": "PLAYWRIGHT_BROWSERS_PATH=.cache/ms-playwright playwright install chromium firefox webkit",
+    "test:browser": "PLAYWRIGHT_BROWSERS_PATH=.cache/ms-playwright playwright test",
+    "test:compat:all": "node scripts/test-compat.mjs --fixture all",
+    "size": "node scripts/size.mjs",
+    "bench": "node scripts/bench.mjs",
+    "test:bench": "node --test bench/*.test.mjs",
+    "test:practical": "node --test --test-timeout=120000 tests/practical/*.test.mjs && npm run test:compat:all",
+    "test:release": "npm run test:all && npm run test:bench && npm run test:practical && npm run test:browser && node scripts/pack-check.mjs --fixture all"
   },
   "devDependencies": {
+    "@playwright/test": "1.63.0",
     "@types/node": "26.0.0",
     "fast-check": "4.9.0",
     "jsmigemo": "0.5.2",

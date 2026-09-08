@@ -1,0 +1,20 @@
+[
+  {
+    "id": "seed-20260908-2",
+    "class": "mixed-case-regression",
+    "input": "ToUKYoUGaKKoUtouKyoU",
+    "needles": ["とうきょうがっこうとうきょう", "東京学校東京"]
+  },
+  {
+    "id": "seed-20260908-10",
+    "class": "mixed-case-regression",
+    "input": "ShASHiNnIhOngOkensaku",
+    "needles": ["しゃしんにほんごけんさく", "写真日本語検索"]
+  },
+  {
+    "id": "repeated-short-segments",
+    "class": "mixed-case-regression",
+    "input": "KaKaKaKaKa",
+    "needles": ["加加加加加", "かかかかか"]
+  }
+]

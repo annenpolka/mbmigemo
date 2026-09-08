@@ -69,7 +69,7 @@ test('CLI succeeds for equivalent regexes, reports mutations, and clears stale s
 });
 
 test('CLI never turns missing implementation or unknown fixture/backend into a green run', () => {
-  for (const args of [['--module', path('.cache/no-such-implementation.mjs')], ['--fixture', 'all'], ['--backend', 'typo'], ['--cases', 'empty'], ['--unknown', 'value']]) {
+  for (const args of [['--module', path('.cache/no-such-implementation.mjs')], ['--fixture', 'unknown'], ['--backend', 'typo'], ['--cases', 'empty'], ['--unknown', 'value']]) {
     const result = spawnSync(process.execPath, [path('scripts/test-compat.mjs'), ...args], { encoding: 'utf8', timeout: 5000 });
     assert.equal(result.status, 1);
   }

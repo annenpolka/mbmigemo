@@ -19,11 +19,13 @@ export function compareCase(testCase, expectedPattern, actualPattern, documents)
   return null;
 }
 
-export function compareQueries(cases, patterns, query, baseDocuments, documentsFor) {
+export function compareQueries(cases, patterns, query, baseDocuments, documentsFor, onProgress) {
   if (!cases.length || cases.length !== patterns.length) throw new Error('nonempty aligned cases and oracle patterns are required');
   const failures = [];
   let comparisons = 0, patternDifferences = 0;
+  let maxExpectedPatternLength = 0, maxActualPatternLength = 0;
   for (let i = 0; i < cases.length; i++) {
+    if (i % 1000 === 0) onProgress?.({ completed: i, total: cases.length });
     const c = cases[i];
     const expected = patterns[i].pattern;
     const documents = documentsFor(c, baseDocuments);
@@ -34,9 +36,12 @@ export function compareQueries(cases, patterns, query, baseDocuments, documentsF
       failures.push({ id: c.id, class: c.class, input: c.input, kind: 'query-error', error: String(error), expectedPattern: expected });
       continue;
     }
+    maxExpectedPatternLength = Math.max(maxExpectedPatternLength, expected.length);
+    maxActualPatternLength = Math.max(maxActualPatternLength, typeof actual === 'string' ? actual.length : 0);
     if (actual !== expected) patternDifferences++;
     const failure = compareCase(c, expected, actual, documents);
     if (failure) failures.push(failure);
   }
-  return { cases: cases.length, inputs: new Set(cases.map((c) => c.input)).size, comparisons, patternDifferences, mismatches: failures.length, failures };
+  onProgress?.({ completed: cases.length, total: cases.length });
+  return { maxExpectedPatternLength, maxActualPatternLength, cases: cases.length, inputs: new Set(cases.map((c) => c.input)).size, comparisons, patternDifferences, mismatches: failures.length, failures };
 }

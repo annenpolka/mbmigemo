@@ -1,7 +1,7 @@
 # mbmigemoの共通コアとブラウザ向け配布を実装する
 
 
-この計画は実装とともに更新する。Progress、Surprises & Discoveries、Decision Log、Outcomes & Retrospectiveには、実際に完了したこと、観測した事実、判断と理由を記録する。初期コミットは計画のみで、2026-09-08にテスト基盤を先行追加した。現在は小辞書の検索コア・公開APIを実装済みで、後半の実用辞書・ブラウザ検証・測定へ進める状態。
+この計画は実装とともに更新する。Progress、Surprises & Discoveries、Decision Log、Outcomes & Retrospectiveには、実際に完了したこと、観測した事実、判断と理由を記録する。初期コミットは計画のみで、2026-09-08にテスト基盤を先行追加した。現在は実用辞書・公開API・ブラウザデモまで実装し、両版の互換性と実ブラウザを検証済み。性能測定と最終配布記録を進めている。
 
 
 ## Purpose / Big Picture
@@ -21,16 +21,18 @@
 - [x] (2026-09-08 03:02:17Z) fast-check 4.9.0でPBTを追加した。通常6プロパティと接続2プロパティを各500試行、別seedで通常6プロパティを各5,000試行して成功。反例の縮小とseed/path再現、API用PBT、CIの複数seedと結果保存も追加した。
 - [x] (2026-09-08) M1: 参照実装とSDKを固定して復元し、JS・Wasm GCの接続を検証。Linux/macOS × 2 seedのCIで検索コア・PBT・配布物確認まで成功（run 34184453471）。実用辞書の選定はM3で行う。
 - [x] (2026-09-08 03:38:54Z) M2: 小辞書の共通検索コアとJS／Wasm GCの公開APIを実装。両版で10,107ケース・各1,232,198文書照合と、追加1,781入力・各68,576候補照合が成功。
-- [ ] M3: 実用辞書とJS向けの公開APIを接続し、互換性を確認する（小辞書のJS APIは完了、実用辞書とdemoは残る）。
-- [ ] M4: Wasm GC版を接続し、ブラウザでの切り替えと失敗時の動作を確認する（Nodeの接続・機能判定・auto／失敗／再試行は完了、実ブラウザは残る）。
-- [ ] M5: 容量・初期化・応答・メモリを比較し、標準配布の対象を決める。
-- [ ] M6: パッケージのローカル配布検証と、実装結果の記録を完了する（小辞書を使うnpm packの別TypeScriptプロジェクトからの利用は成功、製品全体の検証・記録は残る）。
+- [x] (2026-09-08) M3: SKK-JISYO.Lの固定辞書とデモを接続。163,556読み・224,044候補で各版12,107ケース・1,471,006文書照合の差分0。
+- [x] (2026-09-08) M4: Chromium・Firefox・WebKitの48テストでJS／Wasm GC／auto、未対応・破損・再試行・遅延ロードを検証。Safari 26.6.2実機でも3方式、検索・消去・強調表示を確認。
+- [ ] M5: 容量・初期化・応答・メモリを比較し、標準配布の対象を決める（測定ハーネスと採用判定・出所照合の8テストは完了、3ブラウザ各3回の実測は残る）。
+- [ ] M6: パッケージのローカル配布検証と、実装結果の記録を完了する（小辞書と実用辞書を使うnpm packの別TypeScriptプロジェクトからの利用は成功、追加した6構成のCI確認と最終記録は残る）。
 
 
 ## Surprises & Discoveries
 
 
-小辞書の10,107ケースの文書照合が成功した後、変換表から生成した正規表現の有限候補を直接列挙する検証で、KensakuNihongoが検索機Nihongoに誤って一致する差分を発見した。C/Migemoは句ごとに短い受理候補があればその子孫を除いてから連結する。この処理を合わせ、単独サロゲートが補助平面文字を誤って除かないようUnicode境界を確認する。既定のMoonBit String Compareは長さ優先なので、接頭辞をまとめる順序には明示的なlexical_compareを用いる。
+実用辞書で、平坦な選択肢を連結した正規表現の初回照合が極端に遅くなった。V8のサンプルではRegExp JITのBoyer-Moore探索用処理に滞在し、ToUKYoUGaKKoUtouKyoUは約4.1秒、KaKaKaKaKaは15秒のタイムアウトで再現した。共有接頭辞を木としてまとめ、終端の文字集合を文字クラスへ圧縮すると、前者の初回照合は約37ミリ秒（同条件のCパターンは約30ミリ秒）となり、両版の回帰テストが通った。候補を制限せず、3反例を独立プロセスの時間制限付きテストへ固定した。全実用辞書比較も修正後に再実行した。
+
+小辞書の10,107ケースの文書照合が成功した後、変換表から生成した正規表現の有限候補を直接列挙する検証で、KensakuNihongoが検索機Nihongoに誤って一致する差分を発見した。C/Migemoは句ごとに短い受理候補があればその子孫を除いてから連結する。この処理を合わせ、単独サロゲートが補助平面文字を誤って除かないようUnicode境界を確認する。既定のMoonBit String Compareは長さ優先なので、接頭辞をまとめる順序は明示する。M3の共有接頭辞の木では、補助平面文字と単独サロゲートの枝が隣接するようUnicodeコードポイント順を用いる。
 
 初期の正規表現エスケープで、UTF-16コード単位をStringViewの検査付きsliceで取り出すと、絵文字の途中で例外になることを実際の両コアで確認した。位置を検査したcode-unit単位のsubstringへ修正し、補助平面・孤立サロゲートをMoonBitとAPI PBTで検証する。
 
@@ -48,13 +50,21 @@ C/MigemoのCLI対話入力は255バイトまでのため、テストはC APIを�
 
 事実として、MoonBitのWasm GCとJavaScriptの出力先はホストのGCを使うが、通常のWasmとnativeでは参照カウントを使う。JS String Builtinsは、WasmからホストのJavaScript文字列操作を利用する別の機能である。Wasm GCへの対応だけで、この文字列機能も使えるとは判定しない。
 
-事実として、公式の182バイトという例は小さい文字列連結処理のWasm本体であり、Migemo、接続用JavaScript、辞書を含む値ではない。今回のMigemoの性能は未測定である。
+事実として、公式の182バイトという例は小さい文字列連結処理のWasm本体であり、Migemo、接続用JavaScript、辞書を含む値ではない。この小さい例を今回のMigemoの測定値には使わない。
 
 上記の調査根拠と確認日はdocs/research/2026-09-08-moonbit-migemo.mdに保存する。実装時は、選んだコンパイラの版で挙動を再確認し、変化があればこの欄を更新する。
 
 
 ## Decision Log
 
+
+- Decision: 実用辞書をskk-dev/dictのコミット0a164e6b990c5eb5b59eb7d8789f08865dc2f644のSKK-JISYO.Lへ固定する。
+  Rationale: 元データ・ライセンス・変換規則・除外理由を保存し、同一TSVからcompactとC参照を構成できる。辞書はパッケージへ同梱しない。SHA-256と全読み・候補の往復一致を準備時に検証する。
+  Date/Author: 2026-09-08 / Codex
+
+- Decision: 性能測定前に、同じ配布物・辞書・全コーパスで完了した両版の実用辞書互換性レポートを必須とする。
+  Rationale: 古いビルドや小辞書の成功を、測定対象の互換性として流用しないため。測定ごとの文書一致も検証し、3回の各実行で採用基準を満たすか機械的に判定する。
+  Date/Author: 2026-09-08 / Codex
 
 - Decision: M2で小辞書の公開APIをJS／Wasm GC双方へ接続し、実用辞書の選定はM3にまとめる。
   Rationale: 既存のAPI契約とPBTを実コアへ早く適用できる。Nodeでの両版の成功はブラウザ配布・実用辞書の完成とは区別し、既定はJSのままとする。
@@ -108,15 +118,19 @@ C/MigemoのCLI対話入力は255バイトまでのため、テストはC APIを�
 ## Outcomes & Retrospective
 
 
+M3/M4では固定した実用辞書2,135,633バイト（SHA-256: 8fa973194468b4cc37e713e0c26c4a08625ee850d5c5db8497eb409d1263bc21）を利用する。10,000の保存済み生成ケースに、1,000の辞書項目から完全な読みと途中入力を作る2,000ケースを追加し、計12,107ケース・11,707 distinct入力を両版で照合した。各1,471,006照合で差分0。小辞書の比較、有限候補列挙、18プロパティ各500試行も継続して成功した。MoonBitは各27テストへ増え、文字クラス・長い枝・サロゲート境界を検証する。
+
+Playwright 1.63.0のChromium 153.0.8010.12、Firefox 155.0、WebKit 26.6で各16・計48テストが成功した。Safari 26.6.2（21624.5.1.11.3）はGUIで実用辞書・JS／Wasm GC／autoを選択し、kensaku、nihongoの強調表示、消去時の0件、実backendと辞書SHAを確認した。SafariのWebDriver自動化は設定無効のため実行せず、Playwright WebKitとは別の手動確認として記録する。
+
 M2のtest:allが成功した。固定基盤18件、基盤PBT6件、MoonBit各23件、接続固定／PBT6件、API契約・PBT・追加オラクル1,046件（辞書切断の子テストを含む）。18プロパティは各500試行。API・辞書変異の10プロパティは別seed 104729でも各500試行が成功。SDKだけの独立したGitツリーを別ディレクトリへ取り出し、npm ci、SDKのfresh復元、C参照再ビルド、基盤test:allを確認した。C比較は両版とも10,107ケース、重複を除く10,082入力、各1,232,198文書照合で差分0。追加の有限候補照合は各1,781入力・68,576候補で成功した。npm packした配布物を別のTypeScriptプロジェクトへoffline導入し、型チェックとJS／Wasm GC／autoの検索・所有権・エラーを確認した。npm公開は行っていない。
 
 検索コアはsrc/dictionary、src/romaji、src/pattern、src/migemo、薄い公開関数はsrc/exportsにある。src/featuresがGC構造体とJS String Builtinsを検査し、packages/mbmigemo/src/index.tsが選択したコアだけを遅延ロードする。空辞書を正常に受け取る場合と、破損をInvalidDictionaryで拒否する場合を区別する。接続プローブはsrc/bridgeへ移動した。
 
 コミット4b3a7bbのGitHub Actions（run 34184453471）で、ubuntu-24.04／macos-15 × seed 20260908／104729の4構成すべてが成功。固定SDK・C参照の新規復元、test:all、packの別プロジェクトからの利用とfixturesの無変更を確認した。
 
-残項目は実用辞書の固定と比較、実ブラウザ、性能・メモリと配布方式の判断。現在の検証値を実用辞書や全入力での完成として扱わない。
+M2終了時の残項目は実用辞書の固定と比較、実ブラウザ、性能・メモリと配布方式の判断だった。実用辞書とブラウザは上記M3/M4で検証した。
 
-PBT追加後のtest:allは固定基盤18件、PBT6件、MoonBit各3件、接続固定4件とPBT2件の計36件が成功。seed 104729で通常PBTを各5,000回、合計30,000試行して成功した。保存した上流不具合のseed/pathによる再実行も成功。API用PBTは生成辞書の候補保持・任意切断・二インスタンスの編集履歴を定義したが、本体がないためまだ合格していない。
+PBT追加後のtest:allは固定基盤18件、PBT6件、MoonBit各3件、接続固定4件とPBT2件の計36件が成功。seed 104729で通常PBTを各5,000回、合計30,000試行して成功した。保存した上流不具合のseed/pathによる再実行も成功。当時のAPI用PBTは生成辞書の候補保持・任意切断・二インスタンスの編集履歴を定義した段階で、本体接続と成功は上記M2で行った。
 
 2026-09-08の最初のテスト基盤作成時点では、C/Migemoの固定ビルドと小辞書二種類、手書き・生成ケース、意味比較器、将来の公開API契約、両出力先の接続プローブ、Linux/macOS用CI定義が存在する。ローカルのtest:allは基盤15件、MoonBit各3件、接続4件が成功した。キャッシュとビルド結果を持ち込まない別ディレクトリでも、npm ci、C参照の新規取得とビルド、辞書生成、test:allの成功を確認した（MoonBit SDKは同じマシンの既存環境を使用）。この時点では検索コア、実用辞書、ブラウザ検証、ベンチマーク、公開パッケージはなかった。
 
@@ -182,7 +196,7 @@ M6ではnpmへ送信せずnpm packで配布物を作り、別の小さいプロ�
     PBT_SEED=104729 npm run test:pbt:stress
     npm run test:all
 
-npm testはNode/Cの基盤、test:allは記録したSDKでのMoonBitと接続も含む。test:apiとtest:compatはnpm run buildで作った本体を検証する。toolchain:prepare、build、pack:checkは実装済み。以下のdemo・browser・benchコマンドは対応する実装を追加した後に実行する。存在しないコマンドを実行済みと記録しない。作業ディレクトリはmbmigemoのリポジトリルートである。
+npm testはNode/Cの基盤、test:allは記録したSDKでのMoonBitと接続も含む。test:apiとtest:compatはnpm run buildで作った本体を検証する。toolchain:prepare、build、pack:checkは実装済み。demo・browser・size・bench・test:releaseも実装済み。test:releaseは実用辞書とブラウザの準備後に全検証を実行する。作業ディレクトリはmbmigemoのリポジトリルートである。
 
 最初に環境を確認し、結果をdocs/toolchain.mdに記録する。未導入のSDKをインストールする段階では、採用する版を固定してから作業する。
 
@@ -212,7 +226,7 @@ M2とM3では次を実行する。tinyでは小さい辞書、allでは固定し
     npm run moon -- test --target wasm-gc
     npm run test:compat -- --fixture tiny --backend js
     npm run dictionary:prepare -- --fixture all
-    npm run test:compat
+    npm run test:practical
 
 M3でnpm run demoを用意し、ローカルのhttp://127.0.0.1:4173に試用画面を起動する。取得する辞書のチェックサム、選択中のバックエンドは開発用の確認情報として見られるようにする。kensakuの入力に対して「検索」が一致し、入力を消したら一致がなくなることを確認する。
 
@@ -220,6 +234,7 @@ M3でnpm run demoを用意し、ローカルのhttp://127.0.0.1:4173に試用画
 
 M4でブラウザテスト、M5で容量と時間の測定用コマンドを用意する。ブラウザテストはPlaywrightのChromium・Firefox・WebKitで行い、Safariの配布可否は実際のSafariでも確認する。テスト用WebKitをSafari実機と同一だとは扱わない。
 
+    npm run browser:prepare
     npm run test:browser
     npm run size
     npm run bench

@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "name": "SKK-JISYO.L",
+  "commit": "0a164e6b990c5eb5b59eb7d8789f08865dc2f644",
+  "commitTime": "2026-04-11T20:18:59Z",
+  "encoding": "euc-jp",
+  "license": "GPL-2.0-or-later",
+  "sources": [
+    {
+      "file": "SKK-JISYO.L",
+      "url": "https://raw.githubusercontent.com/skk-dev/dict/0a164e6b990c5eb5b59eb7d8789f08865dc2f644/SKK-JISYO.L",
+      "sha256": "c791f578d1b4040fce282db29bc22b2cc7ea46f83e269fab2e0fa779e2967e40"
+    },
+    {
+      "file": "committers.md",
+      "url": "https://raw.githubusercontent.com/skk-dev/dict/0a164e6b990c5eb5b59eb7d8789f08865dc2f644/committers.md",
+      "sha256": "eb13db671542b8b9f1d1e5bde09d043fced6719a35e1daa513d1ea0372290cc9"
+    },
+    {
+      "file": "COPYING",
+      "url": "https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt",
+      "sha256": "edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6",
+      "bundledFile": "tests/dictionaries/LICENSE-SKK-GPL-2.0"
+    }
+  ],
+  "converter": {
+    "name": "jsmigemo",
+    "version": "0.5.2",
+    "vocabularyPolicy": 1
+  },
+  "output": {
+    "sourceSha256": "a0d3095aa83d143c396c4ffc94c29bebd16decff7be5149b3375d5242e95c2d3",
+    "sha256": "8fa973194468b4cc37e713e0c26c4a08625ee850d5c5db8497eb409d1263bc21",
+    "bytes": 2135633,
+    "exclusionsSha256": "d92b11ca7b049479705773f5b8637b1e0345981e004a5b5d0011acdadc9b3277"
+  },
+  "statistics": {
+    "sourceRows": 175791,
+    "sourceValues": 240299,
+    "commentRows": 53,
+    "specialKeyRows": 1198,
+    "specialKeyValues": 1626,
+    "unsupportedReadingRows": 19,
+    "unsupportedReadingValues": 26,
+    "emptyRows": 553,
+    "okuriRows": 15663,
+    "annotationValues": 31443,
+    "numericTemplateValues": 1833,
+    "lispValues": 5,
+    "duplicateValues": 12765,
+    "acceptedRows": 174021,
+    "readings": 163556,
+    "values": 224044
+  }
+}
