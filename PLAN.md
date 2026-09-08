@@ -1,0 +1,234 @@
+# mbmigemoの共通コアとブラウザ向け配布を実装する
+
+
+この計画は実装とともに更新する。Progress、Surprises & Discoveries、Decision Log、Outcomes & Retrospectiveには、実際に完了したこと、観測した事実、判断と理由を記録する。初期コミットは計画のみで、以下の実装用コマンドやAPIの多くはこれから作るものを定義している。
+
+
+## Purpose / Big Picture
+
+
+ローマ字で日本語を検索できる、小さいライブラリを作る。実装後はブラウザで辞書を読み込み、kensakuを入力すると「検索」「けんさく」「ケンサク」を含む候補を探せる。アプリケーションの実装者は正規表現の文字列を受け取り、JavaScriptのRegExpで自分のデータを検索する。
+
+同じMoonBitの検索コアからJavaScript版とWasm GC版を作り、動作をそろえる。Wasm GCとは、WebAssemblyのオブジェクトをブラウザ側の自動メモリ管理で保持する仕組みである。JavaScript版を最初に利用可能にし、Wasm GC版の配布は実測結果で判断する。容量と速度について、まだ測っていない数値を達成済みとして扱わない。
+
+
+## Progress
+
+
+- [x] (2026-09-08 01:56:26Z) MoonBitの出力先、文字列処理、nativeライブラリ出力の制限を調査した。
+- [x] (2026-09-08 01:56:26Z) プロジェクト名をmbmigemoとし、初版の範囲と検証方法をこの計画にまとめた。
+- [ ] M1: ツールチェーンと参照実装を固定し、JS・Wasm GCの文字列と辞書バイト列の受け渡しを検証する。
+- [ ] M2: 小さい辞書でローマ字変換・辞書探索・正規表現生成を実装する。
+- [ ] M3: 実用辞書とJS向けの公開APIを接続し、互換性を確認する。
+- [ ] M4: Wasm GC版を接続し、ブラウザでの切り替えと失敗時の動作を確認する。
+- [ ] M5: 容量・初期化・応答・メモリを比較し、標準配布の対象を決める。
+- [ ] M6: パッケージのローカル配布検証と、実装結果の記録を完了する。
+
+
+## Surprises & Discoveries
+
+
+事実として、2026年9月8日に確認したMoonBit公式文書では、nativeバックエンドのforeign_libraryからリンク可能なライブラリ成果物を出す経路は未対応で、.soと.dllも含まれる。C ABIとは、C言語の関数として別のプログラムから呼ぶ際の取り決めである。MoonBitからC関数を呼べることを、C ABIのライブラリ配布が完成している証拠にはしない。
+
+事実として、MoonBitのWasm GCとJavaScriptの出力先はホストのGCを使うが、通常のWasmとnativeでは参照カウントを使う。JS String Builtinsは、WasmからホストのJavaScript文字列操作を利用する別の機能である。Wasm GCへの対応だけで、この文字列機能も使えるとは判定しない。
+
+事実として、公式の182バイトという例は小さい文字列連結処理のWasm本体であり、Migemo、接続用JavaScript、辞書を含む値ではない。今回のMigemoの性能は未測定である。
+
+上記の調査根拠と確認日はdocs/research/2026-09-08-moonbit-migemo.mdに保存する。実装時は、選んだコンパイラの版で挙動を再確認し、変化があればこの欄を更新する。
+
+
+## Decision Log
+
+
+- Decision: ブラウザ向けのJS版を先に完成させ、同じコアからWasm GC版を作る。
+  Rationale: JS版が比較の基準と互換性の広い配布先になる。Wasm GCの小型化は有望だが、辞書を含む結果はまだ不明である。
+  Date/Author: 2026-09-08 / Codex
+
+- Decision: 初版の挙動は、版と辞書を固定したjsmigemoの検索結果を基準にする。
+  Rationale: 既存のブラウザ向け実装と比較でき、文字列の表記だけ異なる等価な正規表現を誤って不一致扱いしないため。
+  Date/Author: 2026-09-08 / Codex
+
+- Decision: 初版ではjsmigemoのcompact dictionary形式を読む。独自の辞書形式は導入しない。
+  Rationale: 同じバイナリ辞書を使えば、コードとデータの改善を分けて測れる。形式の詳細と利用条件はM1で固定した参照実装から抽出して記録する。
+  Date/Author: 2026-09-08 / Codex
+
+- Decision: 辞書取得、実行対象の選択、文書への正規表現照合はJavaScript側に置く。
+  Rationale: コアをファイルシステムやブラウザUIから独立させ、正規表現エンジンの追加同梱を避けるため。
+  Date/Author: 2026-09-08 / Codex
+
+- Decision: 入力を文字どおり扱い、候補の黙示的な切り捨てを行わない。
+  Rationale: 候補を減らして速度を良く見せる実装は、検索結果の互換性を損なう。制限が必要なら仕様とエラーを明示し、基準実装との違いを記録する。
+  Date/Author: 2026-09-08 / Codex
+
+- Decision: privateの計画リポジトリから始める。初回の作業はREADME・調査・実装計画の配置までとする。
+  Rationale: 公開範囲は指定されておらず、今回依頼された成果はリポジトリ初期化と計画の配置である。実装やパッケージ公開は今後の作業として扱う。
+  Date/Author: 2026-09-08 / Codex
+
+
+## Outcomes & Retrospective
+
+
+初期段階で存在する成果物はREADME.md、このPLAN.md、調査メモ、生成物を除外する.gitignoreである。検索コア、辞書、ベンチマーク、公開パッケージはまだ存在しない。これは実装完了を意味しない。
+
+M1以降の各段階が終わったら、利用できる機能、実際に実行した検証、残った問題、採用した出力先をこの節に追記する。
+
+
+## Context and Orientation
+
+
+このリポジトリの名前はmbmigemo。初期作成時のローカルルートは/workspace/scratch/f499f1cd06de/mbmigemoであり、以後の文中のパスとコマンドの作業ディレクトリはリポジトリのルートを基準にする。別の場所へcloneした場合は、そのルートを使う。
+
+Migemoは、ローマ字入力を日本語の候補に展開し、その候補に一致する正規表現を生成する処理である。ここでいう「検索コア」はローマ字変換、辞書探索、正規表現生成までを指す。「接続処理」はコアとJSの間で文字列やバイト列を受け渡すコード。「基準実装」は比較対象に固定したjsmigemo。「前方一致」は入力が読みの先頭部分に一致する辞書項目も候補にする処理である。
+
+辞書は読みから候補語を探せるバイナリデータとして持つ。jsmigemoのcompact dictionaryは小さい表現で木状の索引を持つ。木状の索引とは、読みの共通する先頭部分を共有して探索するデータ構造である。M1でバイナリの区画、整数の並び順、文字コード、索引のたどり方をdocs/dictionary-format.mdへ記録し、読み手が上流コードを調べ直さなくても実装できる状態にする。確認前に形式の詳細を推測で埋めない。
+
+README.mdは目的と状態を示し、PLAN.mdは実装作業を管理する。docs/research/2026-09-08-moonbit-migemo.mdは判断の出発点を記録する。実装段階ではsrc/romaji/、src/dictionary/、src/pattern/、src/migemo/にMoonBitの処理を、src/exports/に公開用の薄い関数を置く。JS接続はpackages/mbmigemo/、試用画面はexamples/browser/、検証用データはtests/fixtures/、測定処理はbench/、ビルドとデータ準備はscripts/に置く。これらの実装ディレクトリは初期コミットには作らない。
+
+MoonBitのStringはUTF-16のコード単位を基本に扱う。UTF-8の辞書の位置、UTF-16の位置、Unicodeの一文字を同じ単位として扱わない。BytesのJS表現はUint8Arrayに対応するが、一般の配列がすべてTypedArrayになるとは仮定しない。Wasm GCへの辞書投入でコピーが必要かはM1で調べる。
+
+
+## Plan of Work
+
+
+M1では、小さい接続実験と再現可能な評価環境を作る。MoonBit SDKの利用する版、Node.js、npm、依存パッケージを固定し、docs/toolchain.mdへ記録する。現行のコンパイラに合わせてmoon.modと各moon.pkgを作り、出力先をjsとwasm-gcとして明示する。既定の出力先に依存しない。package.jsonの検証用依存にjsmigemoを完全な版番号で追加し、package-lock.jsonも記録する。M1開始時に採用した公開版を記録し、それ以後は自動更新しない。
+
+同時に、固定したjsmigemoのソースから辞書形式を読み取り、自作の小さい語彙をその形式に変換する手順を用意する。tests/fixtures/tiny-dict.tsvには「けんさく」から「検索」、「にほんご」から「日本語」を引ける項目を持たせる。元データ、変換器の版、生成物のSHA-256を記録する。SHA-256とは内容が同じか確認するための固定長のチェックサムである。実用辞書の取得元・版・利用条件もdocs/upstream.mdへ記録する。辞書形式と参照実装の版が決まったら、この計画にもその実際の値を追記する。
+
+M1の接続実験では、文字列を往復させる関数と、入力バイト列の長さ・チェックサムを返す関数をJSとWasm GCの両方で動かす。ひらがな、半角カナ、補助平面の文字と、0・127・128・255を含むバイト列が壊れないことを確認する。補助平面の文字とはUTF-16で二つのコード単位を必要とする文字である。二つの辞書インスタンスが互いを上書きしないことも検証する。Wasm GCのインターフェースが難しい場合でもJS版の開発は継続し、接続実験の制限を記録する。M1終了時にはnpm run test:bridgeが成功し、実際の文字列・バイト列の受け渡し方法とコピー回数を説明できることを受け入れ条件とする。
+
+M2では小さい辞書で検索コアを実装する。src/romaji/はローマ字から読み候補を作り、src/dictionary/は辞書バイト列を検証して前方一致の候補を列挙する。src/pattern/は候補をエスケープしてJavaScriptのRegExpで使えるパターンを作り、src/migemo/はそれらをつなぐ。辞書全体を毎問い合わせで作り直さない。索引はバイト列やオフセットを主体に読み、ノードごとの大量のオブジェクト化は必要性を測ってから行う。
+
+M2の語彙と入力では、完全なパターン文字列の一致に加えて、候補文書の集合へ照合した結果を基準実装と比較する。共有接頭辞で候補をまとめるなど、等価な正規表現の改善を許容する。空入力は検索対象なしとして常に不一致となるパターン(?!)を返す。入力途中のn/nn、shi/si、促音、拗音、全角・半角の扱いは、固定した基準実装の結果からテストケースを作る。意図的に異なる空入力の契約は別ケースとして明示する。M2終了時にはmoon test --target jsとnpm run test:compat -- --fixture tinyが成功し、kensakuから作ったパターンで「検索」を検索できることを確認する。
+
+M3では実用辞書とJS公開APIを接続する。packages/mbmigemo/src/index.tsに非同期の初期化関数を置き、辞書をバイト列から受け取る。取得失敗と辞書形式不正を区別し、原因不明の空の辞書に置き換えない。辞書のURL取得は呼び出し側が行うため、ライブラリ自身に固定の配布URLを埋めない。実用辞書はscripts/prepare-dictionary.mjsで準備し、チェックサムが一致したものだけを測定に使う。
+
+M3では固定した基準実装から、変換の境界を含む手書きケースと、固定シードの自動生成ケースを作る。固定シードとは毎回同じ疑似乱数列を作るための値で、初期値は20260908とする。入力と対象文書の集合はファイルに保存して再現できるようにする。examples/browser/ではkensaku、nihongoを入力し、元の日本語文書の一致箇所を確認できる小さい画面を作る。公開APIの辞書インスタンスごとの独立性も確認する。M3終了時にはnpm run test:compatとnpm run demoが使え、ブラウザで実用辞書を検索できることを受け入れる。
+
+M4では同じコアのWasm GC版を公開する。src/exports/の関数は文字列の入力・出力と辞書インスタンスのハンドルを中心にする。ハンドルとはJS側が保持し、以後の問い合わせへ渡す不透明な参照である。内部の木やResult型をJSから直接解釈しない。辞書は初期化時にまとめて渡し、探索中に1バイトごとのJS呼び出しを行わない。
+
+M4のJSラッパーはbackend: js、wasm-gc、autoの三つを受け付ける。autoでは必要なWasm GC機能とJS String Builtinsを小さい検証用モジュールで確認し、利用できなければJS版を読み込む。機能未対応以外の辞書破損や実装不具合は握りつぶさず報告する。Wasm GCを明示した場合は未対応をエラーにする。通常のinstantiateでJS String Builtinsが使えてもStreaming版では使えない環境があるため、ストリーミングを必須にしない。両版を先に取得せず、選択した版のみを遅延ロードする。M4終了時にはnpm run test:browserでJS強制、Wasm GC強制、機能未対応時のautoの動作を確認し、対応ブラウザと接続時のコピー量を記録する。
+
+M5では容量と速度の評価を行う。比較する実装は、固定したjsmigemo、mbmigemoのJS版、mbmigemoのWasm GC版とする。まずこの三つで判断し、Rust/Cとの再実装比較は初版の必須条件にしない。入力、辞書の内容・形式、対象文書をそろえる。生成パターンの長さも保存し、候補数を減らして有利になった結果を採用しない。
+
+測定では、実行コードと接続用JSの未圧縮・gzip・Brotli後のバイト数、辞書の同じ三種類のバイト数、取得から初回検索までの時間、取得後のコンパイルと辞書の初期化時間、展開時間の中央値・p95・p99、RegExpのコンパイル時間、同じ文書への照合時間を分ける。p95は測定値の95%が収まる値であり、平均だけでは見えない遅い問い合わせを確認する。メモリは各ブラウザで取得できる範囲と測定方法を明記し、同じ方法で測れない数値を直接順位づけしない。
+
+M5では各対象のウォームアップ後に同じ入力を複数回走らせ、冷たい起動を別に測る。実機のCPU・OS・ブラウザ・SDK・辞書チェックサム・圧縮設定を結果に含める。初期判断の基準は、Wasm GC版が意味の互換性を満たし、コードと接続処理のBrotli合計または問い合わせp95のどちらかでJS版から20%以上改善し、かつ辞書取得後の初回応答を10%以上悪化させないこととする。これは性能の観測事実ではなく採用判断用の暫定値である。三回の独立した測定で方向がそろわなければ採用を保留する。基準を満たさなければJSを標準配布とし、Wasm GCは明示選択の実験版に留める。基準の変更は結果と理由をDecision Logへ記録する。
+
+M6ではnpmへ送信せずnpm packで配布物を作り、別の小さいプロジェクトからJS版とWasm GC版を読み込む。型定義、辞書の供給方法、必要なブラウザ機能、エラー、実測結果、未対応範囲をREADMEに追記する。CIはコミットごとに必要な検証を実行する自動処理であり、GitHub ActionsでJSとWasm GCのビルド、互換性、ブラウザの接続テストを実行する。パッケージの公開やリポジトリのpublic化は、この実装計画の完了条件には含めない。
+
+
+## Concrete Steps
+
+
+初期コミットは文書だけなので、この節の実装用コマンドはM1以降で対応するファイルとnpm scriptsを作った後に実行する。存在しないコマンドを実行済みと記録しない。作業ディレクトリはmbmigemoのリポジトリルートである。
+
+最初に環境を確認し、結果をdocs/toolchain.mdに記録する。未導入のSDKをインストールする段階では、採用する版を固定してから作業する。
+
+    git status --short
+    moon version
+    moonc -v
+    node --version
+    npm --version
+
+M1でscripts/build.mjs、scripts/prepare-dictionary.mjsと検証用のnpm scriptsを作り、package-lock.jsonを生成する。再開時の依存復元はnpm ciを使う。ビルドスクリプトは、次のMoonBitコマンドを実行して出力をpackages/mbmigemo/dist/へ配置する。
+
+    moon check --target js
+    moon check --target wasm-gc
+    moon build --release --target js
+    moon build --release --target wasm-gc
+
+M1が完成すると、次のコマンドで固定辞書の準備と両対象の接続実験が成功し、入力文字列とバイト列の一致を確認できる。
+
+    npm ci
+    npm run dictionary:prepare -- --fixture tiny
+    npm run build
+    npm run test:bridge
+
+M2とM3では次を実行する。tinyでは小さい辞書、allでは固定した実用辞書も含めて比較する。test:compatは対象ケース数、比較した入力数、照合結果の不一致数を報告し、不一致があれば終了コード1、なければ0を返す。
+
+    moon test --target js
+    moon test --target wasm-gc
+    npm run test:compat -- --fixture tiny
+    npm run dictionary:prepare -- --fixture all
+    npm run test:compat
+
+M3でnpm run demoを用意し、ローカルのhttp://127.0.0.1:4173に試用画面を起動する。取得する辞書のチェックサム、選択中のバックエンドは開発用の確認情報として見られるようにする。kensakuの入力に対して「検索」が一致し、入力を消したら一致がなくなることを確認する。
+
+    npm run demo
+
+M4でブラウザテスト、M5で容量と時間の測定用コマンドを用意する。ブラウザテストはPlaywrightのChromium・Firefox・WebKitで行い、Safariの配布可否は実際のSafariでも確認する。テスト用WebKitをSafari実機と同一だとは扱わない。
+
+    npm run test:browser
+    npm run size
+    npm run bench
+    npm run pack:check
+
+npm run sizeは実行コード・接続用JS・辞書の各容量を出す。npm run benchはbench/results/へ生の測定結果を書き、選定に使う要約をdocs/benchmarks/baseline.mdへ転記する。npm run pack:checkはnpm packで作ったパッケージを一時プロジェクトで利用し、kensakuから「検索」を照合できることを確認する。いずれもnpm公開は行わない。
+
+
+## Validation and Acceptance
+
+
+検索の契約は「同じ辞書、入力、対象文書、正規表現フラグなら同じ一致結果になる」である。正規表現はJavaScriptのuフラグを付けて検証する。候補文書集合の先頭・中間・末尾に候補を埋め込む場合も比較する。正規表現の文字列の同一性は補助的な診断に使い、唯一の合否条件にしない。
+
+tiny辞書でcreateMigemoを完了させ、query("kensaku")の結果からnew RegExp(pattern, "u")を作ると「検索」「けんさく」「ケンサク」が一致し、「無関係」が一致しない。query("")は(?!)を返し、空文字列も含めて何にも一致しない。メタ文字を含む入力がパターンの構文を破壊しない。n/nn、shi/si、促音、拗音、辞書にない語、長い入力、入力途中からの削除、全角・半角、濁点の表現、補助平面の文字を含むケースを固定した基準実装と比較する。
+
+辞書が途中で切れている、索引が範囲外、文字列区画が不正、チェックサムが異なる、といった入力に対して準備処理または初期化が明示的に失敗する。空辞書で成功したことにしない。辞書準備時のチェックサム検証と、利用者が渡すバイト列の形式検証は区別する。二つのインスタンスに異なるtiny辞書を渡しても、問い合わせの結果が混ざらない。
+
+JS版とWasm GC版は同じ互換性テストを通す。autoの機能未対応経路をテストで強制でき、選択した実装だけが取得される。Wasm GCを強制して未対応の場合はUnsupportedBackendを返し、autoの場合だけJSへ移る。辞書形式不正やコアの例外はautoでも成功に見せない。
+
+実用辞書の互換性テストでは、固定した手書きケースに加え、シード20260908から作った少なくとも10,000件の入力を用いる。正規表現の長さ、候補集合の差、入力のクラスを失敗時に保存する。すべての有限テストが通っても、全入力について同値を証明したとは表現しない。
+
+配布はM5の判断基準とM6の別プロジェクトからの読み込みで検証する。容量と速度の数字には辞書と接続コードを含む範囲を明示する。GCをホストへ任せる構成を、実行時メモリが無料になる仕組みとは説明しない。
+
+
+## Idempotence and Recovery
+
+
+辞書生成は固定した元データ・変換器・版から行い、再実行して同じチェックサムになるようにする。既存辞書を直接書き換えず、一時ファイルへ生成して検証後に置き換える。取得元が利用できなければ、検証済みのキャッシュを使用するか準備処理を失敗させ、別の辞書に黙って変更しない。
+
+依存関係はnpm ciで再現し、SDK更新は独立したコミットで行う。更新後はJS・Wasm GCの接続と互換性を再検証する。失敗した試作は追記で制限を残し、動作中のJS経路を壊さずWasm GCの変更を切り戻せるようにする。
+
+ベンチマークの生データとビルド生成物は無視対象の専用ディレクトリへ置く。人が書いたソース、fixtures、docsの要約を削除対象に含めない。リポジトリの履歴を強制的に書き換えて初期化し直さない。
+
+新規リポジトリの作成が途中で止まった場合は、同名リポジトリの存在と内容を確認してから再開する。既存のREADMEやコミットがあれば読み、利用者の内容を上書きしない。
+
+
+## Artifacts and Notes
+
+
+初期コミットに含める文書はREADME.md、PLAN.md、docs/research/2026-09-08-moonbit-migemo.mdである。初期化時点ではMoonBit SDKとghコマンドはローカル環境に存在せず、検索コアのビルドや測定は行っていない。
+
+実装が進んだら、docs/toolchain.mdへ使用した版、docs/upstream.mdへ参照実装と辞書の出所、docs/dictionary-format.mdへ読取仕様、docs/benchmarks/baseline.mdへ測定条件と採用判断を記録する。ベンチマークの数値だけを貼らず、その数値で配布方法をどう決めたかを残す。
+
+期待する利用例は次のとおりであり、この初期コミットで実行できるコードではない。
+
+    const bytes = new Uint8Array(await (await fetch("/migemo-compact-dict")).arrayBuffer());
+    const migemo = await createMigemo({ dictionary: bytes, backend: "js" });
+    const pattern = migemo.query("kensaku");
+    new RegExp(pattern, "u").test("検索"); // true
+
+
+## Interfaces and Dependencies
+
+
+公開するJS APIの初期契約は次のとおり。これはTypeScriptの型として表現した設計であり、MoonBitの実在する関数シグネチャを引用したものではない。
+
+    type Backend = "auto" | "js" | "wasm-gc";
+    type MigemoOptions = {
+      dictionary: Uint8Array;
+      backend?: Backend;
+    };
+    interface Migemo {
+      readonly backend: "js" | "wasm-gc";
+      query(input: string): string;
+    }
+    function createMigemo(options: MigemoOptions): Promise<Migemo>;
+
+backendを省略した場合は初期段階ではjsとする。M5でWasm GCを標準採用できたと判断した場合だけ、省略時をautoへ変更する。外部へ返すbackendは実際に動作している対象を示す。
+
+初期化完了後は、呼び出し側が元のUint8Arrayを変更しても検索内容が変わらない契約とする。これを満たすためのコピーまたは辞書展開は初期化の測定に含める。queryは同期処理であり、UIを止めるほど重い場合はライブラリをWorkerの中から呼ぶ。WorkerとはUIの主処理とは別の実行場所であり、通信コストも含めて追加を判断する。初版でWorkerを必須にはしない。
+
+初期化のエラーはUnsupportedBackend、InvalidDictionary、InitializationFailedに区別できるcodeを持つErrorで返す。問い合わせで内部エラーが起きた場合は例外として伝える。入力を勝手にtrim、正規化、候補切り捨てする処理は加えず、必要なものを互換性仕様として明記する。
+
+実行時のコア依存はMoonBit標準ライブラリを中心にする。DOM、HTTP、正規表現エンジンをコアへ持ち込まない。開発時の基準実装にjsmigemo、JSのテストにNode.js標準のテスト機能、ブラウザ検証にPlaywrightを使う。辞書はパッケージ本体に埋め込まず、利用者がバイト列として供給する。npm上の名前の確保や公開は別の作業であり、mbmigemoというリポジトリ名だけで利用可能だとは仮定しない。

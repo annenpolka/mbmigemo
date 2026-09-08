@@ -1,0 +1,14 @@
+_build/
+target/
+.mooncakes/
+node_modules/
+dist/
+packages/*/dist/
+bench/results/
+playwright-report/
+test-results/
+*.tgz
+.env
+.env.*
+!.env.example
+.DS_Store
