@@ -14,6 +14,7 @@ await copyFile(path('_build/js/release/build/exports/exports.js'), `${output}/co
 await copyFile(path('_build/wasm-gc/release/build/exports/exports.wasm'), `${output}/core.wasm`);
 const probe = await readFile(path('_build/wasm-gc/release/build/features/features.wasm'));
 await writeFile(`${output}/feature-bytes.js`, `// Generated from src/features; do not edit.\nexport const featureBytes = new Uint8Array(${JSON.stringify([...probe])});\n`);
+await copyFile(path('LICENSE'), path('packages/mbmigemo/LICENSE'));
 await copyFile(path('src/romaji/LICENSE-CMIGEMO'), `${output}/LICENSE-CMIGEMO`);
 await copyFile(`${toolchainEnv().MOON_HOME}/lib/core/LICENSE`, `${output}/LICENSE-MOONBIT-CORE`);
 await copyFile(`${toolchainEnv().MOON_HOME}/lib/core/NOTICE`, `${output}/NOTICE-MOONBIT-CORE`);

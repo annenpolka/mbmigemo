@@ -17,4 +17,4 @@ It is licensed under Apache-2.0. Its license is included as
 
 The library does not embed a Migemo dictionary. Callers supply dictionary
 bytes and retain responsibility for the license of their chosen dictionary.
-This notice does not set a license for mbmigemo's own code.
+mbmigemo's own code is distributed under the MIT License; see `LICENSE`.

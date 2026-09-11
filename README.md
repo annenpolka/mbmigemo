@@ -65,4 +65,4 @@ M4 Maxでの[実測結果](docs/benchmarks/baseline.md)では、コードのBrot
 
 JS版はES modulesとUnicode対応の`RegExp`を使う。Wasm版にはWasm GCとJS String Builtinsの両方が必要。確認したブラウザの版と、自動テスト・Safari実機確認の範囲は[テスト手順](docs/testing.md)を参照。`query`と照合は同期処理のため、大きな展開や大量の文書を扱うアプリはWorkerなどで実行場所を分けられる。
 
-プロジェクト全体のライセンスは未決定で、npm公開前に決定が必要。C/Migemo由来の変換表と処理、MoonBit標準ライブラリのライセンス・NOTICEは配布用ビルドへ含める。実用辞書のGPL-2.0-or-laterの条件は[上流とライセンス](docs/upstream.md)に記録し、元データ・変換結果・除外理由をキャッシュに保存する。辞書はパッケージ本体へ埋め込まない。
+プロジェクトのライセンスはMIT（[LICENSE](LICENSE)）。C/Migemo由来の変換表と処理、MoonBit標準ライブラリのライセンス・NOTICEは配布用ビルドへ含める。実用辞書のGPL-2.0-or-laterの条件は[上流とライセンス](docs/upstream.md)に記録し、元データ・変換結果・除外理由をキャッシュに保存する。辞書はパッケージ本体へ埋め込まない。

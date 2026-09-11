@@ -16,7 +16,7 @@ const [packed] = JSON.parse(run('npm', ['--cache', path('.cache/npm-pack'), 'pac
   cwd: path('packages/mbmigemo'),
 }));
 const names = new Set(packed.files.map(({ path }) => path));
-for (const file of ['README.md', 'dist/index.js', 'dist/index.d.ts', 'dist/core.js', 'dist/core.wasm', 'dist/feature-bytes.js',
+for (const file of ['README.md', 'LICENSE', 'dist/index.js', 'dist/index.d.ts', 'dist/core.js', 'dist/core.wasm', 'dist/feature-bytes.js',
   'dist/LICENSE-CMIGEMO', 'dist/LICENSE-MOONBIT-CORE', 'dist/NOTICE-MOONBIT-CORE', 'THIRD_PARTY_NOTICES.md']) {
   assert.ok(names.has(file), `Missing packed artifact: ${file}`);
 }

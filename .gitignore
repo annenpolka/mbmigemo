@@ -4,6 +4,7 @@ target/
 node_modules/
 dist/
 packages/*/dist/
+packages/*/LICENSE
 bench/results/
 playwright-report/
 test-results/

@@ -25,6 +25,7 @@
 - [x] (2026-09-08) M4: Chromium・Firefox・WebKitの48テストでJS／Wasm GC／auto、未対応・破損・再試行・遅延ロードを検証。Safari 26.6.2実機でも3方式、検索・消去・強調表示を確認。
 - [x] (2026-09-08) M5: M4 Maxで3ブラウザ各3回、計18試行を測定。容量・起動・query分位・正規表現構築と照合・メモリ観測を記録。9組すべてでWasmの採用条件を満たさず、JSを既定として維持。
 - [x] (2026-09-08) M6: README・測定結果・制約を記録し、小辞書／実用辞書のnpm packを独立TypeScriptプロジェクトで確認。最終実装1215a72のCI全6構成が成功（run 34187248404）。npm公開は行わない。
+- [x] (2026-09-11) プロジェクトのライセンスをMITに決定し、ルートLICENSE・両package.json・README・docs/upstream.md・THIRD_PARTY_NOTICES.mdを更新。build.mjsがパッケージへLICENSEをコピーし、pack-check.mjsが同梱を検証する。
 
 
 ## Surprises & Discoveries
@@ -59,6 +60,10 @@ C/MigemoのCLI対話入力は255バイトまでのため、テストはC APIを�
 
 ## Decision Log
 
+
+- Decision: プロジェクトのライセンスをMITとする。
+  Rationale: 移植元のC/Migemoと変換表、開発用のjsmigemoがMITであり、製品に含まれる派生部分の系譜と一致する。コンパイルで混入するMoonBit標準ライブラリのApache-2.0部分は配布物で自身のライセンス・NOTICEを保持し、MITの全体ライセンスと両立する。GPL-2.0-or-laterの実用辞書は別取得データでパッケージへ同梱しないため、コードへ伝播しない。
+  Date/Author: 2026-09-11 / Devin
 
 - Decision: M5の実測に基づきJSを標準とし、Wasm GCは利用者が明示したwasm-gcまたはautoから使う実験版に留める。
   Rationale: Brotliの実行code合計はJS15,844バイトに対してWasm16,804バイト。Chromiumのquery p95は約23〜28%改善したが、取得後初回応答は約2.05〜2.28倍。Firefox・WebKitも含む全9組で既定変更の基準を満たさなかった。判定基準は変更しない。
@@ -126,7 +131,7 @@ C/MigemoのCLI対話入力は255バイトまでのため、テストはC APIを�
 
 M6までの受け入れ条件を満たした。実装コミット1215a72のGitHub Actions（https://github.com/annenpolka/mbmigemo/actions/runs/34187248404）で、Linux/macOS×2 seedのコア・PBT4構成と、Linux/macOSの実用辞書・3ブラウザ・pack2構成がすべて成功した。配布物には利用例のREADME、型、両コア、feature probeと上流ライセンスを含め、小辞書／実用辞書を別のTypeScriptプロジェクトからJS・Wasm GC・autoで利用できた。
 
-今後の範囲は、広い入力での同期queryの負荷、Wasm初期化時の転送・辞書展開コストの改善、別端末での性能確認、npm公開前の全体ライセンス決定など。今回の有限コーパスの成功を全入力の同値証明や全端末の性能保証とは扱わない。Wasm標準化の条件は未達だが、計画どおりJSを標準として配布判断を完了した。
+今後の範囲は、広い入力での同期queryの負荷、Wasm初期化時の転送・辞書展開コストの改善、別端末での性能確認など。今回の有限コーパスの成功を全入力の同値証明や全端末の性能保証とは扱わない。Wasm標準化の条件は未達だが、計画どおりJSを標準として配布判断を完了した。
 
 M5の測定はcleanなコミット1215a72、Apple M4 Max、Node26.0.0、Playwright1.63.0で行った。3ブラウザ×両版×3回を別プロセスで直列に測り、各試行で110入力×370文書のC比較が成功した。各550・合計9,900の計時サンプルを保存し、独立した再計算でも集計値と採用判定が一致した。生の観測値はbench/results/、環境・ハッシュ・各回の集計・判断はdocs/benchmarks/baseline.mdとbaseline.jsonに記録。Firefoxの大きな起動値も除外しない。メモリはChromiumの非標準JS heap観測のみ取得でき、Firefox/WebKitはunavailableとして総メモリの比較には使わない。既定はJSのまま、Wasm GCは実験的な選択肢として配布する。
 

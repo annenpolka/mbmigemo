@@ -20,4 +20,4 @@ new RegExp(migemo.query('kensaku'), 'u').test('検索'); // true
 
 ブラウザへ配置するときは`dist/`内の相対位置を維持し、`.wasm`を`application/wasm`で配信する。選択したコアを遅延ロードするため、そのファイルも配信対象に含める。
 
-検証手順、辞書の準備、実測値は[ソースリポジトリ](https://github.com/annenpolka/mbmigemo)を参照。プロジェクト全体のライセンスは未決定。上流由来のコードには同梱の`THIRD_PARTY_NOTICES.md`と`dist/LICENSE-*`・`dist/NOTICE-*`が適用される。辞書は同梱しない。
+検証手順、辞書の準備、実測値は[ソースリポジトリ](https://github.com/annenpolka/mbmigemo)を参照。プロジェクトのライセンスはMIT（`LICENSE`）。上流由来のコードには同梱の`THIRD_PARTY_NOTICES.md`と`dist/LICENSE-*`・`dist/NOTICE-*`が適用される。辞書は同梱しない。
